@@ -1,4 +1,4 @@
-#echonetSender.py
+#standbyModel.py
 #Norifumi Kondo
 import logPrint as p
 

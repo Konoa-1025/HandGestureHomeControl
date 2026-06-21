@@ -4,7 +4,9 @@
 from datetime import datetime
 import inspect
 import os
+import threading
 
+_print_lock = threading.Lock()
 
 def now():
     return datetime.now().strftime("%H:%M:%S")
@@ -46,9 +48,10 @@ def _display_name(source):
         "main": "main",
         "tcpSender": "tcp",
         "echonetSender": "echo",
-        "standModel": "stand",
+        "standbyModel": "standby",
         "lowModel": "low",
-        "highModel": "high"
+        "highModel": "high",
+        "cameraManager": "camera"
     }
 
     return names.get(source, source)
@@ -101,23 +104,25 @@ def _log(level, text, source=None, research=False):
     console_message = (
         f"[{now()}] "
         f"{_label(level, source)} "
-        f"[{name:<6}] "
+        f"[{name:<7}] "
         f"{text}"
     )
 
     tcp_message = (
         f"[{now()}] "
         f"{_plain_label(level)} "
-        f"[{name:<6}] "
+        f"[{name:<7}] "
         f"{text}"
     )
 
-    print(console_message)
+    with _print_lock:
+        print(console_message)
 
     if research:
         _send_tcp_research_log(tcp_message)
     else:
         _send_tcp_log(tcp_message)
+
 
 
 def info(text, source=None):

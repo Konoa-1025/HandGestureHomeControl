@@ -2,4 +2,4 @@
 #Norifumi Kondo
 import logPrint as p
 
-p.info("lowModel 起動")
+p.info("起動")

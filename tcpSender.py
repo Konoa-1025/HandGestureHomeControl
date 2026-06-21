@@ -8,6 +8,7 @@ import time
 from pathlib import Path
 import logPrint as p
 
+
 _CONFIG_PATH = Path(__file__).parent / "config.json"
 
 with open(_CONFIG_PATH, "r", encoding="utf-8") as f:
@@ -36,9 +37,16 @@ def _log_worker():
         if _log_client is None:
             try:
                 _log_client = _connect(_LOG_PORT)
-                p.success(f"{_TCP_HOST}:{_LOG_PORT} 接続成功")
-            except:
-                p.error(f"{_TCP_HOST}:{_LOG_PORT} 接続失敗 5秒後に再試行")
+                p.success(
+                    f"{_TCP_HOST}:{_LOG_PORT} 接続成功",
+                    "tcpSender"
+                )
+
+            except Exception as e:
+                p.error(
+                    f"{_TCP_HOST}:{_LOG_PORT} 接続失敗 ({e}) 5秒後に再試行",
+                    "tcpSender"
+                )
 
         time.sleep(5)
 
@@ -50,9 +58,16 @@ def _research_worker():
         if _research_log_client is None:
             try:
                 _research_log_client = _connect(_RESEARCH_LOG_PORT)
-                p.success(f"\{_TCP_HOST}:{_RESEARCH_LOG_PORT} 接続成功")
-            except:
-                p.error(f"{_TCP_HOST}:{_RESEARCH_LOG_PORT} 接続失敗 5秒後に再試行")
+                p.success(
+                    f"{_TCP_HOST}:{_RESEARCH_LOG_PORT} 接続成功",
+                    "tcpSender"
+                )
+
+            except Exception as e:
+                p.error(
+                    f"{_TCP_HOST}:{_RESEARCH_LOG_PORT} 接続失敗 ({e}) 5秒後に再試行",
+                    "tcpSender"
+                )
 
         time.sleep(5)
 
@@ -79,8 +94,16 @@ def send_log(text):
         _log_client.send(
             (text + "\n").encode("utf-8")
         )
-    except:
-        _log_client.close()
+
+    except Exception as e:
+        p.error(
+            f"6000送信失敗 : {e}",
+            "tcpSender"
+        )
+
+        if _log_client:
+            _log_client.close()
+
         _log_client = None
 
 
@@ -94,8 +117,16 @@ def send_research_log(text):
         _research_log_client.send(
             (text + "\n").encode("utf-8")
         )
-    except:
-        _research_log_client.close()
+
+    except Exception as e:
+        p.error(
+            f"6001送信失敗 : {e}",
+            "tcpSender"
+        )
+
+        if _research_log_client:
+            _research_log_client.close()
+
         _research_log_client = None
 
 
