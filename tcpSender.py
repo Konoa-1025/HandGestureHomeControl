@@ -21,6 +21,9 @@ _RESEARCH_LOG_PORT = _config["research_log_port"]
 _log_client = None
 _research_log_client = None
 
+_restart_counter_log = 0
+_restart_counter_research = 0
+
 
 def _connect(port):
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -32,6 +35,7 @@ def _connect(port):
 
 def _log_worker():
     global _log_client
+    global _restart_counter_log
 
     while True:
         if _log_client is None:
@@ -41,18 +45,25 @@ def _log_worker():
                     f"{_TCP_HOST}:{_LOG_PORT} 接続成功",
                     "tcpSender"
                 )
-
             except Exception as e:
-                p.error(
-                    f"{_TCP_HOST}:{_LOG_PORT} 接続失敗 ({e}) 5秒後に再試行",
-                    "tcpSender"
-                )
-
-        time.sleep(5)
+                _restart_counter_log += 1
+                if _restart_counter_log >= 5:
+                    p.error(
+                        f"{_TCP_HOST}:{_LOG_PORT}に接続失敗 ({e})",
+                        "tcpSender"
+                    )
+                    break
+                else:
+                    p.warning(
+                        f"{_TCP_HOST}:{_LOG_PORT}接続失敗({e})5秒後に再試行({_restart_counter_log}回)",
+                        "tcpSender"
+                    )
+                    time.sleep(5)
 
 
 def _research_worker():
     global _research_log_client
+    global _restart_counter_research
 
     while True:
         if _research_log_client is None:
@@ -64,12 +75,19 @@ def _research_worker():
                 )
 
             except Exception as e:
-                p.error(
-                    f"{_TCP_HOST}:{_RESEARCH_LOG_PORT} 接続失敗 ({e}) 5秒後に再試行",
-                    "tcpSender"
-                )
-
-        time.sleep(5)
+                _restart_counter_research += 1
+                if _restart_counter_research >= 5:
+                    p.error(
+                        f"{_TCP_HOST}:{_RESEARCH_LOG_PORT}に接続失敗 ({e}) ",
+                        "tcpSender"
+                    )
+                    break
+                else:
+                    p.warning(
+                        f"{_TCP_HOST}:{_RESEARCH_LOG_PORT}接続失敗({e})5秒後に再試行({_restart_counter_research}回)",
+                        "tcpSender"
+                    )
+                    time.sleep(5)
 
 
 def connect_all():

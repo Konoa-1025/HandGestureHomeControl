@@ -2,7 +2,6 @@
 # Norifumi Kondo
 import os
 import cv2
-import cv2
 import json
 from pathlib import Path
 import logPrint as p

@@ -1,7 +1,27 @@
 {
-    "cameraIp": "192.168.1.100",
-    "cameraUser": "username",
-    "cameraPassword": "password",
-    "macIp": "192.168.0.0",
-    "port": 5000
+    "cameras": [
+        {
+            "name": "カメラ 1",
+            "type": "axis",
+            "host": "127.00.00.01",
+            "user": "user",
+            "password": "password"
+        },
+        {
+            "name": "カメラ 2 ",
+            "type": "axis",
+            "host": "127.00.00.02",
+            "user": "user",
+            "password": "password"
+        },
+        {
+            "name": "カメラ 3",
+            "type": "url",
+            "url": "http://example.com/stream"
+        }
+    ],
+    
+    "tcp_host": "127.00.00.01",
+    "log_port": 6000,
+    "research_log_port": 6001
 }
