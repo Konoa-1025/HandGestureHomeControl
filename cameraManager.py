@@ -9,6 +9,7 @@ import threading
 
 p.info("起動")
 
+
 _CONFIG_PATH = Path(__file__).parent / "config.json"
 
 with open(_CONFIG_PATH, "r", encoding="utf-8") as f:
@@ -17,7 +18,7 @@ with open(_CONFIG_PATH, "r", encoding="utf-8") as f:
 _captures = []
 
 
-def _make_url(_camera) -> str | None:
+def _make_url(_camera) -> str | None: #Type=axis URLの生成
     if _camera["type"] == "axis":
         return (
             f"http://{_camera['user']}:"
@@ -31,7 +32,7 @@ def _make_url(_camera) -> str | None:
 
     return None
 
-def _try_open(_url, _timeout=3):
+def _try_open(_url, _timeout=3): #カメラに一時的に接続
     _result = {}
 
     def _open():
@@ -89,7 +90,7 @@ def start_camera():
     return True
 
 
-def read_frames():
+def read_frames(): #映像の取得　frames[n+1] = カメラn台目
     _frames = []
 
     for _cap in _captures:
@@ -103,7 +104,7 @@ def read_frames():
     return _frames
 
 
-def release_all():
+def release_all(): #カメラの開放
     for _cap in _captures:
         _cap.release()
 
