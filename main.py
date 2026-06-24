@@ -28,7 +28,7 @@ p.success("システム起動完了")
 
 # システム保護/モデル切り替え
 _model = "standby"  # standby / low / highModel
-_autoChangeModels= False       # Trueなら自動切り替えON
+_autoChangeModels= True      # Trueなら自動切り替えON
 
 
 def _change_model(_next_model):

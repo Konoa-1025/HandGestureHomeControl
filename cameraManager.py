@@ -90,7 +90,7 @@ def start_camera():
     return True
 
 
-def read_frames(): #映像の取得　frames[n+1] = カメラn台目
+def read_frames(): #映像の取得 frames[n+1] = カメラn台目
     _frames = []
 
     for _cap in _captures:
