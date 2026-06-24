@@ -90,11 +90,14 @@ def start_camera():
     return True
 
 
-def read_frames(): #映像の取得 frames[n+1] = カメラn台目
+def read_frames(): #映像の取得　frames[n+1] = カメラn台目
     _frames = []
 
-    for _cap in _captures:
+    print("captures:", len(_captures))
+
+    for i, _cap in enumerate(_captures):
         _ret, _frame = _cap.read()
+        print(i, "ret:", _ret, "frame:", None if _frame is None else _frame.shape)
 
         if _ret:
             _frames.append(_frame)

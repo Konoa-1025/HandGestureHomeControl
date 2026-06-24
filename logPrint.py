@@ -37,7 +37,7 @@ def _get_source():
 
 def _use_bg(source):
     return source in [
-        "standModel",
+        "standbyModel",
         "lowModel",
         "highModel"
     ]
