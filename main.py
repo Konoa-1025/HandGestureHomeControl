@@ -6,6 +6,7 @@ import tcpSender as tcp
 import psutil
 import threading
 import time
+import cv2
 
 p.info("■■ Hand Gesture Home Control ■■")
 
@@ -28,7 +29,7 @@ p.success("システム起動完了")
 
 # システム保護/モデル切り替え
 _model = "standby"  # standby / low / highModel
-_autoChangeModels= False       # Trueなら自動切り替えON
+_autoChangeModels= True     # Trueなら自動切り替えON
 
 
 def _change_model(_next_model):
@@ -40,7 +41,7 @@ def _change_model(_next_model):
         standbyModel._startModel()
     elif _next_model == "low":
         lowModel._startModel()
-    elif _next_model == "highModel":
+    elif _next_model == "high":
         highModel._startModel()
     else:
         p.error("切り替え対象が見つかりません")
@@ -50,18 +51,22 @@ def _change_model(_next_model):
 
 def monitor_cpu(_initial_time, _event):
     p.info("CPUモニター開始")
+
     while not _event.wait(0.5):
         _mem = psutil.virtual_memory().percent
         _cpu = psutil.cpu_percent()
+
         # 人がいるときだけ自動切り替え
         if _autoChangeModels:
             if _cpu >= 90.0 or _mem >= 90.0:
-                _next_model = "standby"
-            elif _cpu >= 80.0 or _mem >= 80.0:
                 _next_model = "low"
             else:
-                _next_model = "highModel"
+                _next_model = "high"
+
             _change_model(_next_model)
+        else:
+            _change_model("standby")
+
     p.info("END monitor_cpu")
 
 
@@ -78,12 +83,9 @@ _pc_monitor.start()
 
 #処理部
 camera_cap = camera.start_camera()
-if not camera.start_camera():
+if camera.start_camera():
     p.success("カメラに接続できました。")
-    _frames = camera.read_frames()
-
-    #_front = _frames[0]
-    #_side = _frames[1]
+    
 else:
     p.error("カメラが起動できません")
 
@@ -94,4 +96,12 @@ else:
 
 # メインループ
 while True:
+    _frames = camera.read_frames()
+
+    _front = _frames[0]
+    _side = _frames[1]
+
+    tcp.send_front_frame(_front)
+    tcp.send_side_frame(_side)
+
     time.sleep(1)

@@ -5,7 +5,10 @@ import socket
 import json
 import threading
 import time
+import struct
 from pathlib import Path
+
+import cv2
 import logPrint as p
 
 
@@ -14,148 +17,243 @@ _CONFIG_PATH = Path(__file__).parent / "config.json"
 with open(_CONFIG_PATH, "r", encoding="utf-8") as f:
     _config = json.load(f)
 
+
 _TCP_HOST = _config["tcp_host"]
 _LOG_PORT = _config["log_port"]
 _RESEARCH_LOG_PORT = _config["research_log_port"]
+_FRONT_VIDEO_PORT = _config["front_video_port"]
+_SIDE_VIDEO_PORT = _config["side_video_port"]
+
 
 _log_client = None
 _research_log_client = None
+_front_video_client = None
+_side_video_client = None
 
 _restart_counter_log = 0
 _restart_counter_research = 0
+_restart_counter_front_video = 0
+_restart_counter_side_video = 0
 
 
 def _connect(port):
-    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client.settimeout(3)
-    client.connect((_TCP_HOST, port))
-    client.settimeout(None)
-    return client
+    _client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    _client.settimeout(3)
+    _client.connect((_TCP_HOST, port))
+    _client.settimeout(None)
+    return _client
 
 
-def _log_worker():
+def _client_worker(_port, _client_name):
     global _log_client
-    global _restart_counter_log
-
-    while True:
-        if _log_client is None:
-            try:
-                _log_client = _connect(_LOG_PORT)
-                p.success(
-                    f"{_TCP_HOST}:{_LOG_PORT} 接続成功",
-                    "tcpSender"
-                )
-            except Exception as e:
-                _restart_counter_log += 1
-                if _restart_counter_log >= 5:
-                    p.error(
-                        f"{_TCP_HOST}:{_LOG_PORT}に接続失敗 ({e})",
-                        "tcpSender"
-                    )
-                    break
-                else:
-                    p.warning(
-                        f"{_TCP_HOST}:{_LOG_PORT}接続失敗({e})5秒後に再試行({_restart_counter_log}回)",
-                        "tcpSender"
-                    )
-                    time.sleep(5)
-
-
-def _research_worker():
     global _research_log_client
-    global _restart_counter_research
+    global _front_video_client
+    global _side_video_client
+
+    _restart_counter = 0
 
     while True:
-        if _research_log_client is None:
+        if _client_name == "log":
+            _client = _log_client
+        elif _client_name == "research":
+            _client = _research_log_client
+        elif _client_name == "front_video":
+            _client = _front_video_client
+        elif _client_name == "side_video":
+            _client = _side_video_client
+        else:
+            return
+
+        if _client is None:
             try:
-                _research_log_client = _connect(_RESEARCH_LOG_PORT)
+                _new_client = _connect(_port)
+
+                if _client_name == "log":
+                    _log_client = _new_client
+                elif _client_name == "research":
+                    _research_log_client = _new_client
+                elif _client_name == "front_video":
+                    _front_video_client = _new_client
+                elif _client_name == "side_video":
+                    _side_video_client = _new_client
+
                 p.success(
-                    f"{_TCP_HOST}:{_RESEARCH_LOG_PORT} 接続成功",
+                    f"{_TCP_HOST}:{_port} 接続成功",
                     "tcpSender"
                 )
+                _restart_counter = 0
 
             except Exception as e:
-                _restart_counter_research += 1
-                if _restart_counter_research >= 5:
+                _restart_counter += 1
+
+                if _restart_counter >= 5:
                     p.error(
-                        f"{_TCP_HOST}:{_RESEARCH_LOG_PORT}に接続失敗 ({e}) ",
+                        f"{_TCP_HOST}:{_port} に接続失敗 ({e})",
                         "tcpSender"
                     )
                     break
-                else:
-                    p.warning(
-                        f"{_TCP_HOST}:{_RESEARCH_LOG_PORT}接続失敗({e})5秒後に再試行({_restart_counter_research}回)",
-                        "tcpSender"
-                    )
-                    time.sleep(5)
+
+                p.warning(
+                    f"{_TCP_HOST}:{_port} 接続失敗 ({e}) 5秒後に再試行({_restart_counter}回)",
+                    "tcpSender"
+                )
+                time.sleep(5)
+
+        else:
+            time.sleep(0.2)
 
 
 def connect_all():
     threading.Thread(
-        target=_log_worker,
+        target=_client_worker,
+        args=(_LOG_PORT, "log"),
         daemon=True
     ).start()
 
     threading.Thread(
-        target=_research_worker,
+        target=_client_worker,
+        args=(_RESEARCH_LOG_PORT, "research"),
+        daemon=True
+    ).start()
+
+    threading.Thread(
+        target=_client_worker,
+        args=(_FRONT_VIDEO_PORT, "front_video"),
+        daemon=True
+    ).start()
+
+    threading.Thread(
+        target=_client_worker,
+        args=(_SIDE_VIDEO_PORT, "side_video"),
         daemon=True
     ).start()
 
 
-def send_log(text):
+def _send_text(_client_name, _text):
     global _log_client
+    global _research_log_client
 
-    if _log_client is None:
+    if _client_name == "log":
+        _client = _log_client
+    elif _client_name == "research":
+        _client = _research_log_client
+    else:
+        return
+
+    if _client is None:
         return
 
     try:
-        _log_client.send(
-            (text + "\n").encode("utf-8")
+        _client.sendall(
+            (_text + "\n").encode("utf-8")
         )
 
     except Exception as e:
         p.error(
-            f"6000送信失敗 : {e}",
+            f"{_client_name} 送信失敗 : {e}",
             "tcpSender"
         )
 
-        if _log_client:
-            _log_client.close()
+        try:
+            _client.close()
+        except:
+            pass
 
-        _log_client = None
+        if _client_name == "log":
+            _log_client = None
+        elif _client_name == "research":
+            _research_log_client = None
+
+
+def send_log(text):
+    _send_text("log", text)
 
 
 def send_research_log(text):
-    global _research_log_client
+    _send_text("research", text)
 
-    if _research_log_client is None:
+
+def _send_frame(_client_name, _frame, _quality=70):
+    global _front_video_client
+    global _side_video_client
+
+    if _frame is None:
+        return
+
+    if _client_name == "front_video":
+        _client = _front_video_client
+    elif _client_name == "side_video":
+        _client = _side_video_client
+    else:
+        return
+
+    if _client is None:
         return
 
     try:
-        _research_log_client.send(
-            (text + "\n").encode("utf-8")
+        _encode_param = [
+            int(cv2.IMWRITE_JPEG_QUALITY),
+            _quality
+        ]
+
+        _success, _buffer = cv2.imencode(
+            ".jpg",
+            _frame,
+            _encode_param
         )
+
+        if not _success:
+            return
+
+        _data = _buffer.tobytes()
+        _size = struct.pack(">I", len(_data))
+
+        _client.sendall(_size + _data)
 
     except Exception as e:
         p.error(
-            f"6001送信失敗 : {e}",
+            f"{_client_name} 映像送信失敗 : {e}",
             "tcpSender"
         )
 
-        if _research_log_client:
-            _research_log_client.close()
+        try:
+            _client.close()
+        except:
+            pass
 
-        _research_log_client = None
+        if _client_name == "front_video":
+            _front_video_client = None
+        elif _client_name == "side_video":
+            _side_video_client = None
+
+
+def send_front_frame(_frame):
+    _send_frame("front_video", _frame)
+
+
+def send_side_frame(_frame):
+    _send_frame("side_video", _frame)
 
 
 def close_all():
     global _log_client
     global _research_log_client
+    global _front_video_client
+    global _side_video_client
 
-    if _log_client:
-        _log_client.close()
-        _log_client = None
+    for _client in [
+        _log_client,
+        _research_log_client,
+        _front_video_client,
+        _side_video_client
+    ]:
+        if _client:
+            try:
+                _client.close()
+            except:
+                pass
 
-    if _research_log_client:
-        _research_log_client.close()
-        _research_log_client = None
+    _log_client = None
+    _research_log_client = None
+    _front_video_client = None
+    _side_video_client = None
