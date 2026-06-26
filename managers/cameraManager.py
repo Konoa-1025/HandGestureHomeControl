@@ -4,13 +4,13 @@ import os
 import cv2
 import json
 from pathlib import Path
-import logPrint as p
+import utils.logPrint as p
 import threading
 
 p.info("起動")
 
 
-_CONFIG_PATH = Path(__file__).parent / "config.json"
+_CONFIG_PATH = Path(__file__).parent / "../config.json"
 
 with open(_CONFIG_PATH, "r", encoding="utf-8") as f:
     _config = json.load(f)

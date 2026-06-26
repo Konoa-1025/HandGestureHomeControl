@@ -9,10 +9,10 @@ import struct
 from pathlib import Path
 
 import cv2
-import logPrint as p
+import utils.logPrint as p
 
 
-_CONFIG_PATH = Path(__file__).parent / "config.json"
+_CONFIG_PATH = Path(__file__).parent / "../config.json"
 
 with open(_CONFIG_PATH, "r", encoding="utf-8") as f:
     _config = json.load(f)

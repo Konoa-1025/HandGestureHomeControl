@@ -1,6 +1,6 @@
 #standbyModel.py
 #Norifumi Kondo
-import logPrint as p
+import utils.logPrint as p
 
 def _startModel():
     p.info("切り替わりました。")

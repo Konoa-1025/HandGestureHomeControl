@@ -85,7 +85,7 @@ def _plain_label(level):
 
 def _send_tcp_log(message):
     try:
-        import tcpSender
+        import senders.tcpSender as tcpSender
         tcpSender.send_log(message)
     except:
         pass
@@ -93,7 +93,7 @@ def _send_tcp_log(message):
 
 def _send_tcp_research_log(message):
     try:
-        import tcpSender
+        import senders.tcpSender as tcpSender
         tcpSender.send_research_log(message)
     except:
         pass

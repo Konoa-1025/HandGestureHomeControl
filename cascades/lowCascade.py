@@ -1,8 +1,8 @@
 #lowLevel.py
 #Norifumi Kondo
 import cv2
-import logPrint as p
-import cameraManager as camera
+import utils.logPrint as p
+import managers.cameraManager as camera
 
 def _startCas():
     p.info("切り替わりました。")

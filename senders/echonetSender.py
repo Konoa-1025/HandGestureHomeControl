@@ -1,5 +1,5 @@
 #echonetSender.py
 #Norifumi Kondo
-import logPrint as p
+import utils.logPrint as p
 
 p.info("起動")
