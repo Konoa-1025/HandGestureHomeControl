@@ -16,15 +16,18 @@ with open(_CONFIG_PATH, "r", encoding="utf-8") as f:
     _config = json.load(f)
 
 _captures = []
+_current_resolution = "1920x1080" #画質
 
-
-def _make_url(_camera) -> str | None: #Type=axis URLの生成
+def _make_url(_camera,_resolution=None) -> str | None: #Type=axis URLの生成
     if _camera["type"] == "axis":
+
+        if _resolution is None:
+            _resolution = _current_resolution
         return (
             f"http://{_camera['user']}:"
             f"{_camera['password']}@"
             f"{_camera['host']}"
-            "/axis-cgi/mjpg/video.cgi"
+            f"/axis-cgi/mjpg/video.cgi?resolution={_resolution}"
         )
 
     if _camera["type"] == "url":
@@ -89,6 +92,31 @@ def start_camera():
     p.success(f"{len(_captures)}台のカメラを使用します")
     return True
 
+#画質変更
+def change_resolution(_resolution):
+    global _current_resolution
+    if _resolution == _current_resolution:
+        return True
+    p.info(f"解像度変更 {_current_resolution} → {_resolution}")
+    for i, _camera in enumerate(_config["cameras"]):
+        if i >= len(_captures):
+            break
+
+        _new_url = _make_url(_camera, _resolution)
+        p.info(f"{_camera['name']} 再接続中")
+        _new_cap = _try_open(_new_url, 5)
+        if _new_cap is None:
+            p.warning(f"{_camera['name']} 再接続失敗")
+            continue
+        
+        _captures[i].release()
+        _captures[i] = _new_cap
+
+        p.success(f"{_camera['name']} 解像度変更完了")
+
+    _current_resolution = _resolution
+
+    return True
 
 def read_frames(): #映像の取得　frames[n+1] = カメラn台目
     _frames = []
@@ -98,12 +126,10 @@ def read_frames(): #映像の取得　frames[n+1] = カメラn台目
     for i, _cap in enumerate(_captures):
         _ret, _frame = _cap.read()
         print(i, "ret:", _ret, "frame:", None if _frame is None else _frame.shape)
-
         if _ret:
             _frames.append(_frame)
         else:
             _frames.append(None)
-
     return _frames
 
 

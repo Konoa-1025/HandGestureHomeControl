@@ -39,7 +39,9 @@ def _use_bg(source):
     return source in [
         "standbyModel",
         "lowModel",
-        "highModel"
+        "highModel",
+        "highLevel",
+        "lowLevel"
     ]
 
 
@@ -51,7 +53,9 @@ def _display_name(source):
         "standbyModel": "standby",
         "lowModel": "low",
         "highModel": "high",
-        "cameraManager": "camera"
+        "cameraManager": "camera",
+        "highLevel":"cas-hi",
+        "lowLevel":"cas-Lo"
     }
 
     return names.get(source, source)

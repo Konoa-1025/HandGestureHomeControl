@@ -34,7 +34,7 @@ _autoChangeModels= True      # Trueなら自動切り替えON
 
 def _change_cas(_next_cas):
     global _casModel
-    if _model == _next_cas:
+    if _casModel == _next_cas:
         return
     _casModel = _next_cas
     
@@ -75,13 +75,17 @@ def monitor_pc(_initial_time, _event):
         # 人がいるときだけ自動切り替え
         if _autoChangeModels:
             if _cpu >= 90.0 or _mem >= 90.0:
+                _next_cas = "low"
                 _next_model = "low"
             else:
+                _next_cas = "high"
                 _next_model = "high"
 
             _change_model(_next_model)
+            _change_cas(_next_cas)
         else:
             _change_model("standby")
+            _change_cas(_next_cas)
 
     p.info("END monitor_cpu")
 
@@ -103,7 +107,7 @@ if camera.start_camera():
     
 else:
     p.error("カメラが起動できません")
-    #camera._debug_camera()
+    camera._debug_camera()
 
 
 # メインループ
