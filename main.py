@@ -1,5 +1,5 @@
 #main.py
-#26/06/26
+#Norifumi Konndo
 #情報集め役 兼 司令塔
 
 #モジュール読み込み
@@ -20,9 +20,18 @@ def main():
     tcp.connect_all()
     time.sleep(1)
     p.success("◆◇◆ Ready Hand Gesture Home Control ◆◇◆")
+
+    
+
     while True:
+        _cpu, _mem = systemM.get_status()
+
+        cas.update(_cpu, _mem)
+        model.update(_cpu, _mem)
         time.sleep(1)
 
+        print(_cpu,_mem)
 if __name__ == "__main__":
+    
     main()
 
