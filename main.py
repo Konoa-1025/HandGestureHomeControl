@@ -17,20 +17,19 @@ import managers.cameraManager as camera
 import managers.systemMonitor as systemM
 
 def main():
-    tcp.connect_all()
-    time.sleep(1)
-    p.success("◆◇◆ Ready Hand Gesture Home Control ◆◇◆")
+    _config = figload.load_config()
+    tcp.connect_all(_config)
+    time.sleep(_config["system"]["startup_wait"])
 
-    
+    p.success("◆◇◆ Ready Hand Gesture Home Control ◆◇◆")
 
     while True:
         _cpu, _mem = systemM.get_status()
 
-        cas.update(_cpu, _mem)
-        model.update(_cpu, _mem)
+        cas.update(_cpu, _mem) #カスケード判断
+        model.update(_cpu, _mem) #モデル判断
         time.sleep(1)
 
-        print(_cpu,_mem)
 if __name__ == "__main__":
     
     main()

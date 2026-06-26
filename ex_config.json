@@ -1,27 +1,54 @@
 {
     "cameras": [
         {
-            "name": "カメラ 1",
+            "name": "hghg1",
+            "display_name": "カメラ1",
             "type": "axis",
-            "host": "127.00.00.01",
-            "user": "user",
-            "password": "password"
+            "host": "127.0.0.1",
+            "user": "USERNAME",
+            "password": "PASSWORD"
         },
         {
-            "name": "カメラ 2 ",
+            "name": "hghg2",
+            "display_name": "カメラ2",
             "type": "axis",
-            "host": "127.00.00.02",
-            "user": "user",
-            "password": "password"
+            "host": "127.0.0.1",
+            "user": "USERNAME",
+            "password": "PASSWORD"
         },
         {
-            "name": "カメラ 3",
+            "name": "hghg3",
+            "display_name": "iPhone",
             "type": "url",
-            "url": "http://example.com/stream"
+            "url": "http://127.0.0.1:8080/video"
         }
     ],
-    
-    "tcp_host": "127.00.00.01",
-    "log_port": 6000,
-    "research_log_port": 6001
+
+    "tcp": {
+        "hosts": [
+            "192.0.0.1",
+            "192.0.0.2",
+            "192.0.0.3"
+        ],
+        "ports": {
+            "log": 6000,
+            "research_log": 6001,
+            "front_video": 6002,
+            "side_video": 6003
+        }
+    },
+
+    "system": {
+        "monitor_interval": 0.5,
+        "startup_wait": 1.0
+    },
+
+    "thresholds": {
+        "cascade": {
+            "memory_high": 90
+        },
+        "model": {
+            "cpu_high": 90
+        }
+    }
 }
