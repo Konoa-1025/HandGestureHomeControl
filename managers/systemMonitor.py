@@ -4,7 +4,7 @@
 import psutil
 
 def get_status():
-    _cpu = psutil.cpu_percent(interval=None)
-    _mem = psutil.virtual_memory().percent
-
-    return _cpu, _mem
+    return {
+        "cpu": psutil.cpu_percent(interval=None),
+        "memory": psutil.virtual_memory().percent
+    }

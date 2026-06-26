@@ -22,13 +22,12 @@ def main():
     time.sleep(_config["system"]["startup_wait"])
 
     p.success("◆◇◆ Ready Hand Gesture Home Control ◆◇◆")
-
+    
     while True:
-        _cpu, _mem = systemM.get_status()
-
-        cas.update(_cpu, _mem) #カスケード判断
-        model.update(_cpu, _mem) #モデル判断
-        time.sleep(1)
+        _system = systemM.get_status()
+        cas.update(_system)
+        model.update(_system)
+        time.sleep(_config["system"]["startup_wait"])
 
 if __name__ == "__main__":
     

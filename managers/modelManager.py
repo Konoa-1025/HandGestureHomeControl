@@ -1,14 +1,14 @@
 #managers/modelManager.py
 #Norifumi Konndo
 
-_current_model = "standby"
+_current = "standby"
 
-def update(_cpu, _mem):
-    global _current_model
 
-    if _cpu >= 90:
-        _current_model = "low"
+def update(_system):
+
+    global _current
+
+    if _system["cpu"] >= 90:
+        _current = "low"
     else:
-        _current_model = "high"
-
-    return _current_model
+        _current = "high"
