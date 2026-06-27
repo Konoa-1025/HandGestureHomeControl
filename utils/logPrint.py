@@ -42,6 +42,7 @@ def _use_bg(source):
         "highModel",
         "highLevel",
         "lowLevel"
+        "cascadeManager"
     ]
 
 
