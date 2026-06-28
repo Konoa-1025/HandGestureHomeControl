@@ -2,6 +2,8 @@
 #Norifumi Konndo
 #情報集め役 兼 司令塔
 
+import debug.watching
+
 #モジュール読み込み
 import time
 import art
@@ -28,7 +30,10 @@ def main():
     #カスケード初期化
     cas.Initialization(_config["thresholds"]["cascade"]["memory"]["low"],_config["thresholds"]["cascade"]["memory"]["high"])
     #モデル初期化
-    cas.Initialization(_config["thresholds"]["cascade"]["memory"]["low"],_config["thresholds"]["cascade"]["memory"]["high"])
+    model.Initialization(_config["thresholds"]["cascade"]["memory"]["low"],_config["thresholds"]["cascade"]["memory"]["high"])
+
+    if not camera.start_camera():
+        camera._debug_camera()
 
     p.success("◆◇◆ Ready Hand Gesture Home Control ◆◇◆")
     
@@ -41,7 +46,10 @@ def main():
         cas.update(_system)
         model.update(_system)
 
-
+        #カメラから映像を取得
+        _frames = camera.read_frames()
+        _frames = cas.run(_frames)
+        #_result = model.run(_frames)
         time.sleep(_config["system"]["startup_wait"])
 
 if __name__ == "__main__":

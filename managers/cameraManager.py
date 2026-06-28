@@ -7,6 +7,8 @@ from pathlib import Path
 import utils.logPrint as p
 import threading
 
+_is_debug = False
+
 p.info("起動")
 
 
@@ -86,7 +88,7 @@ def start_camera():
             _cap.release()
 
     if len(_captures) == 0:
-        p.error("使用できるカメラがありません")
+        p.error("使用できるネットワークカメラがありません")
         return False
 
     p.success(f"{len(_captures)}台のカメラを使用します")
@@ -94,42 +96,49 @@ def start_camera():
 
 #画質変更
 def change_resolution(_resolution):
+
     global _current_resolution
     if _resolution == _current_resolution:
         return True
+
     p.info(f"解像度変更 {_current_resolution} → {_resolution}")
+
+    if _is_debug:
+        _width, _height = map(int, _resolution.split("x"))
+        for _cap in _captures:
+            _cap.set(cv2.CAP_PROP_FRAME_WIDTH, _width)
+            _cap.set(cv2.CAP_PROP_FRAME_HEIGHT, _height)
+        _current_resolution = _resolution
+        return True
     for i, _camera in enumerate(_config["cameras"]):
         if i >= len(_captures):
             break
-
         _new_url = _make_url(_camera, _resolution)
         p.info(f"{_camera['name']} 再接続中")
         _new_cap = _try_open(_new_url, 5)
         if _new_cap is None:
             p.warning(f"{_camera['name']} 再接続失敗")
             continue
-        
         _captures[i].release()
         _captures[i] = _new_cap
-
         p.success(f"{_camera['name']} 解像度変更完了")
-
     _current_resolution = _resolution
 
     return True
 
-def read_frames(): #映像の取得　frames[n+1] = カメラn台目
+def read_frames():
     _frames = []
 
-    print("captures:", len(_captures))
-
-    for i, _cap in enumerate(_captures):
+    for _cap in _captures:
         _ret, _frame = _cap.read()
-        print(i, "ret:", _ret, "frame:", None if _frame is None else _frame.shape)
+
         if _ret:
+            _width, _height = map(int, _current_resolution.split("x"))
+            _frame = cv2.resize(_frame, (_width, _height))
             _frames.append(_frame)
         else:
             _frames.append(None)
+
     return _frames
 
 
@@ -144,6 +153,8 @@ def _debug_camera():#macの内蔵カメラに限る
     if _cap.isOpened():
         p.success("デバッグカメラ接続成功")
         _captures.append(_cap)
+        global _is_debug
+        _is_debug = True
         return True
     p.error("デバッグカメラ接続失敗")
     return False
