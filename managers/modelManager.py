@@ -1,8 +1,8 @@
 #managers/modelManager.py
 #Norifumi Konndo
-import Models.standbyModel as standby
-import Models.lowModel as low
-import Models.highModel as high
+import models.standbyModel as standby
+import models.lowModel as low
+import models.highModel as high
 import utils.logPrint as p
 
 _current = "standby"
