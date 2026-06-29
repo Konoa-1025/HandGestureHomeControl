@@ -43,6 +43,17 @@
         "startup_wait": 1.0
     },
 
+    "cascade":{
+        "low":{
+            "width":1920,
+            "height":1080
+        },
+        "high":{
+            "width":2560,
+            "height":1440
+        }
+    },
+
     "thresholds": {
         "cascade": {
             "memory_high": 90
