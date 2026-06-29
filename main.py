@@ -42,7 +42,10 @@ def main():
 
 
     #モデル初期化
-    model.Initialization(_config["thresholds"]["cascade"]["memory"]["low"],_config["thresholds"]["cascade"]["memory"]["high"])
+    model.Initialization(
+            _config["thresholds"]["model"]["memory"]["low"],
+            _config["thresholds"]["model"]["memory"]["high"]
+        )
 
     if not camera.start_camera():
         camera._debug_camera()
@@ -61,7 +64,8 @@ def main():
         #カメラから映像を取得
         _frames = camera.read_frames()
         _frames = cas.run(_frames)
-        #_result = model.run(_frames)
+        _result = model.run(_frames)
+        
         #time.sleep(_config["system"]["startup_wait"])
 
 if __name__ == "__main__":

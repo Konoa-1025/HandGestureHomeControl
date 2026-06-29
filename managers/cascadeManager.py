@@ -11,6 +11,7 @@ def Initialization(_low,_high,_lowWidth,_lowHeight,_highWidth,_highHeight):
     global _memory_high
     global _memory_low
     lowCas.Initialization(_lowWidth,_lowHeight)
+    highCas.Initialization(_highWidth,_highHeight)
 
     _current = "low"
     _memory_low = _low

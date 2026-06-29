@@ -1,22 +1,51 @@
 #managers/modelManager.py
 #Norifumi Konndo
+import Models.standbyModel as standby
+import Models.lowModel as low
+import Models.highModel as high
+import utils.logPrint as p
 
 _current = "standby"
 
-def Initialization(_low,_high):
-    global _current 
-    global _memory_high
-    global _memory_low
+_cpu_low = 70
+_cpu_high = 90
+
+def Initialization(_low, _high):
+    global _current
+    global _cpu_low
+    global _cpu_high
 
     _current = "low"
-    _memory_low = _low
-    _memory_high = _high
+    _cpu_low = _low
+    _cpu_high = _high
 
 def update(_system):
-
     global _current
 
-    if _system["cpu"] >= 90:
-        _current = "low"
+    _cpu = _system["cpu"]
+
+    if _current == "high":
+        if _cpu >= _cpu_high:
+            _current = "low"
+            p.info(f"モデル：low CPU={_cpu}")
+
+    elif _current == "low":
+        if _cpu <= _cpu_low:
+            _current = "high"
+            p.info(f"モデル：high CPU={_cpu}")
+
+    return _current
+
+def run(_frames):
+    if _current == "standby":
+        return standby.run(_frames)
+
+    elif _current == "low":
+        return low.run(_frames)
+
+    elif _current == "high":
+        return high.run(_frames)
+    
     else:
-        _current = "high"
+        p.error(f"モデルの指定外です。{_current}")
+        return None
