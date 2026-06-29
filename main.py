@@ -62,7 +62,7 @@ def main():
         _frames = camera.read_frames()
         _frames = cas.run(_frames)
         #_result = model.run(_frames)
-        time.sleep(_config["system"]["startup_wait"])
+        #time.sleep(_config["system"]["startup_wait"])
 
 if __name__ == "__main__":
     

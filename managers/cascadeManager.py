@@ -17,28 +17,26 @@ def Initialization(_low,_high,_lowWidth,_lowHeight,_highWidth,_highHeight):
     _memory_high = _high
 
 def update(_system):
-
     global _current
+
     _memory = _system["memory"]
     _cpu = _system["cpu"]
 
-    #p.info(f"memory={_memory}, low={_memory_low}, high={_memory_high}, current={_current}")
     if _cpu >= 90:
         if _current != "low":
             _current = "low"
             p.info("CPU高負荷：カスケード low")
             lowCas._startCas()
-
         return _current
 
     if _current == "high":
-        if _memory >= _memory_high: 
+        if _memory >= _memory_high:
             _current = "low"
             p.info(f"カスケード：low {_memory}")
             lowCas._startCas()
 
     elif _current == "low":
-        if _memory < _memory_high:
+        if _memory <= _memory_low:
             _current = "high"
             p.info(f"カスケード：high {_memory}")
             highCas._startCas()
@@ -64,7 +62,9 @@ def run(_frames):
         if _frames[i] is None:
             continue
 
+        _camera_name = f"Camera {i + 1}"
+
         if _current == "low":
-            _frames[i] = lowCas._casRun(_frames[i])
+            _frames[i] = lowCas._casRun(_frames[i], _camera_name)
         else:
-            _frames[i] = highCas._casRun(_frames[i])
+            _frames[i] = highCas._casRun(_frames[i], _camera_name)

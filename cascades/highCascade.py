@@ -6,8 +6,8 @@ import cv2
 import utils.logPrint as p
 import managers.cameraManager as camera
 
-_width = 2560
-_height = 1440
+_width = 3840
+_height = 2160
 
 def Initialization(_highWidth,_highHeight):
     global _width
@@ -21,7 +21,7 @@ def _startCas():
     camera.change_resolution(f"{_width}x{_height}")
     p.info("起動")
 
-def _casRun(_frame, _left=None, _right=None, _top=None, _bottom=None):
+def _casRun(_frame,_camera_name="Camera",_mediaROI=None, _left=None, _right=None, _top=None, _bottom=None):
     #リサイズ ネットワークカメラでリサイズできるならスキップ
     if _frame.shape[1] != _width or _frame.shape[0] != _height:
         _frame = cv2.resize(_frame, (_width, _height))
@@ -33,8 +33,11 @@ def _casRun(_frame, _left=None, _right=None, _top=None, _bottom=None):
     # RGB変換
     _frame = cv2.cvtColor(_frame, cv2.COLOR_BGR2RGB)
     #カスケード判別用 赤
-    _frame = cv2.rectangle(_frame,(0, 0),(100, 100),(0, 0, 255),-1)  
+    _frame = cv2.rectangle(_frame,(0, 0),(100, 100),(255, 0, 0),-1)  
 
-    debugCam.debug(_frame)
+    # 表示用だけRGB → BGRに戻す
+    _debug_frame = cv2.cvtColor(_frame, cv2.COLOR_RGB2BGR)
+
+    debugCam.debug(_debug_frame, _camera_name, 960, 540)
 
     return _frame
