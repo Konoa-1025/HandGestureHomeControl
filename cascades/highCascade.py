@@ -8,16 +8,22 @@ import managers.cameraManager as camera
 
 _width = 2560
 _height = 1440
-_resolution = "2560x1440"
+
+def Initialization(_highWidth,_highHeight):
+    global _width
+    global _height
+
+    _width = _highWidth
+    _height = _highHeight
 
 def _startCas():
     
-    camera.change_resolution(_resolution)
+    camera.change_resolution(f"{_width}x{_height}")
     p.info("起動")
 
 def _casRun(_frame, _left=None, _right=None, _top=None, _bottom=None):
-    #リサイズ
-    if _resolution == "3840x2160": #すでに解像度が低いならスキップ
+    #リサイズ ネットワークカメラでリサイズできるならスキップ
+    if _frame.shape[1] != _width or _frame.shape[0] != _height:
         _frame = cv2.resize(_frame, (_width, _height))
     #カット
     if _left is not None :

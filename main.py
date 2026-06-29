@@ -1,6 +1,7 @@
 #main.py
 #Norifumi Konndo
 #情報集め役 兼 司令塔
+#親　上層
 
 import debug.watching
 
@@ -28,7 +29,18 @@ def main():
     time.sleep(_config["system"]["startup_wait"])
 
     #カスケード初期化
-    cas.Initialization(_config["thresholds"]["cascade"]["memory"]["low"],_config["thresholds"]["cascade"]["memory"]["high"])
+    cas.Initialization(
+            _config["thresholds"]["cascade"]["memory"]["low"],
+            _config["thresholds"]["cascade"]["memory"]["high"],
+            _config["cascade"]["low"]["width"],
+            _config["cascade"]["low"]["height"],
+            _config["cascade"]["high"]["width"],
+            _config["cascade"]["high"]["height"]
+        )
+
+
+
+
     #モデル初期化
     model.Initialization(_config["thresholds"]["cascade"]["memory"]["low"],_config["thresholds"]["cascade"]["memory"]["high"])
 

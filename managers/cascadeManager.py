@@ -6,10 +6,11 @@ import cascades.lowCascade as lowCas
 
 _crop_size = 500
 
-def Initialization(_low,_high):
+def Initialization(_low,_high,_lowWidth,_lowHeight,_highWidth,_highHeight):
     global _current 
     global _memory_high
     global _memory_low
+    lowCas.Initialization(_lowWidth,_lowHeight)
 
     _current = "low"
     _memory_low = _low
