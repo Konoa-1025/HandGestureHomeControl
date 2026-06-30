@@ -59,12 +59,14 @@ def main():
 
         #システム切り替え
         cas.update(_system)
-        model.update(_system)
+        #model.update(_system) runに統合
 
         #カメラから映像を取得
         _frames = camera.read_frames()
         _frames = cas.run(_frames)
-        _result = model.run(_frames)
+        print(type(_frames))
+        print(_frames)
+        _result = model.run(_frames,_system)
         
         #time.sleep(_config["system"]["startup_wait"])
 

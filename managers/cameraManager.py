@@ -149,12 +149,19 @@ def release_all(): #カメラの開放
     _captures.clear()
 
 def _debug_camera():#macの内蔵カメラに限る
-    _cap = cv2.VideoCapture(0, cv2.CAP_AVFOUNDATION)
-    if _cap.isOpened():
-        p.success("デバッグカメラ接続成功")
-        _captures.append(_cap)
-        global _is_debug
-        _is_debug = True
-        return True
+    global _is_debug
+
+    for i in range(10):
+        _cap = cv2.VideoCapture(i, cv2.CAP_AVFOUNDATION)
+        if _cap.isOpened():
+            _ret, _frame = _cap.read()
+            if _ret:
+                p.info(f"Camera {i}: {_frame.shape}")
+                # ここで一旦採用
+                _captures.append(_cap)
+                _is_debug = True
+                p.success(f"デバッグカメラ接続成功 index={i}")
+                return True
+            _cap.release()
     p.error("デバッグカメラ接続失敗")
     return False

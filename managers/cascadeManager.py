@@ -69,3 +69,5 @@ def run(_frames):
             _frames[i] = lowCas._casRun(_frames[i], _camera_name)
         else:
             _frames[i] = highCas._casRun(_frames[i], _camera_name)
+
+    return _frames
