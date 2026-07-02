@@ -1,25 +1,17 @@
-#standbyModel.py
-#Norifumi Kondo
+# standbyModel.py
+# Norifumi Kondo
 import utils.logPrint as p
-
 import cv2
-import mediapipe as mp
 
-def _startModel():
-    p.info("切り替わりました。")
-
-
-mp_hands = mp.solutions.hands  # type: ignore[attr-defined]
-_hands = mp_hands.Hands(
-    static_image_mode=False,
-    max_num_hands=1,
-    min_detection_confidence=0.5,
-    min_tracking_confidence=0.5
-)
+_prev_frame = None
+_THRESHOLD = 25      # 差分の感度（大きいほど鈍感）
+_MIN_PIXELS = 1000   # 動きと判断するピクセル数
 
 p.info("起動")
 
 def run(_frames):
+    global _prev_frame
+
     if _frames is None:
         p.error("standbyModel: フレームがNoneです")
         return False
@@ -31,11 +23,23 @@ def run(_frames):
         if _frame is None:
             continue
 
-        _rgb = cv2.cvtColor(_frame, cv2.COLOR_BGR2RGB)
-        _results = _hands.process(_rgb)
+        #グレースケールにする
+        gray = cv2.cvtColor(_frame, cv2.COLOR_BGR2GRAY)
 
-        if _results.multi_hand_landmarks:
-            p.success("手を検出しました")
+        if _prev_frame is None:
+            _prev_frame = gray
+            continue
+
+        diff = cv2.absdiff(_prev_frame, gray)
+        _prev_frame = gray
+
+        #動きを確認
+        moved = cv2.countNonZero(
+            cv2.threshold(diff, _THRESHOLD, 255, cv2.THRESH_BINARY)[1]
+        ) > _MIN_PIXELS
+
+        if moved:
+            #p.success("動きを検出しました")
             return True
 
     return False

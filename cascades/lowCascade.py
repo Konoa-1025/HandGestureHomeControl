@@ -37,6 +37,7 @@ def _casRun(_frame,_camera_name="Camera",_mediaROI=None, _left=None, _right=None
     #カスケード判別用 青
     _frame = cv2.rectangle(_frame,(0, 0),(100, 100),(0, 0, 255),-1) 
     
+    #デバック用確認カメラ
     _debug_frame = cv2.cvtColor(_frame, cv2.COLOR_RGB2BGR)
     debugCam.debug(_debug_frame, _camera_name, 960, 540)
 

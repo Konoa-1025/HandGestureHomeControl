@@ -64,8 +64,8 @@ def main():
         #カメラから映像を取得
         _frames = camera.read_frames()
         _frames = cas.run(_frames)
-        print(type(_frames))
-        print(_frames)
+        #print(type(_frames))
+        #print(_frames)
         _result = model.run(_frames,_system)
         
         #time.sleep(_config["system"]["startup_wait"])
