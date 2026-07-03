@@ -16,20 +16,44 @@ _cpu_high = 90
 _NO_PERSON_TIMEOUT = 5.0
 _no_person_since = None
 
-def Initialization(_low, _high):
+def Initialization(_low, _high,_timeout,_ST_threshould,_minPx):
+    _intflg = True
     global _current, _prev, _cpu_low, _cpu_high, _cpu, _no_person_since
     _current = "standby"
     _prev = None
     _cpu_low = _low
     _cpu_high = _high
     _cpu = 0
+    _NO_PERSON_TIMEOUT = _timeout
     _no_person_since = None
+    _intflg = standby.Initialization(_ST_threshould,_minPx)
+    
+    return _intflg
 
 def _log_if_changed():
     global _prev
     if _current != _prev:
         p.info(f"モデル：{_prev} → {_current}")
         _prev = _current
+
+def _empty_result():
+    return {
+        "is_person": False,
+        "hands": []
+    }
+
+
+def _normalize_result(_result):
+    if isinstance(_result, dict):
+        return {
+            "is_person": bool(_result.get("is_person", False)),
+            "hands": _result.get("hands", [])
+        }
+
+    return {
+        "is_person": bool(_result),
+        "hands": []
+    }
 
 def update(_system):
     global _current, _cpu
@@ -53,13 +77,20 @@ def run(_frames, _system):
     if _model == "standby":
         _no_person_since = None
         _is_person = standby.run(_frames)
+
         if _is_person:
             _current = "high"
+
         _log_if_changed()
-        return _is_person
+        return {
+            "is_person": bool(_is_person),
+            "hands": []
+        }
 
     elif _model in ("low", "high"):
-        _is_person = (low if _model == "low" else high).run(_frames)
+        _result = (low if _model == "low" else high).run(_frames)
+        _result = _normalize_result(_result)
+        _is_person = _result["is_person"]
         _has_motion = standby.run(_frames)
 
         if _is_person or _has_motion:
@@ -72,6 +103,7 @@ def run(_frames, _system):
                 _no_person_since = None
 
         _log_if_changed()
-        return _is_person
+        return _result
 
-    return False
+    _log_if_changed()
+    return _empty_result()

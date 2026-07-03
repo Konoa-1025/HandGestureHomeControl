@@ -23,54 +23,45 @@ def main():
     #設定読み込み
     _config = figload.load_config()
     
-
     #tcp初期化・接続
-    tcp.connect_all(_config)
+    p.info("TCP通信開始"); tcp.connect_all(_config)
     time.sleep(_config["system"]["startup_wait"])
 
     #カスケード初期化
-    cas.Initialization(
+    p.info("カスケード初期化");cas.Initialization(
             _config["thresholds"]["cascade"]["memory"]["low"],
             _config["thresholds"]["cascade"]["memory"]["high"],
             _config["cascade"]["low"]["width"],
             _config["cascade"]["low"]["height"],
             _config["cascade"]["high"]["width"],
-            _config["cascade"]["high"]["height"]
+            _config["cascade"]["high"]["height"],
+            0,  #lostcount
+            10, #lostlimit
+            400 #cutsize
         )
-
-
-
-
+    
     #モデル初期化
-    model.Initialization(
+    p.info("モデル初期化");model.Initialization(
             _config["thresholds"]["model"]["memory"]["low"],
-            _config["thresholds"]["model"]["memory"]["high"]
+            _config["thresholds"]["model"]["memory"]["high"],
+            5.0,    #PARSON_TIMEOUT
+            25,     #standby_threshould
+            1000    #standby_minpx
         )
 
+    p.info("カメラ初期化")
     if not camera.start_camera():
         camera._debug_camera()
-
     p.success("◆◇◆ Ready Hand Gesture Home Control ◆◇◆")
-    
     while True:
-
-        #システム情報取得
-        _system = systemM.get_status()
-
-        #システム切り替え
-        cas.update(_system)
-        #model.update(_system) runに統合
-
-        #カメラから映像を取得
-        _frames = camera.read_frames()
-        _frames = cas.run(_frames)
-        #print(type(_frames))
-        #print(_frames)
-        _result = model.run(_frames,_system)
-        
-        #time.sleep(_config["system"]["startup_wait"])
+        _system = systemM.get_status()                      #使用率の取得
+        cas.update(_system)                                 #カスケードの切り替え
+        _frames = camera.read_frames()                      #カメラ映像取得
+        _original_frames = _frames.copy()                   #カメラ映像のコピー
+        _frames = cas.run(_frames)                          #カメラ映像をカスケードマネージャーに与える
+        _result = model.run(_frames, _system)               #カメラ映像をモデルマネージャーに与える
+        cas.updateHandPositions(_result, _original_frames)  #モデルMGからカスケードMGにROIを与える
 
 if __name__ == "__main__":
     
     main()
-

@@ -7,6 +7,15 @@ _prev_frame = None
 _THRESHOLD = 25      # 差分の感度（大きいほど鈍感）
 _MIN_PIXELS = 1000   # 動きと判断するピクセル数
 
+def Initialization(_threshould,_minPx):
+    global _THRESHOLD
+    global _MIN_PIXELS
+    _THRESHOLD = _threshould
+    _MIN_PIXELS = _minPx
+
+    return True
+
+
 p.info("起動")
 
 def run(_frames):
@@ -29,6 +38,10 @@ def run(_frames):
         if _prev_frame is None:
             _prev_frame = gray
             continue
+
+        if _prev_frame.shape != gray.shape:
+            _prev_frame = gray
+            return True
 
         diff = cv2.absdiff(_prev_frame, gray)
         _prev_frame = gray
