@@ -41,20 +41,20 @@ def update(_system):
     if _cpu >= 90:
         if _current != "low":
             _current = "low"
-            p.info("CPU高負荷：カスケード low")
+            p.warning("CPU高負荷：カスケード low")
             lowCas._startCas()
         return _current
 
     if _current == "high":
         if _memory >= _memory_high:
             _current = "low"
-            p.info(f"カスケード：low {_memory}")
+            p.change(f"カスケード：low {_memory}")
             lowCas._startCas()
 
     elif _current == "low":
         if _memory <= _memory_low:
             _current = "high"
-            p.info(f"カスケード：high {_memory}")
+            p.change(f"カスケード：high {_memory}")
             highCas._startCas()
 
     return _current

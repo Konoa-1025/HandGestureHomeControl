@@ -16,6 +16,7 @@ class Color:
     RED = '\033[31m'
     GREEN = '\033[32m'
     YELLOW = '\033[33m'
+    ORANGE = '\033[38;5;208m'
     CYAN = '\033[36m'
 
     BLACK = '\033[30m'
@@ -24,6 +25,7 @@ class Color:
     BG_RED = '\033[48;5;106m'
     BG_GREEN = '\033[42m'
     BG_YELLOW = '\033[43m'
+    BG_ORANGE = '\033[48;5;208m'
     BG_CYAN = '\033[46m'
 
     RESET = '\033[0m'
@@ -40,23 +42,30 @@ def _use_bg(source):
         "standbyModel",
         "lowModel",
         "highModel",
-        "highLevel",
-        "lowLevel"
-        "cascadeManager"
+        "highCascade",
+        "lowCascade",
+        "cameraManager",
+        "cascadeManager",
+        "modelManager",
+        "systemManager"
     ]
 
 
 def _display_name(source):
     names = {
+        #main
         "main": "main",
+        #sender
         "tcpSender": "tcp",
         "echonetSender": "echo",
+        #model
         "standbyModel": "standby",
-        "lowModel": "low",
-        "highModel": "high",
-        "cameraManager": "camera",
-        "highLevel":"cas-hi",
-        "lowLevel":"cas-Lo"
+        "lowModel": "Model-low",
+        "highModel": "Model-high",
+        #cascade
+        "lowCascade": "Cascade-low",
+        "highCascade": "Cascade-high",
+        
     }
 
     return names.get(source, source)
@@ -67,6 +76,12 @@ def _label(level, source):
 
     if level == "INFO":
         return f"{Color.BLACK}{Color.BG_CYAN}[ INFO  ]{Color.RESET}" if use_bg else f"{Color.CYAN}[ INFO  ]{Color.RESET}"
+
+    if level == "DEBUG":
+        return f"{Color.BLACK}{Color.BG_ORANGE}[DEBUG  ]{Color.RESET}" if use_bg else f"{Color.ORANGE}[DEBUG  ]{Color.RESET}"
+
+    if level == "CHANGE":
+        return f"{Color.BLACK}{Color.BG_ORANGE}[CHANGE ]{Color.RESET}" if use_bg else f"{Color.ORANGE}[CHANGE ]{Color.RESET}"
 
     if level == "SUCCESS":
         return f"{Color.BLACK}{Color.BG_GREEN}[SUCCESS]{Color.RESET}" if use_bg else f"{Color.GREEN}[SUCCESS]{Color.RESET}"
@@ -81,7 +96,7 @@ def _label(level, source):
 
 
 def _plain_label(level):
-    return f"[{level:^7}]"
+    return f"[{level:<7}]"
 
 
 def _send_tcp_log(message):
@@ -134,6 +149,14 @@ def info(text, source=None):
     _log("INFO", text, source)
 
 
+def debug(text, source=None):
+    _log("DEBUG", text, source)
+
+
+def change(text, source=None):
+    _log("CHANGE", text, source)
+
+
 def success(text, source=None):
     _log("SUCCESS", text, source)
 
@@ -148,6 +171,14 @@ def error(text, source=None):
 
 def research(text, source=None):
     _log("INFO", text, source, research=True)
+
+
+def research_debug(text, source=None):
+    _log("DEBUG", text, source, research=True)
+
+
+def research_change(text, source=None):
+    _log("CHANGE", text, source, research=True)
 
 
 def research_success(text, source=None):

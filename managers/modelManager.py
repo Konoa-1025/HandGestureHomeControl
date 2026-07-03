@@ -33,7 +33,7 @@ def Initialization(_low, _high,_timeout,_ST_threshould,_minPx):
 def _log_if_changed():
     global _prev
     if _current != _prev:
-        p.info(f"モデル：{_prev} → {_current}")
+        p.change(f"モデル：{_prev} → {_current}")
         _prev = _current
 
 def _empty_result():

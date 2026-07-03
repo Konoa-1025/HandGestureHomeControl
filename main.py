@@ -18,6 +18,7 @@ import managers.cascadeManager as cas
 import managers.modelManager as model
 import managers.cameraManager as camera
 import managers.systemMonitor as systemM
+import managers.appliancesManager as home
 
 def main():
     #設定読み込み
@@ -37,7 +38,7 @@ def main():
             _config["cascade"]["high"]["height"],
             0,  #lostcount
             10, #lostlimit
-            400 #cutsize
+            500 #cutsize
         )
     
     #モデル初期化
@@ -48,6 +49,9 @@ def main():
             25,     #standby_threshould
             1000    #standby_minpx
         )
+    
+    p.info("家電の読み込み");home.Initialization()
+
 
     p.info("カメラ初期化")
     if not camera.start_camera():
