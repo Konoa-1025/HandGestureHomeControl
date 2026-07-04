@@ -3,7 +3,7 @@
 #情報集め役 兼 司令塔
 #親　上層
 
-import debug.watching
+import debug.preview
 
 #モジュール読み込み
 import time
@@ -104,6 +104,9 @@ def main():
         _frames = cas.run(_frames)                          #カメラ映像をカスケードマネージャーに与える
         _result = model.run(_frames, _system)               #カメラ映像をモデルマネージャーに与える
         cas.updateHandPositions(_result, _original_frames)  #モデルMGからカスケードMGにROIを与える
+        
+
+        
 
 if __name__ == "__main__":
     

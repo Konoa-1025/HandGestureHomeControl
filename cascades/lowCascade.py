@@ -1,6 +1,6 @@
 #cascades/lowCascade.py
 #Norifumi Kondo
-import debug.watching as debugCam
+import debug.preview as debugCam
 
 import cv2
 import utils.logPrint as p
@@ -53,9 +53,9 @@ def _casRun(_frame, _camera_name="Camera", _mediaROI=None, _left=None, _right=No
     _frame = cv2.GaussianBlur(_frame, (3, 3), 0)
 
     # カスケード判別用 青（BGR）
-    _frame = cv2.rectangle(_frame, (0, 0), (100, 100), (255, 0, 0), -1)
+    #_frame = cv2.rectangle(_frame, (0, 0), (100, 100), (255, 0, 0), -1)
 
-    # デバッグ用確認カメラ
-    debugCam.debug(_frame, _camera_name, 960, 540)
+    # *? デバッグ用確認カメラ
+    #debugCam.show(_frame, _camera_name, 960, 540)
 
     return _frame
