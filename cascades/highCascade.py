@@ -23,6 +23,7 @@ def _startCas():
 
 def _casRun(_frame, _camera_name="Camera", _mediaROI=None, _left=None, _right=None, _top=None, _bottom=None):
     #print(_mediaROI)
+    
     # リサイズ ネットワークカメラでリサイズできるならスキップ
     if _frame.shape[1] != _width or _frame.shape[0] != _height:
         _frame = cv2.resize(_frame, (_width, _height))

@@ -10,7 +10,7 @@ import time
 import art
 
 art.tprint("HandGestureHC")
-#ファイル読み込み 優先順位 >上<
+# *ファイル読み込み 優先順位 >上<
 import utils.logPrint as p
 import senders.tcpSender as tcp
 import utils.configLoader as figload
@@ -42,13 +42,38 @@ def main():
         )
     
     #モデル初期化
-    p.info("モデル初期化");model.Initialization(
-            _config["thresholds"]["model"]["memory"]["low"],
-            _config["thresholds"]["model"]["memory"]["high"],
-            5.0,    #PARSON_TIMEOUT
-            25,     #standby_threshould
-            1000    #standby_minpx
-        )
+    model_settings = {
+    "memory": {
+        "low": _config["thresholds"]["model"]["memory"]["low"],
+        "high": _config["thresholds"]["model"]["memory"]["high"]
+    },
+    "cpu": {
+        "low": _config["thresholds"]["model"]["cpu"]["low"],
+        "high": _config["thresholds"]["model"]["cpu"]["high"]
+    },
+    "standby": {
+        "person_timeout": 5.0,
+        "threshold": 25,
+        "min_pixels": 1000
+    },
+    "low": {
+        "process_width": 640,
+        "process_height": 360,
+        "max_hands": 1,
+        "detection_confidence": 0.4,
+        "tracking_confidence": 0.4
+    },
+    "high": {
+        "process_width": 1280,
+        "process_height": 720,
+        "max_hands": 2,
+        "detection_confidence": 0.7,
+        "tracking_confidence": 0.7
+        }
+    }
+    p.info("モデル初期化")
+    model.Initialization(model_settings)
+
     
     p.info("家電の読み込み");home.Initialization()
 

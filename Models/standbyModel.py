@@ -7,11 +7,12 @@ _prev_frame = None
 _THRESHOLD = 25      # 差分の感度（大きいほど鈍感）
 _MIN_PIXELS = 1000   # 動きと判断するピクセル数
 
-def Initialization(_threshould,_minPx):
+def Initialization(_settings):
     global _THRESHOLD
     global _MIN_PIXELS
-    _THRESHOLD = _threshould
-    _MIN_PIXELS = _minPx
+
+    _THRESHOLD = _settings["threshold"]
+    _MIN_PIXELS = _settings["min_pixels"]
 
     return True
 

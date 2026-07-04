@@ -8,27 +8,27 @@ import time
 
 _current = "standby"
 _prev = None
-_cpu = 0
-
 _cpu_low = 70
 _cpu_high = 90
 
 _NO_PERSON_TIMEOUT = 5.0
 _no_person_since = None
 
-def Initialization(_low, _high,_timeout,_ST_threshould,_minPx):
-    _intflg = True
-    global _current, _prev, _cpu_low, _cpu_high, _cpu, _no_person_since
+def Initialization(_settings):
+    global _current, _prev, _cpu_low, _cpu_high, _cpu
+    global _NO_PERSON_TIMEOUT, _no_person_since
     _current = "standby"
     _prev = None
-    _cpu_low = _low
-    _cpu_high = _high
-    _cpu = 0
-    _NO_PERSON_TIMEOUT = _timeout
+    _cpu_low = _settings["cpu"]["low"]
+    _cpu_high = _settings["cpu"]["high"]
+    _mem_low = _settings["memory"]["low"]
+    _mem_high = _settings["memory"]["high"]
+    _NO_PERSON_TIMEOUT = _settings["standby"]["person_timeout"]
     _no_person_since = None
-    _intflg = standby.Initialization(_ST_threshould,_minPx)
-    
-    return _intflg
+    _standby_flg = standby.Initialization(_settings["standby"])
+    _low_flg = low.Initialization(_settings["low"])
+    _high_flg = high.Initialization(_settings["high"])
+    return _standby_flg and _low_flg and _high_flg
 
 def _log_if_changed():
     global _prev
