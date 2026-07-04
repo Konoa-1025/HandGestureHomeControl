@@ -10,12 +10,14 @@ import managers.cameraManager as camera
 _width = 1920
 _height = 1080
 
-def Initialization(_lowWidth,_lowHeight):
+def Initialization(_settings):
     global _width
     global _height
 
-    _width = _lowWidth
-    _height = _lowHeight
+    _width = _settings["width"]
+    _height = _settings["height"]
+
+    return True
 
 def _startCas(): #ネットワークカメラ用
     

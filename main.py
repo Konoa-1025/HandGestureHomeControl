@@ -29,46 +29,56 @@ def main():
     time.sleep(_config["system"]["startup_wait"])
 
     #カスケード初期化
-    p.info("カスケード初期化");cas.Initialization(
-            _config["thresholds"]["cascade"]["memory"]["low"],
-            _config["thresholds"]["cascade"]["memory"]["high"],
-            _config["cascade"]["low"]["width"],
-            _config["cascade"]["low"]["height"],
-            _config["cascade"]["high"]["width"],
-            _config["cascade"]["high"]["height"],
-            0,  #lostcount
-            10, #lostlimit
-            500 #cutsize
-        )
+    cascade_settings = {
+    "memory": {
+            "low": _config["thresholds"]["cascade"]["memory"]["low"],
+            "high": _config["thresholds"]["cascade"]["memory"]["high"]
+    },
+    "tracking": {
+            "lost_count": 0,
+            "lost_limit": 10,
+            "crop_size": 500
+    },
+    "low": {
+            "width": _config["cascade"]["low"]["width"],
+            "height": _config["cascade"]["low"]["height"]
+    },
+    "high": {
+            "width": _config["cascade"]["high"]["width"],
+            "height": _config["cascade"]["high"]["height"]
+        }
+    }
+    p.info("カスケード初期化")
+    cas.Initialization(cascade_settings)
     
     #モデル初期化
     model_settings = {
     "memory": {
-        "low": _config["thresholds"]["model"]["memory"]["low"],
-        "high": _config["thresholds"]["model"]["memory"]["high"]
+            "low": _config["thresholds"]["model"]["memory"]["low"],
+            "high": _config["thresholds"]["model"]["memory"]["high"]
     },
     "cpu": {
-        "low": _config["thresholds"]["model"]["cpu"]["low"],
-        "high": _config["thresholds"]["model"]["cpu"]["high"]
+            "low": _config["thresholds"]["model"]["cpu"]["low"],
+            "high": _config["thresholds"]["model"]["cpu"]["high"]
     },
     "standby": {
-        "person_timeout": 5.0,
-        "threshold": 25,
-        "min_pixels": 1000
+            "person_timeout": 5.0,
+            "threshold": 25,
+            "min_pixels": 1000
     },
     "low": {
-        "process_width": 640,
-        "process_height": 360,
-        "max_hands": 1,
-        "detection_confidence": 0.4,
-        "tracking_confidence": 0.4
+            "process_width": 640,
+            "process_height": 360,
+            "max_hands": 1,
+            "detection_confidence": 0.4,
+            "tracking_confidence": 0.4
     },
     "high": {
-        "process_width": 1280,
-        "process_height": 720,
-        "max_hands": 2,
-        "detection_confidence": 0.7,
-        "tracking_confidence": 0.7
+            "process_width": 1280,
+            "process_height": 720,
+            "max_hands": 2,
+            "detection_confidence": 0.7,
+            "tracking_confidence": 0.7
         }
     }
     p.info("モデル初期化")
@@ -81,7 +91,11 @@ def main():
     p.info("カメラ初期化")
     if not camera.start_camera():
         camera._debug_camera()
+
     p.success("◆◇◆ Ready Hand Gesture Home Control ◆◇◆")
+
+    time.sleep(1)
+    
     while True:
         _system = systemM.get_status()                      #使用率の取得
         cas.update(_system)                                 #カスケードの切り替え

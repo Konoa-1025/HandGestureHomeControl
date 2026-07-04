@@ -9,12 +9,16 @@ import managers.cameraManager as camera
 _width = 3840
 _height = 2160
 
-def Initialization(_highWidth,_highHeight):
+
+
+def Initialization(_settings):
     global _width
     global _height
 
-    _width = _highWidth
-    _height = _highHeight
+    _width = _settings["width"]
+    _height = _settings["height"]
+
+    return True
 
 def _startCas():
     
@@ -23,7 +27,7 @@ def _startCas():
 
 def _casRun(_frame, _camera_name="Camera", _mediaROI=None, _left=None, _right=None, _top=None, _bottom=None):
     #print(_mediaROI)
-    
+
     # リサイズ ネットワークカメラでリサイズできるならスキップ
     if _frame.shape[1] != _width or _frame.shape[0] != _height:
         _frame = cv2.resize(_frame, (_width, _height))

@@ -11,25 +11,33 @@ _lost_count = 0
 _LOST_LIMIT = 10
 
 
-def Initialization(_low,_high,_lowWidth,_lowHeight,_highWidth,_highHeight,_lostlim,_lostCo,_cropSize):
-    _intflg = True
-    global _current 
+def Initialization(_settings):
+    global _current
     global _memory_high
     global _memory_low
     global _last_frame_transforms
     global _lost_count
     global _LOST_LIMIT
     global _crop_size
+
     _current = "low"
-    _memory_low = _low
-    _memory_high = _high
+    _memory_low = _settings["memory"]["low"]
+    _memory_high = _settings["memory"]["high"]
+
     _last_frame_transforms = {}
-    _lost_count = _lostCo
-    _LOST_LIMIT = _lostlim
-    _crop_size = _cropSize
-    _intflg = lowCas.Initialization(_lowWidth,_lowHeight)
-    _intflg = highCas.Initialization(_highWidth,_highHeight)
-    p.success("初期化終了")
+    _lost_count = _settings["tracking"]["lost_count"]
+    _LOST_LIMIT = _settings["tracking"]["lost_limit"]
+    _crop_size = _settings["tracking"]["crop_size"]
+
+    _low_flg = lowCas.Initialization(_settings["low"])
+    _high_flg = highCas.Initialization(_settings["high"])
+
+    _intflg = _low_flg and _high_flg
+
+    if _intflg:
+        p.success("初期化終了")
+    else:
+        p.error("初期化失敗")
     return _intflg
 
 def update(_system):

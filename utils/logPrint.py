@@ -191,3 +191,9 @@ def research_warning(text, source=None):
 
 def research_error(text, source=None):
     _log("ERROR", text, source, research=True)
+
+# utils/logPrint.py
+import os
+
+def clear():
+    os.system("cls" if os.name == "nt" else "clear")
