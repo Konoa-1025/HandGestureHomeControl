@@ -55,18 +55,3 @@ def modelPreview(_frame, _name, _landmarks=None, _center=None):
         )
 
     show(_preview_frame, _name)
-
-
-def cascadePreview(_frame, _name, _crop=None):
-    _preview_frame = _frame.copy()
-
-    if _crop is not None:
-        cv2.rectangle(
-            _preview_frame,
-            (_crop["left"], _crop["top"]),
-            (_crop["right"], _crop["bottom"]),
-            (255, 0, 0),
-            2
-        )
-
-    show(_preview_frame, _name)

@@ -3,8 +3,6 @@
 #情報集め役 兼 司令塔
 #親　上層
 
-import debug.preview
-
 #モジュール読み込み
 import time
 import art
@@ -33,11 +31,6 @@ def main():
     "memory": {
             "low": _config["thresholds"]["cascade"]["memory"]["low"],
             "high": _config["thresholds"]["cascade"]["memory"]["high"]
-    },
-    "tracking": {
-            "lost_count": 0,
-            "lost_limit": 10,
-            "crop_size": 500
     },
     "low": {
             "width": _config["cascade"]["low"]["width"],
@@ -100,10 +93,8 @@ def main():
         _system = systemM.get_status()                      #使用率の取得
         cas.update(_system)                                 #カスケードの切り替え
         _frames = camera.read_frames()                      #カメラ映像取得
-        _original_frames = _frames.copy()                   #カメラ映像のコピー
         _frames = cas.run(_frames)                          #カメラ映像をカスケードマネージャーに与える
         _result = model.run(_frames, _system)               #カメラ映像をモデルマネージャーに与える
-        cas.updateHandPositions(_result, _original_frames)  #モデルMGからカスケードMGにROIを与える
         
 
         
