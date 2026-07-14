@@ -18,6 +18,7 @@ import managers.cameraManager as camera
 import managers.systemMonitor as systemM
 import managers.appliancesManager as home
 import managers.ricognitionManager as rico
+import managers.targetconboManager as target
 
 def main():
     #設定読み込み
