@@ -16,7 +16,7 @@ def show(_frame, _name="Preview", _width=1280, _height=720):
     cv2.waitKey(1)
 
 
-def modelPreview(_frame, _name, _landmarks=None, _center=None):
+def modelPreview(_frame, _name, _landmarks=None):
     _preview_frame = _frame.copy()
     _connections = [
         (0,1),(1,2),(2,3),(3,4),
@@ -44,14 +44,5 @@ def modelPreview(_frame, _name, _landmarks=None, _center=None):
                 (0, 255, 0),
                 -1
             )
-
-    if _center is not None:
-        cv2.circle(
-            _preview_frame,
-            (_center["center_x"], _center["center_y"]),
-            8,
-            (0, 0, 255),
-            -1
-        )
 
     show(_preview_frame, _name)
