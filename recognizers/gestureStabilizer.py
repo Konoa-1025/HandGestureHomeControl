@@ -1,7 +1,6 @@
 #gestureStabilizer.py
 #Norifumi Konndo
 #確定させる
-_gesture = []
 
 def Initialization(_settings):
 
@@ -9,4 +8,4 @@ def Initialization(_settings):
 
 def run(_hand):
 
-    return _gesture
+    return 

@@ -1,7 +1,6 @@
 #pointingEstimator.py
 #Norifumi Konndo
 #向きを推測させる
-_gesturePX = []
 
 def Initialization(_settings):
 
@@ -9,4 +8,4 @@ def Initialization(_settings):
 
 def run(_gesture):
 
-    return _gesturePX
+    return 

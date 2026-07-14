@@ -17,7 +17,7 @@ import managers.modelManager as model
 import managers.cameraManager as camera
 import managers.systemMonitor as systemM
 import managers.appliancesManager as home
-import managers.ricognitionManager as rico
+import managers.recognitionManager as rico
 import managers.targetconboManager as target
 
 def main():
@@ -71,7 +71,7 @@ def main():
     "high": {
             "process_width": 1280,
             "process_height": 720,
-            "max_hands": 2,
+            "max_hands": 1,
             "detection_confidence": 0.7,
             "tracking_confidence": 0.7
         }
@@ -96,8 +96,8 @@ def main():
         cas.update(_system)                                 #カスケードの切り替え
         _frames = camera.read_frames()                      #カメラ映像取得
         _frames = cas.run(_frames)                          #カメラ映像をカスケードマネージャーに与える
-        _handPoints = model.run(_frames, _system)           #カメラ映像をモデルマネージャーに与える
-        _result = rico.run(_handPoints)			    #モデルのランマークを解析させる
+        _handpoints = model.run(_frames, _system)
+        _result = rico.run(_handpoints["hands"])         
         
         
 

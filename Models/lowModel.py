@@ -102,7 +102,7 @@ def run(_frames):
             _landmarks = _create_landmark_list(_hand_landmarks, _scale_x, _scale_y)
 
             _hand_data = {
-                "frame_index": _frame_index,
+                "camera_index": _frame_index,
                 "landmarks": _landmarks,
                 "model": "low"
             }
