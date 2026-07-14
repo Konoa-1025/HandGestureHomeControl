@@ -96,8 +96,8 @@ def main():
         cas.update(_system)                                 #カスケードの切り替え
         _frames = camera.read_frames()                      #カメラ映像取得
         _frames = cas.run(_frames)                          #カメラ映像をカスケードマネージャーに与える
-        _handpoints = model.run(_frames, _system)
-        _result = rico.run(_handpoints["hands"])         
+        _model_result = model.run(_frames, _system)
+        _result = rico.run(_model_result)        
         
         
 

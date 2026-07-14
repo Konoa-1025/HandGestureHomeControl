@@ -15,15 +15,32 @@ def Initialization(_settings):
     return True
 
 
-def run(_handpoints):
-    # ランドマークから各フレームの手の形を推定
-    _hands = rico.run(_handpoints)
-    p.debug(_hands)
-    # 複数フレームの結果から手の形を確定
-    _gestures = stab.run(_hands)
-    #p.debug(_gestures)
-    
-    # 指差しの場合、手や指の向きを推定
-    _results = est.run(_gestures)
+def run(_model_result):
+    _result = _model_result.get("hands", [])
 
-    return _results
+    _result = rico.run(_result)
+    _result = stab.run(_result)
+    _result = est.run(_result)
+    _selected = _select_confirmed_gesture(_result)
+    
+    return _selected
+
+def _select_confirmed_gesture(_gestures):
+    _confirmed = [
+        _gesture
+        for _gesture in _gestures
+        if _gesture["stabilized_gesture"] is not None
+    ]
+
+    if not _confirmed:
+        return None
+
+    _gesture_names = {
+        _gesture["stabilized_gesture"]
+        for _gesture in _confirmed
+    }
+
+    if len(_gesture_names) > 1:
+        return None
+
+    return _confirmed[0]
