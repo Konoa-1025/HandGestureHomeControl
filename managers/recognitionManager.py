@@ -21,9 +21,18 @@ def run(_model_result):
     _result = rico.run(_result)
     _result = stab.run(_result)
     _result = est.run(_result)
+
     _selected = _select_confirmed_gesture(_result)
-    
-    return _selected
+
+    if _selected is None:
+        return None
+
+    return {
+        "camera": _selected["camera_index"],
+        "gesture": _selected["stabilized_gesture"],
+        "direction": _selected.get("direction"),
+        "is_cached": _selected.get("is_cached", False)
+    }
 
 def _select_confirmed_gesture(_gestures):
     _confirmed = [

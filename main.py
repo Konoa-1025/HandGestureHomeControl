@@ -18,7 +18,7 @@ import managers.cameraManager as camera
 import managers.systemMonitor as systemM
 import managers.appliancesManager as home
 import managers.recognitionManager as rico
-import managers.targetconboManager as target
+import managers.conboManager as target
 
 def main():
     #設定読み込み
@@ -82,6 +82,16 @@ def main():
     
     p.info("家電の読み込み");home.Initialization()
 
+    conbo_settings = {
+        "cancel_sound_path": "sounds/cancel.mp3",
+        "go_sound_path": "sounds/go.mp3",
+        "beep_sound_path": "sounds/beep.mp3",
+        "start_sound_path": "sounds/start.mp3",
+        "combo_csv_path": "homeAppliances/combos.csv",
+        "beep_interval": 1.0
+        }
+    target.Initialization(conbo_settings)
+
 
     p.info("カメラ初期化")
     if not camera.start_camera():
@@ -97,12 +107,11 @@ def main():
         _frames = camera.read_frames()                      #カメラ映像取得
         _frames = cas.run(_frames)                          #カメラ映像をカスケードマネージャーに与える
         _model_result = model.run(_frames, _system)
-        _result = rico.run(_model_result)        
-        
+        _recognition_result = rico.run(_model_result)
+        target.run(_recognition_result)
         
 
         
 
 if __name__ == "__main__":
-    
     main()
