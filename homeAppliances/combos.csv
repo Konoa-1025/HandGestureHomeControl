@@ -1,16 +1,22 @@
 direction,device,trigger,gesture1,gesture2,gesture3,gesture4,action
-UP_LEFT,LIGHT,POINT,,,,,toggle_power
-UP_LEFT,LIGHT,POINT,,,,,color_up
-UP_LEFT,LIGHT,POINT,,,,,color_down
-UP_LEFT,LIGHT,POINT,,,,,next_setting
+UP_LEFT,LIGHT,POINT,POINT,,,,toggle_power
+UP_LEFT,LIGHT,POINT,OPEN_HAND,,,,color_up
+UP_LEFT,LIGHT,POINT,FIST,,,,color_down
+,,POINT,PEACE,FIST,,,next_setting
 
-UP_RIGHT,AIRCON,POINT,POINT,,,,toggle_power
-UP_RIGHT,AIRCON,POINT,OPEN_HAND,,,,temp_up
-UP_RIGHT,AIRCON,POINT,FIST,,,,temp_down
-UP_RIGHT,AIRCON,POINT,PEACE,OPEN_HAND,,,cooling
-UP_RIGHT,AIRCON,POINT,PEACE,FIST,,,heating
+UP,AIRCON,POINT,POINT,,,,aircon_toggle_power
+UP,AIRCON,POINT,OPEN_HAND,,,,aircon_temp_up
+UP,AIRCON,POINT,FIST,,,,aircon_temp_down
+UP,AIRCON,POINT,PEACE,OPEN_HAND,,,aircon_cooling
+UP,AIRCON,POINT,PEACE,FIST,,,aircon_heating
 
-RIGHT,TV,POINT,,,,,toggle_power
-RIGHT,TV,POINT,,,,,volume_up
-RIGHT,TV,POINT,,,,,volume_down
-RIGHT,TV,POINT,,,,,channel_mode
+RIGHT,BRAIND,POINT,POINT,,,,braind_toggle_upper
+RIGHT,BRAIND,POINT,OPEN_HAND,,,,braind_stop
+RIGHT,BRAIND,POINT,PEACE,OPEN_HAND,,,braind_angle_up
+RIGHT,BRAIND,POINT,PEACE,FIST,,,braind_angle_down
+
+DOWN,AIRPURI,POINT,POINT,,,,airpurifier_toggle_power
+,,POINT,OPEN_HAND,,,,airpurifier_temp_up
+DOWN,AIRPURI,POINT,FIST,,,,airpurifier_temp_down
+DOWN,AIRPURI,POINT,PEACE,OPEN_HAND,,,airpurifier_cooling
+DOWN,AIRPURI,POINT,PEACE,FIST,,,airpurifier_heating
