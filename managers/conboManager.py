@@ -6,6 +6,7 @@ import time
 from pathlib import Path
 
 import pygame
+import managers.appliancesManager as home
 import utils.logPrint as p
 
 
@@ -39,21 +40,25 @@ def Initialization(_settings):
     global _combo_lost_since
     global _cancel_timeout
 
+    p.info("初期化中")
+
+    _combo_settings = _settings.get("combo", _settings)
+
     _sound_paths = {
-        "cancel": Path(_settings["cancel_sound_path"]),
-        "go": Path(_settings["go_sound_path"]),
-        "beep": Path(_settings["beep_sound_path"]),
-        "start": Path(_settings["start_sound_path"])
+        "cancel": Path(_combo_settings["cancel_sound_path"]),
+        "go": Path(_combo_settings["go_sound_path"]),
+        "beep": Path(_combo_settings["beep_sound_path"]),
+        "start": Path(_combo_settings["start_sound_path"])
     }
 
-    _combo_path = Path(_settings["combo_csv_path"])
+    _combo_path = Path(_combo_settings["combo_csv_path"])
 
     _beep_interval = float(
-        _settings.get("beep_interval", 1.0)
+        _combo_settings.get("beep_interval", 1.0)
     )
 
     _cancel_timeout = float(
-        _settings.get("cancel_timeout", 0.7)
+        _combo_settings.get("cancel_timeout", 0.7)
     )
 
     for _sound_name, _sound_path in _sound_paths.items():
@@ -84,6 +89,8 @@ def Initialization(_settings):
     _combo_lost_since = None
 
     _initialized = True
+
+    p.success("初期化成功")
 
     return True
 
@@ -211,6 +218,11 @@ def _handle_lost(_reason):
     return None
 
 def _get_device(_recognition_result):
+    _selected_appliance = home.get_selected_appliance()
+
+    if _selected_appliance is not None:
+        return _selected_appliance
+
     _device = (
         _recognition_result.get("device")
         or _recognition_result.get("target")

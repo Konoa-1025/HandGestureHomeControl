@@ -1,24 +1,34 @@
 # cameraManager.py
 # Norifumi Kondo
-import os
+
 import cv2
-import json
-from pathlib import Path
-import utils.logPrint as p
 import threading
+
+import utils.logPrint as p
 
 _is_debug = False
 
-p.info("起動")
 
-
-_CONFIG_PATH = Path(__file__).parent / "../config.json"
-
-with open(_CONFIG_PATH, "r", encoding="utf-8") as f:
-    _config = json.load(f)
+_config = {}
 
 _captures = []
 _current_resolution = "1920x1080" #画質
+
+
+def Initialization(_settings):
+    global _config
+
+    p.info("初期化中")
+
+    _config = _settings.get("camera", _settings)
+
+    if not start_camera():
+        if not _debug_camera():
+            p.error("初期化失敗")
+            return False
+
+    p.success("初期化成功")
+    return True
 
 def _make_url(_camera,_resolution=None) -> str | None: #Type=axis URLの生成
     if _camera["type"] == "axis":
@@ -63,8 +73,11 @@ def start_camera():
 
     _captures = []
 
-    for _camera in _config["cameras"]:
-        if len(_captures) >= 2:
+    _camera_sources = _config.get("cameras") or _config.get("sources") or []
+    _max_cameras = int(_config.get("max_cameras", 2))
+
+    for _camera in _camera_sources:
+        if len(_captures) >= _max_cameras:
             break
 
         _url = _make_url(_camera)
@@ -110,7 +123,9 @@ def change_resolution(_resolution):
             _cap.set(cv2.CAP_PROP_FRAME_HEIGHT, _height)
         _current_resolution = _resolution
         return True
-    for i, _camera in enumerate(_config["cameras"]):
+    _camera_sources = _config.get("cameras") or _config.get("sources") or []
+
+    for i, _camera in enumerate(_camera_sources):
         if i >= len(_captures):
             break
         _new_url = _make_url(_camera, _resolution)

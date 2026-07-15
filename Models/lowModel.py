@@ -22,12 +22,15 @@ def Initialization(_settings):
     global _min_detection_confidence
     global _min_tracking_confidence
 
+    p.info("初期化中")
+
     _processWidth = _settings["process_width"]
     _processHeight = _settings["process_height"]
     _maxHands = _settings["max_hands"]
     _min_detection_confidence = _settings["detection_confidence"]
     _min_tracking_confidence = _settings["tracking_confidence"]
 
+    p.success("初期化成功")
     return True
 
 

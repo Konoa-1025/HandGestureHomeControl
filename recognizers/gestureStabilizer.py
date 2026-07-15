@@ -4,6 +4,8 @@
 
 import time
 
+import utils.logPrint as p
+
 
 _required_frames = 5
 _lost_timeout = 1.0
@@ -15,10 +17,13 @@ def Initialization(_settings):
     global _lost_timeout
     global _camera_states
 
+    p.info("初期化中")
+
     _required_frames = _settings.get("required_frames", 5)
     _lost_timeout = float(_settings.get("lost_timeout", 0.5))
     _camera_states = {}
 
+    p.success("初期化成功")
     return True
 
 

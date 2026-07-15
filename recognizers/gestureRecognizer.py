@@ -10,7 +10,11 @@ _settings = {}
 def Initialization(settings):
 
     global _settings
+
+    p.info("初期化中")
     _settings = settings
+
+    p.success("初期化成功")
     return True
 
 def run(_handpoints):

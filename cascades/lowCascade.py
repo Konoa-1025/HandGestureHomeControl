@@ -12,9 +12,12 @@ def Initialization(_settings):
     global _width
     global _height
 
+    p.info("初期化中")
+
     _width = _settings["width"]
     _height = _settings["height"]
 
+    p.success("初期化成功")
     return True
 
 def _startCas(): #ネットワークカメラ用

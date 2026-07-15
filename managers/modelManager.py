@@ -1,10 +1,10 @@
 #managers/modelManager.py
-#Norifumi Kondo
-import models.standbyModel as standby
-import models.lowModel as low
-import models.highModel as high
-import utils.logPrint as p
 import time
+
+import models.highModel as high
+import models.lowModel as low
+import models.standbyModel as standby
+import utils.logPrint as p
 
 _current = "standby"
 _prev = None
@@ -17,18 +17,30 @@ _no_person_since = None
 def Initialization(_settings):
     global _current, _prev, _cpu_low, _cpu_high, _cpu
     global _NO_PERSON_TIMEOUT, _no_person_since
+
+    p.info("初期化中")
+
+    _model_settings = _settings.get("model", _settings)
+
     _current = "standby"
     _prev = None
-    _cpu_low = _settings["cpu"]["low"]
-    _cpu_high = _settings["cpu"]["high"]
-    _mem_low = _settings["memory"]["low"]
-    _mem_high = _settings["memory"]["high"]
-    _NO_PERSON_TIMEOUT = _settings["standby"]["person_timeout"]
+    _cpu_low = _model_settings["cpu"]["low"]
+    _cpu_high = _model_settings["cpu"]["high"]
+    _mem_low = _model_settings["memory"]["low"]
+    _mem_high = _model_settings["memory"]["high"]
+    _NO_PERSON_TIMEOUT = _model_settings["standby"]["person_timeout"]
     _no_person_since = None
-    _standby_flg = standby.Initialization(_settings["standby"])
-    _low_flg = low.Initialization(_settings["low"])
-    _high_flg = high.Initialization(_settings["high"])
-    return _standby_flg and _low_flg and _high_flg
+    _standby_flg = standby.Initialization(_model_settings["standby"])
+    _low_flg = low.Initialization(_model_settings["low"])
+    _high_flg = high.Initialization(_model_settings["high"])
+    _intflg = _standby_flg and _low_flg and _high_flg
+
+    if _intflg:
+        p.success("初期化成功")
+    else:
+        p.error("初期化失敗")
+
+    return _intflg
 
 def _log_if_changed():
     global _prev

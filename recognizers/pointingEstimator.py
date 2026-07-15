@@ -2,14 +2,19 @@
 # Norifumi Kondo
 # 指差し方向を推定する
 
+import utils.logPrint as p
+
 _min_vector_length = 30
 
 
 def Initialization(_settings):
     global _min_vector_length
 
+    p.info("初期化中")
+
     _min_vector_length = _settings.get("min_vector_length", 30)
 
+    p.success("初期化成功")
     return True
 
 

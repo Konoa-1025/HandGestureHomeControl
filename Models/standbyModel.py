@@ -11,9 +11,12 @@ def Initialization(_settings):
     global _THRESHOLD
     global _MIN_PIXELS
 
+    p.info("初期化中")
+
     _THRESHOLD = _settings["threshold"]
     _MIN_PIXELS = _settings["min_pixels"]
 
+    p.success("初期化成功")
     return True
 
 

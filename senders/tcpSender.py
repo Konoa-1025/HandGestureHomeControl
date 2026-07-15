@@ -121,6 +121,8 @@ def connect_all(_config):
     global _tcp_hosts
     global _ports
 
+    p.info("初期化中")
+
     _tcp_hosts = _config["tcp"]["hosts"]
     _ports = _config["tcp"]["ports"]
 
@@ -147,6 +149,10 @@ def connect_all(_config):
         args=(_ports["side_video"], "side_video"),
         daemon=True
     ).start()
+
+    p.success("初期化成功")
+
+    return True
 
 
 def _disconnect_client(_client_name):

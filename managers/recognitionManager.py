@@ -8,10 +8,15 @@ import recognizers.pointingEstimator as est
 
 
 def Initialization(_settings):
-    rico.Initialization(_settings.get("recognizer", {}))
-    stab.Initialization(_settings.get("stabilizer", {}))
-    est.Initialization(_settings.get("estimator", {}))
+    p.info("初期化中")
 
+    _recognition_settings = _settings.get("recognition", _settings)
+
+    rico.Initialization(_recognition_settings.get("recognizer", {}))
+    stab.Initialization(_recognition_settings.get("stabilizer", {}))
+    est.Initialization(_recognition_settings.get("estimator", {}))
+
+    p.success("初期化成功")
     return True
 
 

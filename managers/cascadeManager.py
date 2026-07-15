@@ -1,25 +1,30 @@
-#managers/cascadeManager.py
-#Norifumi Konndo
-import utils.logPrint as p
+# managers/cascadeManager.py
+# Norifumi Konndo
+
 import cascades.highCascade as highCas
 import cascades.lowCascade as lowCas
+import utils.logPrint as p
 
 def Initialization(_settings):
     global _current
     global _memory_high
     global _memory_low
 
-    _current = "low"
-    _memory_low = _settings["memory"]["low"]
-    _memory_high = _settings["memory"]["high"]
+    p.info("初期化中")
 
-    _low_flg = lowCas.Initialization(_settings["low"])
-    _high_flg = highCas.Initialization(_settings["high"])
+    _cascade_settings = _settings.get("cascade", _settings)
+
+    _current = "low"
+    _memory_low = _cascade_settings["memory"]["low"]
+    _memory_high = _cascade_settings["memory"]["high"]
+
+    _low_flg = lowCas.Initialization(_cascade_settings["low"])
+    _high_flg = highCas.Initialization(_cascade_settings["high"])
 
     _intflg = _low_flg and _high_flg
 
     if _intflg:
-        p.success("初期化終了")
+        p.success("初期化成功")
     else:
         p.error("初期化失敗")
     return _intflg
