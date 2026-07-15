@@ -4,6 +4,7 @@
 import time
 
 import managers.appliancesManager as home
+import managers.actionManager as action
 import managers.cameraManager as camera
 import managers.cascadeManager as cascade
 import managers.conboManager as combo
@@ -50,6 +51,9 @@ def Initialization(_config):
         return False
 
     if not _run_step("Appliances", home.Initialization, _config):
+        return False
+
+    if not _run_step("Action", action.Initialization, _config):
         return False
 
     if not _run_step("Camera", camera.Initialization, _config):

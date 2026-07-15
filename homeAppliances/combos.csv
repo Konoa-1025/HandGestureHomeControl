@@ -1,16 +1,16 @@
-device,trigger,gesture1,gesture2,gesture3,gesture4,action
-LIGHT,POINT,,,,,toggle_power
-LIGHT,POINT,,,,,color_up
-LIGHT,POINT,,,,,color_down
-LIGHT,POINT,,,,,next_setting
+direction,device,trigger,gesture1,gesture2,gesture3,gesture4,action
+UP_LEFT,LIGHT,POINT,,,,,toggle_power
+UP_LEFT,LIGHT,POINT,,,,,color_up
+UP_LEFT,LIGHT,POINT,,,,,color_down
+UP_LEFT,LIGHT,POINT,,,,,next_setting
 
-AIRCON,POINT,POINT,,,,toggle_power
-AIRCON,POINT,OPEN_HAND,,,,temp_up
-AIRCON,POINT,FIST,,,,temp_down
-AIRCON,POINT,PEACE,OPEN_HAND,,,cooling
-AIRCON,POINT,PEACE,FIST,,,heating
+UP_RIGHT,AIRCON,POINT,POINT,,,,toggle_power
+UP_RIGHT,AIRCON,POINT,OPEN_HAND,,,,temp_up
+UP_RIGHT,AIRCON,POINT,FIST,,,,temp_down
+UP_RIGHT,AIRCON,POINT,PEACE,OPEN_HAND,,,cooling
+UP_RIGHT,AIRCON,POINT,PEACE,FIST,,,heating
 
-TV,POINT,,,,,toggle_power
-TV,POINT,,,,,volume_up
-TV,POINT,,,,,volume_down
-TV,POINT,,,,,channel_mode
+RIGHT,TV,POINT,,,,,toggle_power
+RIGHT,TV,POINT,,,,,volume_up
+RIGHT,TV,POINT,,,,,volume_down
+RIGHT,TV,POINT,,,,,channel_mode

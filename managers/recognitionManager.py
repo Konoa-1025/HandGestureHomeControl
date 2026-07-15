@@ -2,6 +2,7 @@
 # Norifumi Konndo
 # リコグニションマネージャー
 import utils.logPrint as p
+import managers.appliancesManager as home
 import recognizers.gestureRecognizer as rico
 import recognizers.gestureStabilizer as stab
 import recognizers.pointingEstimator as est
@@ -31,6 +32,8 @@ def run(_model_result):
 
     if _selected is None:
         return None
+
+    home.resolve_appliance(_selected.get("direction"))
 
     return {
         "camera": _selected["camera_index"],

@@ -188,6 +188,7 @@ def _reset_combo():
     _gesture_history = []
     _combo_lost_since = None
     _gesture_released = False
+    home.clear_selected_appliance()
 
 
 def _handle_lost(_reason):
@@ -290,6 +291,9 @@ def run(_recognition_result):
         if _gesture != "POINT":
             return None
 
+        if _device is None:
+            return None
+
         _combo_started = True
         _gesture_history = ["POINT"]
         _last_beep_at = time.monotonic()
@@ -347,11 +351,6 @@ def run(_recognition_result):
     # 完全一致がある
     if _exact_matches:
         _matched_combo = _exact_matches[0]
-
-        p.success(
-            f"{_matched_combo['device']}："
-            f"{_matched_combo['action']}"
-        )
 
         _play("go")
 
