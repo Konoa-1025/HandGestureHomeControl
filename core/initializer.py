@@ -8,6 +8,7 @@ import managers.actionManager as action
 import managers.cameraManager as camera
 import managers.cascadeManager as cascade
 import managers.conboManager as combo
+import managers.echonetManager as echonet
 import managers.modelManager as model
 import managers.recognitionManager as recognition
 import senders.tcpSender as tcp
@@ -35,6 +36,7 @@ def Initialization(_config):
         return False
 
     _startup_wait = _config.get("system", {}).get("startup_wait", 0)
+
     if _startup_wait:
         time.sleep(_startup_wait)
 
@@ -51,6 +53,9 @@ def Initialization(_config):
         return False
 
     if not _run_step("Appliances", home.Initialization, _config):
+        return False
+
+    if not _run_step("ECHONET", echonet.Initialization, _config):
         return False
 
     if not _run_step("Action", action.Initialization, _config):

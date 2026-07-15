@@ -1,34 +1,8 @@
 {
-    "cameras": [
-        {
-            "name": "hghg1",
-            "display_name": "カメラ1",
-            "type": "axis",
-            "host": "127.0.0.1",
-            "user": "USERNAME",
-            "password": "PASSWORD"
-        },
-        {
-            "name": "hghg2",
-            "display_name": "カメラ2",
-            "type": "axis",
-            "host": "127.0.0.1",
-            "user": "USERNAME",
-            "password": "PASSWORD"
-        },
-        {
-            "name": "hghg3",
-            "display_name": "iPhone",
-            "type": "url",
-            "url": "http://127.0.0.1:8080/video"
-        }
-    ],
-
     "tcp": {
         "hosts": [
-            "192.0.0.1",
-            "192.0.0.2",
-            "192.0.0.3"
+            "192.168.0.10",
+            "192.168.0.11"
         ],
         "ports": {
             "log": 6000,
@@ -37,29 +11,140 @@
             "side_video": 6003
         }
     },
-
     "system": {
         "monitor_interval": 0.5,
         "startup_wait": 1.0
     },
-
-    "cascade":{
-        "low":{
-            "width":1920,
-            "height":1080
+    "camera": {
+        "cameras": [
+            {
+                "name": "front_camera",
+                "display_name": "正面カメラ",
+                "type": "axis",
+                "host": "CAMERA_IP_ADDRESS",
+                "user": "CAMERA_USERNAME",
+                "password": "CAMERA_PASSWORD"
+            },
+            {
+                "name": "side_camera",
+                "display_name": "側面カメラ",
+                "type": "axis",
+                "host": "CAMERA_IP_ADDRESS",
+                "user": "CAMERA_USERNAME",
+                "password": "CAMERA_PASSWORD"
+            },
+            {
+                "name": "debug_camera",
+                "display_name": "デバッグカメラ",
+                "type": "url",
+                "url": "http://127.0.0.1:8080/video"
+            }
+        ],
+        "max_cameras": 2
+    },
+    "cascade": {
+        "memory": {
+            "low": 80,
+            "high": 90
         },
-        "high":{
-            "width":2560,
-            "height":1440
+        "low": {
+            "width": 1920,
+            "height": 1080
+        },
+        "high": {
+            "width": 2560,
+            "height": 1440
         }
     },
-
-    "thresholds": {
-        "cascade": {
-            "memory_high": 90
+    "model": {
+        "memory": {
+            "low": 89,
+            "high": 90
         },
-        "model": {
-            "cpu_high": 90
+        "cpu": {
+            "low": 70,
+            "high": 90
+        },
+        "standby": {
+            "person_timeout": 5.0,
+            "threshold": 25,
+            "min_pixels": 1000
+        },
+        "low": {
+            "process_width": 640,
+            "process_height": 360,
+            "max_hands": 1,
+            "detection_confidence": 0.4,
+            "tracking_confidence": 0.4
+        },
+        "high": {
+            "process_width": 1280,
+            "process_height": 720,
+            "max_hands": 1,
+            "detection_confidence": 0.7,
+            "tracking_confidence": 0.7
+        }
+    },
+    "recognition": {
+        "recognizer": {},
+        "stabilizer": {
+            "required_frames": 5,
+            "lost_timeout": 0.5
+        },
+        "estimator": {
+            "min_vector_length": 30
+        }
+    },
+    "combo": {
+        "cancel_sound_path": "sounds/cancel.mp3",
+        "go_sound_path": "sounds/go.mp3",
+        "beep_sound_path": "sounds/beep.mp3",
+        "start_sound_path": "sounds/start.mp3",
+        "combo_csv_path": "homeAppliances/combos.csv",
+        "beep_interval": 1.0,
+        "cancel_timeout": 0.7
+    },
+    "appliances": {
+        "combo_csv_path": "homeAppliances/combos.csv"
+    },
+    "echonet": {
+        "devices": {
+            "AIRCON": {
+                "type": "aircon",
+                "ip_address": "AIRCON_IP_ADDRESS",
+                "deoj": "013001"
+            },
+            "LIGHT": {
+                "type": "light",
+                "ip_address": "LIGHT_IP_ADDRESS",
+                "deoj": "029001"
+            }
+        },
+        "actions": {
+            "aircon": {
+                "toggle_power": {
+                    "esv": "61",
+                    "epc": "80",
+                    "edt": "30"
+                },
+                "cooling": {
+                    "esv": "61",
+                    "epc": "B0",
+                    "edt": "42"
+                },
+                "heating": {
+                    "esv": "61",
+                    "epc": "B0",
+                    "edt": "43"
+                }
+            },
+            "light": {
+                "toggle_power": {
+                    "esv": "61",
+                    "epc": "80",
+                    "edt": "30"
+                }
+            }
         }
     }
 }

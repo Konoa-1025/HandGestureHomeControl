@@ -15,8 +15,10 @@ def Initialization(settings):
 
     p.info("echonetManagerを初期化中")
 
-    _devices = settings.get("devices", {})
-    _actions = settings.get("actions", {})
+    _echonet_settings = settings.get("echonet", {})
+
+    _devices = _echonet_settings.get("devices", {})
+    _actions = _echonet_settings.get("actions", {})
 
     if not _devices:
         p.error("ECHONET Liteのデバイス設定がありません")
