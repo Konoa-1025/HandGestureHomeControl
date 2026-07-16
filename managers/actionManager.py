@@ -77,6 +77,7 @@ def aircon_temp_down(device):
 
 def aircon_cooling(device):
     """エアコンを冷房運転にする"""
+    p.debug("あああああああ")
     return echonetManager.execute(
         device,
         "cooling"

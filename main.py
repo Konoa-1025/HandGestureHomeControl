@@ -16,12 +16,14 @@ import managers.cascadeManager as cas
 import managers.modelManager as model
 import managers.recognitionManager as rico
 import managers.conboManager as target
+import managers.echonetManager as echonetManager
 
 def main():
     _config = figload.load_config()
 
     if not initializer.Initialization(_config):
         return
+    
 
     while True:
         _system = systemM.get_status()                      #使用率の取得
