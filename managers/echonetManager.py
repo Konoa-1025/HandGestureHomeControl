@@ -59,9 +59,9 @@ def _on_inf(
 ):
     global _devices
 
-    seoj_text = _el.getHexString(seoj)
-    epc_text = _el.getHexString(epc)
-    edt_text = _el.getHexString(pdcedt.edt)
+    seoj_text = _el.getHexString(seoj) #type:ignore
+    epc_text = _el.getHexString(epc)#type:ignore
+    edt_text = _el.getHexString(pdcedt.edt)#type:ignore
 
     if ip not in _devices:
         _devices[ip] = {}
@@ -102,7 +102,7 @@ def _on_inf(
 
             p.info(
                 f"ECHONET Lite機器検出: "
-                f"IP={ip} EOJ={_el.getHexString(eoj)}"
+                f"IP={ip} EOJ={_el.getHexString(eoj)}"#type:ignore
             )
 
         threading.Thread(
