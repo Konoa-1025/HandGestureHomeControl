@@ -34,10 +34,9 @@
                 "password": "CAMERA_PASSWORD"
             },
             {
-                "name": "debug_camera",
-                "display_name": "デバッグカメラ",
-                "type": "url",
-                "url": "http://127.0.0.1:8080/video"
+                "name": "web_camera",
+                "display_name": "ウェブカメラ",
+                "type": "type"
             }
         ],
         "max_cameras": 2

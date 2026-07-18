@@ -3,7 +3,7 @@
 
 import cv2
 import threading
-
+import platform
 import utils.logPrint as p
 
 _is_debug = False
@@ -163,20 +163,47 @@ def release_all(): #カメラの開放
 
     _captures.clear()
 
-def _debug_camera():#macの内蔵カメラに限る
+def _debug_camera():  # Windows / Mac のWebカメラに対応
     global _is_debug
+    _width, _height = map(int, _current_resolution.split("x"))
+
+    # OSごとにOpenCVのカメラバックエンドを切り替える
+    if platform.system() == "Windows":
+        _backend = cv2.CAP_DSHOW
+    elif platform.system() == "Darwin":
+        _backend = cv2.CAP_AVFOUNDATION
+    else:
+        _backend = cv2.CAP_ANY
 
     for i in range(10):
-        _cap = cv2.VideoCapture(i, cv2.CAP_AVFOUNDATION)
-        if _cap.isOpened():
-            _ret, _frame = _cap.read()
-            if _ret:
-                p.info(f"Camera {i}: {_frame.shape}")
-                # ここで一旦採用
-                _captures.append(_cap)
-                _is_debug = True
-                p.success(f"デバッグカメラ接続成功 index={i}")
-                return True
+        p.info(f"Webカメラ確認中 index={i}")
+        _cap = cv2.VideoCapture(i, _backend)
+        if not _cap.isOpened():
             _cap.release()
-    p.error("デバッグカメラ接続失敗")
+            continue
+        # Webカメラに希望解像度を設定
+        _cap.set(cv2.CAP_PROP_FRAME_WIDTH, _width)
+        _cap.set(cv2.CAP_PROP_FRAME_HEIGHT, _height)
+        # WindowsではMJPEGにすると高解像度で動きやすい
+        if platform.system() == "Windows":
+            _cap.set(
+                cv2.CAP_PROP_FOURCC,
+                cv2.VideoWriter_fourcc(*"MJPG") #type: ignore
+            )
+        _ret, _frame = _cap.read()
+
+        if _ret and _frame is not None:
+            p.info(
+                f"Camera {i}: "
+                f"{_frame.shape[1]}x{_frame.shape[0]}"
+            )
+            _captures.append(_cap)
+            _is_debug = True
+            p.success(
+                f"Webカメラ接続成功 index={i}"
+            )
+            return True
+        _cap.release()
+
+    p.error("Webカメラ接続失敗")
     return False
