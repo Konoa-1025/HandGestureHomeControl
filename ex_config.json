@@ -95,10 +95,11 @@
         }
     },
     "combo": {
-        "cancel_sound_path": "sounds/cancel.mp3",
-        "go_sound_path": "sounds/go.mp3",
-        "beep_sound_path": "sounds/beep.mp3",
-        "start_sound_path": "sounds/start.mp3",
+        "sound_type":"normal",
+        "cancel_sound_path": "cancel.mp3",
+        "go_sound_path": "go.mp3",
+        "beep_sound_path": "beep.mp3",
+        "start_sound_path": "start.mp3",
         "combo_csv_path": "homeAppliances/combos.csv",
         "beep_interval": 1.0,
         "cancel_timeout": 0.7

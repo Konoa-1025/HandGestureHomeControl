@@ -44,13 +44,14 @@ def Initialization(_settings):
 
     _combo_settings = _settings.get("combo", _settings)
 
-    _sound_paths = {
-        "cancel": Path(_combo_settings["cancel_sound_path"]),
-        "go": Path(_combo_settings["go_sound_path"]),
-        "beep": Path(_combo_settings["beep_sound_path"]),
-        "start": Path(_combo_settings["start_sound_path"])
-    }
+    sound_dir = Path("sounds") / _combo_settings["sound_type"]
 
+    _sound_paths = {
+        "cancel": sound_dir / _combo_settings["cancel_sound_path"],
+        "go": sound_dir / _combo_settings["go_sound_path"],
+        "beep": sound_dir / _combo_settings["beep_sound_path"],
+        "start": sound_dir / _combo_settings["start_sound_path"],
+    }
     _combo_path = Path(_combo_settings["combo_csv_path"])
 
     _beep_interval = float(
