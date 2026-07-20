@@ -372,5 +372,6 @@ def run(_recognition_result):
         f"コンボ待機: "
         f"{' → '.join(_gesture_history)}"
     )
+    _play("start")
 
     return None

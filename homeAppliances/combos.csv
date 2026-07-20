@@ -1,17 +1,8 @@
 direction,device,ip,eoj,trigger,gesture1,gesture2,gesture3,gesture4,action
-,太陽光発電,192.168.50.11,027901,,,,,,
-,太陽光発電,192.168.50.11,027902,,,,,,
-,分電盤,192.168.50.9,028701,,,,,,
-,電動ブラインド,192.168.50.16,026001,,,,,,
-,空気清浄機,192.168.50.15,0F4201,,,,,,
-,エアコン,192.168.50.14,013002,,,,,,
-,,,028101,,,,,,
-,DEVICE_028201,192.168.50.11,028201,,,,,,
-,,,,,,,,,
 UP_LEFT,LIGHT,,,POINT,POINT,,,,toggle_power
 UP_LEFT,LIGHT,,,POINT,OPEN_HAND,,,,color_up
 UP_LEFT,LIGHT,,,POINT,FIST,,,,color_down
-,,,,POINT,PEACE,FIST,,,next_setting
+LEFT,TEST,,,POINT,PEACE,PEACE,PEACE,OPEN_HAND,TEST
 ,,,,,,,,,
 UP,AIRCON,192.168.50.14,013002,POINT,POINT,,,,aircon_toggle_power
 UP,AIRCON,192.168.50.14,013002,POINT,OPEN_HAND,,,,aircon_temp_up
@@ -29,3 +20,8 @@ DOWN,AIRPURI,192.168.50.15,0F4201,POINT,OPEN_HAND,,,,airpurifier_temp_up
 DOWN,AIRPURI,192.168.50.15,0F4201,POINT,FIST,,,,airpurifier_temp_down
 DOWN,AIRPURI,192.168.50.15,0F4201,POINT,PEACE,OPEN_HAND,,,airpurifier_cooling
 DOWN,AIRPURI,192.168.50.15,0F4201,POINT,PEACE,FIST,,,airpurifier_heating
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
