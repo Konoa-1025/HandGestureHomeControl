@@ -6,7 +6,7 @@ import threading
 import platform
 import utils.logPrint as p
 
-_is_debug = False
+_is_debug = True
 
 
 _config = {}
@@ -109,8 +109,8 @@ def start_camera():
 
 #画質変更
 def change_resolution(_resolution):
-
     global _current_resolution
+
     if _resolution == _current_resolution:
         return True
 
@@ -118,12 +118,27 @@ def change_resolution(_resolution):
 
     if _is_debug:
         _width, _height = map(int, _resolution.split("x"))
+
+        # (_is_debug = Trueなら)Webカメラでは1920x1080を超える変更を無視
+        if _width > 1920 or _height > 1080:
+            p.warning(
+                f"Webカメラでは {_resolution} に変更できないため、"
+                f"{_current_resolution} のまま使用します"
+            )
+            return True
+
         for _cap in _captures:
             _cap.set(cv2.CAP_PROP_FRAME_WIDTH, _width)
             _cap.set(cv2.CAP_PROP_FRAME_HEIGHT, _height)
+
         _current_resolution = _resolution
         return True
-    _camera_sources = _config.get("cameras") or _config.get("sources") or []
+
+    _camera_sources = (
+        _config.get("cameras")
+        or _config.get("sources")
+        or []
+    )
 
     for i, _camera in enumerate(_camera_sources):
         if i >= len(_captures):
@@ -138,7 +153,6 @@ def change_resolution(_resolution):
         _captures[i] = _new_cap
         p.success(f"{_camera['name']} 解像度変更完了")
     _current_resolution = _resolution
-
     return True
 
 def read_frames():
