@@ -4,9 +4,10 @@ import cv2
 import mediapipe as mp
 import utils.logPrint as p
 import debug.preview as preview
+from typing import Optional #! Python3.8対応用
 
 _initialized = False
-_hands: mp.solutions.hands.Hands | None = None # type: ignore
+_hands: Optional[mp.solutions.hands.Hands] = None  # type: ignore
 
 # highモデル用初期設定
 _processWidth = 1280

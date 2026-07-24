@@ -5,7 +5,7 @@ import cv2
 import threading
 import platform
 import utils.logPrint as p
-from typing import Optional
+from typing import Optional #! Python3.8対応用
 
 _is_debug = True
 
