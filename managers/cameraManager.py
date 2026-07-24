@@ -5,6 +5,7 @@ import cv2
 import threading
 import platform
 import utils.logPrint as p
+from typing import Optional
 
 _is_debug = True
 
@@ -30,7 +31,7 @@ def Initialization(_settings):
     p.success("初期化成功")
     return True
 
-def _make_url(_camera,_resolution=None) -> str | None: #Type=axis URLの生成
+def _make_url(_camera,_resolution=None) -> Optional[str]:#Type=axis URLの生成
     if _camera["type"] == "axis":
 
         if _resolution is None:

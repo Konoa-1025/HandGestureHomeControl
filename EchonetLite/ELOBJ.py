@@ -6,10 +6,11 @@
 @date 2023年度
 @details PDCEDTをEPCと結びつけて管理することを主とする
 """
-from copy import deepcopy
+from copy import deepcopy # パッケージマネージャからcopy @ micropython-libをインストールする
 
 if __name__ == '__main__':  # unit test
-    from PDCEDT import PDCEDT
+    print("unit test")
+    from EchonetLite.PDCEDT import PDCEDT
 elif  __name__ == 'ELOBJ':  # EchonetLite.py test
     from PDCEDT import PDCEDT
 else:
@@ -27,10 +28,10 @@ class ELOBJ():
         @brief コンストラクタ
         @param other (ELOBJ) = None
         """
-        self.pdcedts:dict[int, PDCEDT] = {}
-        self.inf_property_map_raw:list[int] = [] # 9d
-        self.set_property_map_raw:list[int] = [] # 9e
-        self.get_property_map_raw:list[int] = [] # 9f
+        self.pdcedts = {}
+        self.inf_property_map_raw = [] # 9d
+        self.set_property_map_raw = [] # 9e
+        self.get_property_map_raw = [] # 9f
         # コピーコンストラクタの実現
         if type(other) is ELOBJ:
             self.pdcedts = deepcopy(other.pdcedts)
@@ -59,7 +60,7 @@ class ELOBJ():
                 self.set_property_map_raw == other.set_property_map_raw and
                 self.get_property_map_raw == other.get_property_map_raw)
 
-    def __getitem__(self, epc:int) -> PDCEDT | None:
+    def __getitem__(self, epc):
         """!
         @brief  配列[]インタフェースを提供する。特にrvalue として
         @param  epc (int)
@@ -83,7 +84,7 @@ class ELOBJ():
         self.pdcedts[epc] = pdcedt
         return self.pdcedts[epc]
 
-    def GetPDCEDT(self, epc:int) -> PDCEDT | None:
+    def GetPDCEDT(self, epc):
         """!
         @brief EPCに対応するPDCEDTを取得する
         @param epc int
@@ -95,7 +96,7 @@ class ELOBJ():
         else:
             return None
 
-    def SetPDCEDT(self, epc:int, pdcedt:PDCEDT | list[int]) -> PDCEDT:
+    def SetPDCEDT(self, epc, pdcedt):
         """!
         @brief EPCに対応するPDCEDTをセットする
         @param epc int
@@ -108,7 +109,7 @@ class ELOBJ():
             self.pdcedts[epc] = PDCEDT(pdcedt)
         return self.pdcedts[epc]
 
-    def SetEDT(self, epc:int, edt:list[int]) -> PDCEDT:
+    def SetEDT(self, epc, edt):
         """!
         @brief EPCに対してEDTをセットする。この際、PDCは自動計算する
         @param epd int
@@ -120,7 +121,7 @@ class ELOBJ():
         self.pdcedts[epc].setEDT(edt)
         return self.pdcedts[epc]
 
-    def GetMyPropertyMap(self, epc:int) -> list[int] | None:
+    def GetMyPropertyMap(self, epc):
         """!
         @brief 自身のPropertyMapを取得する
         @param epc int 0x9d=INF, 0x9e=SET, 0x9f=GET
@@ -137,7 +138,7 @@ class ELOBJ():
             print("ELOBJ Error!! GetMyPropertyMap epc:", hex(epc))
             return None
 
-    def SetMyPropertyMap(self, epc:int, epcList:list[int]) -> PDCEDT | None:
+    def SetMyPropertyMap(self, epc, epcList):
         """!
         @brief 自身のPropertyMapを設定する
         @param epc int 0x9d=INF, 0x9e=SET, 0x9f=GET
@@ -155,7 +156,7 @@ class ELOBJ():
             print("ELOBJ Error!! SetMyPropertyMap epc:", hex(epc))
             return None
 
-        n:int = len(epcList)
+        n = len(epcList)
         if n < 16: # format 1
             pdcedt = PDCEDT()
             epcList.insert(0, n)
@@ -206,7 +207,8 @@ class ELOBJ():
         """
         # print("===== ELOBJ.print()")
         for key in self.pdcedts:
-            print("EPC:", format(key,'02x'), ",", self.pdcedts[key].printString() )
+            #print("EPC:", format(key,'02x'), ",", self.pdcedts[key].printString() )
+            print("EPC:", '{:02X}'.format(key), ",", self.pdcedts[key].printString() )
 
 
 if __name__ == '__main__':
