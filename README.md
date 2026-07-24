@@ -1,4 +1,4 @@
-# HandGestureHomeControl
+# HandGestureHomeControl Python3.11
 **No remote. No voice. Just your hand.**
 
 「あれ。リモコンどこ？」
@@ -70,4 +70,8 @@ Norifumi Konndo
 ※このシステムは、「2026年課題研究」の内容です。
 
 ## 注意
+このシステムは、Jetsonの導入に伴いPython3.11版の更新を一時停止しています。
+Pythonの最新のバージョンではありませんが最新のプログラムはpython3.8ブランチにあります。
+そちらの使用を検討してください。
+
 このプロジェクトを使用すると家のすべてのリモコンの場所を忘れる可能性があります！（もう必要になることがなくなるので）
