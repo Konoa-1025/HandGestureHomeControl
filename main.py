@@ -1,7 +1,7 @@
 #main.py
 #Norifumi Konndo
 #情報集め役 兼 司令塔
-#親　上層
+#Python 3.11対応
 
 import art
 
