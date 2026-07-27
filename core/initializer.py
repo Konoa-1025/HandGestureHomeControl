@@ -3,6 +3,7 @@
 
 import time
 
+import managers.dataManager as data
 import managers.appliancesManager as home
 import managers.actionManager as action
 import managers.cameraManager as camera
@@ -33,6 +34,9 @@ def Initialization(_config):
     p.info("初期化中")
 
     if not _run_step("TCP", tcp.connect_all, _config):
+        return False
+
+    if not _run_step("Data", data.Initialization, _config):
         return False
 
     _startup_wait = _config.get("system", {}).get("startup_wait", 0)

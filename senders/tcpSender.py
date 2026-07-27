@@ -171,25 +171,31 @@ def _send_text(_client_name, _text):
     _client = _get_client(_client_name)
 
     if _client is None:
-        return
+        return False
 
     try:
-        _client.sendall((_text + "\n").encode("utf-8"))
+        _client.sendall(
+            (_text + "\n").encode("utf-8")
+        )
+
+        return True
 
     except Exception as e:
         p.error(
             f"{_client_name} 送信失敗: {e}",
             "tcpSender"
         )
+
         _disconnect_client(_client_name)
+
+        return False
 
 
 def send_log(_text):
-    _send_text("log", _text)
-
+    return _send_text("log", _text)
 
 def send_research_log(_text):
-    _send_text("research", _text)
+    return _send_text("research", _text)
 
 
 def _send_frame(_client_name, _frame, _quality=70):

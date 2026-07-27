@@ -6,6 +6,7 @@ import models.lowModel as low
 import models.standbyModel as standby
 import utils.logPrint as p
 
+
 _current = "standby"
 _prev = None
 _cpu_low = 70
@@ -53,6 +54,9 @@ def _empty_result():
         "is_person": False,
         "hands": []
     }
+
+def get_current():
+    return _current
 
 
 def _normalize_result(_result):
