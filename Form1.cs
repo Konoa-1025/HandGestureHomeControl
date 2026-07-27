@@ -62,6 +62,8 @@ namespace HandGestureDashboard
 
         public async Task Initialize() //初期化
         {
+            this.Size = new Size(796, 475);
+
             NTimeLB.Text = "";
             Console.Text = "";
             NTimer.Start();
@@ -148,13 +150,28 @@ namespace HandGestureDashboard
 
         private void CClear_Click(object sender, EventArgs e)
         {
-            Console.Text = "";
+            Console.Text = ">";
         }
 
         private void Chelp_Click(object sender, EventArgs e)
         {
             UConsole.Text = "help";
             SendCommand();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (button2.Text == "コンソール")
+            {
+                button2.Text = "ノーマル";
+                this.Size = new Size(796, 664);
+            }
+            else
+            {
+                button2.Text = "コンソール";
+                this.Size = new Size(796, 475);
+            }
+
         }
     }
 }
