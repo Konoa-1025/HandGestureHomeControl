@@ -1,7 +1,24 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="HandGestureDashboard.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="port0" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">6000</Value>
+    </Setting>
+    <Setting Name="port1" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">6001</Value>
+    </Setting>
+    <Setting Name="port2" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">6002</Value>
+    </Setting>
+    <Setting Name="port3" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">6003</Value>
+    </Setting>
+    <Setting Name="port4" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">6004</Value>
+    </Setting>
+    <Setting Name="port5" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">6005</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>
