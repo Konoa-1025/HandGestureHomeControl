@@ -87,8 +87,8 @@
             this.tabControl3 = new System.Windows.Forms.TabControl();
             this.tabPage12 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
-            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.angleNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.distanceNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.label23 = new System.Windows.Forms.Label();
             this.label24 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
@@ -98,12 +98,12 @@
             this.label32 = new System.Windows.Forms.Label();
             this.label34 = new System.Windows.Forms.Label();
             this.button7 = new System.Windows.Forms.Button();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.brightnessNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.label35 = new System.Windows.Forms.Label();
             this.label36 = new System.Windows.Forms.Label();
             this.label37 = new System.Windows.Forms.Label();
             this.exNamebx = new System.Windows.Forms.TextBox();
-            this.domainUpDown1 = new System.Windows.Forms.DomainUpDown();
+            this.backgroundComboBox = new System.Windows.Forms.DomainUpDown();
             this.label38 = new System.Windows.Forms.Label();
             this.label33 = new System.Windows.Forms.Label();
             this.tabPage13 = new System.Windows.Forms.TabPage();
@@ -112,8 +112,8 @@
             this.label18 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.button6 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.DataExportBt = new System.Windows.Forms.Button();
+            this.DataListUpdateBt = new System.Windows.Forms.Button();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.tabPage14 = new System.Windows.Forms.TabPage();
             this.button11 = new System.Windows.Forms.Button();
@@ -169,6 +169,14 @@
             this.DataPushTimer = new System.Windows.Forms.Timer(this.components);
             this.CountDown = new System.Windows.Forms.Timer(this.components);
             this.label39 = new System.Windows.Forms.Label();
+            this.P4Sign = new System.Windows.Forms.Label();
+            this.port4Lb = new System.Windows.Forms.Label();
+            this.P5Sign = new System.Windows.Forms.Label();
+            this.port5Lb = new System.Windows.Forms.Label();
+            this.fileNameLabel = new System.Windows.Forms.Label();
+            this.experimentIdLabel = new System.Windows.Forms.Label();
+            this.timestampLabel = new System.Windows.Forms.Label();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -187,9 +195,9 @@
             this.tabControl3.SuspendLayout();
             this.tabPage12.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.angleNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.distanceNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.brightnessNumericUpDown)).BeginInit();
             this.tabPage13.SuspendLayout();
             this.tabPage14.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -379,7 +387,7 @@
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(46, 21);
             this.textBox4.TabIndex = 28;
-            this.textBox4.Text = "なし";
+            this.textBox4.Text = "計測";
             // 
             // textBox5
             // 
@@ -387,7 +395,7 @@
             this.textBox5.Name = "textBox5";
             this.textBox5.Size = new System.Drawing.Size(46, 21);
             this.textBox5.TabIndex = 29;
-            this.textBox5.Text = "なし";
+            this.textBox5.Text = "映像2";
             // 
             // textBox6
             // 
@@ -897,8 +905,8 @@
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 41.10429F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 58.89571F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel4.Controls.Add(this.numericUpDown3, 1, 5);
-            this.tableLayoutPanel4.Controls.Add(this.numericUpDown2, 1, 4);
+            this.tableLayoutPanel4.Controls.Add(this.angleNumericUpDown, 1, 5);
+            this.tableLayoutPanel4.Controls.Add(this.distanceNumericUpDown, 1, 4);
             this.tableLayoutPanel4.Controls.Add(this.label23, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.label24, 0, 1);
             this.tableLayoutPanel4.Controls.Add(this.label27, 0, 2);
@@ -908,12 +916,12 @@
             this.tableLayoutPanel4.Controls.Add(this.label32, 0, 6);
             this.tableLayoutPanel4.Controls.Add(this.label34, 1, 1);
             this.tableLayoutPanel4.Controls.Add(this.button7, 1, 2);
-            this.tableLayoutPanel4.Controls.Add(this.numericUpDown1, 1, 3);
+            this.tableLayoutPanel4.Controls.Add(this.brightnessNumericUpDown, 1, 3);
             this.tableLayoutPanel4.Controls.Add(this.label35, 2, 3);
             this.tableLayoutPanel4.Controls.Add(this.label36, 2, 4);
             this.tableLayoutPanel4.Controls.Add(this.label37, 2, 5);
             this.tableLayoutPanel4.Controls.Add(this.exNamebx, 1, 0);
-            this.tableLayoutPanel4.Controls.Add(this.domainUpDown1, 1, 6);
+            this.tableLayoutPanel4.Controls.Add(this.backgroundComboBox, 1, 6);
             this.tableLayoutPanel4.Controls.Add(this.label38, 2, 1);
             this.tableLayoutPanel4.Location = new System.Drawing.Point(7, 18);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
@@ -929,37 +937,37 @@
             this.tableLayoutPanel4.Size = new System.Drawing.Size(375, 247);
             this.tableLayoutPanel4.TabIndex = 0;
             // 
-            // numericUpDown3
+            // angleNumericUpDown
             // 
-            this.numericUpDown3.Font = new System.Drawing.Font("MS UI Gothic", 19F);
-            this.numericUpDown3.Location = new System.Drawing.Point(136, 175);
-            this.numericUpDown3.Maximum = new decimal(new int[] {
+            this.angleNumericUpDown.Font = new System.Drawing.Font("MS UI Gothic", 19F);
+            this.angleNumericUpDown.Location = new System.Drawing.Point(136, 175);
+            this.angleNumericUpDown.Maximum = new decimal(new int[] {
             180,
             0,
             0,
             0});
-            this.numericUpDown3.Minimum = new decimal(new int[] {
+            this.angleNumericUpDown.Minimum = new decimal(new int[] {
             180,
             0,
             0,
             -2147483648});
-            this.numericUpDown3.Name = "numericUpDown3";
-            this.numericUpDown3.Size = new System.Drawing.Size(185, 33);
-            this.numericUpDown3.TabIndex = 28;
+            this.angleNumericUpDown.Name = "angleNumericUpDown";
+            this.angleNumericUpDown.Size = new System.Drawing.Size(185, 33);
+            this.angleNumericUpDown.TabIndex = 28;
             // 
-            // numericUpDown2
+            // distanceNumericUpDown
             // 
-            this.numericUpDown2.Font = new System.Drawing.Font("MS UI Gothic", 19F);
-            this.numericUpDown2.Location = new System.Drawing.Point(136, 138);
-            this.numericUpDown2.Maximum = new decimal(new int[] {
+            this.distanceNumericUpDown.Font = new System.Drawing.Font("MS UI Gothic", 19F);
+            this.distanceNumericUpDown.Location = new System.Drawing.Point(136, 138);
+            this.distanceNumericUpDown.Maximum = new decimal(new int[] {
             9999,
             0,
             0,
             0});
-            this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(185, 33);
-            this.numericUpDown2.TabIndex = 27;
-            this.numericUpDown2.Value = new decimal(new int[] {
+            this.distanceNumericUpDown.Name = "distanceNumericUpDown";
+            this.distanceNumericUpDown.Size = new System.Drawing.Size(185, 33);
+            this.distanceNumericUpDown.TabIndex = 27;
+            this.distanceNumericUpDown.Value = new decimal(new int[] {
             1000,
             0,
             0,
@@ -1064,14 +1072,14 @@
             this.button7.UseVisualStyleBackColor = true;
             this.button7.Click += new System.EventHandler(this.button7_Click_1);
             // 
-            // numericUpDown1
+            // brightnessNumericUpDown
             // 
-            this.numericUpDown1.Font = new System.Drawing.Font("MS UI Gothic", 19F);
-            this.numericUpDown1.Location = new System.Drawing.Point(136, 97);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(185, 33);
-            this.numericUpDown1.TabIndex = 26;
-            this.numericUpDown1.Value = new decimal(new int[] {
+            this.brightnessNumericUpDown.Font = new System.Drawing.Font("MS UI Gothic", 19F);
+            this.brightnessNumericUpDown.Location = new System.Drawing.Point(136, 97);
+            this.brightnessNumericUpDown.Name = "brightnessNumericUpDown";
+            this.brightnessNumericUpDown.Size = new System.Drawing.Size(185, 33);
+            this.brightnessNumericUpDown.TabIndex = 26;
+            this.brightnessNumericUpDown.Value = new decimal(new int[] {
             50,
             0,
             0,
@@ -1119,19 +1127,19 @@
             this.exNamebx.TabIndex = 23;
             this.exNamebx.TextChanged += new System.EventHandler(this.textBox7_TextChanged);
             // 
-            // domainUpDown1
+            // backgroundComboBox
             // 
-            this.domainUpDown1.Font = new System.Drawing.Font("MS UI Gothic", 19F);
-            this.domainUpDown1.Items.Add("White");
-            this.domainUpDown1.Items.Add("Yellow");
-            this.domainUpDown1.Items.Add("Gray");
-            this.domainUpDown1.Items.Add("Dark");
-            this.domainUpDown1.Items.Add("Black");
-            this.domainUpDown1.Location = new System.Drawing.Point(136, 212);
-            this.domainUpDown1.Name = "domainUpDown1";
-            this.domainUpDown1.Size = new System.Drawing.Size(185, 33);
-            this.domainUpDown1.TabIndex = 31;
-            this.domainUpDown1.Text = "White";
+            this.backgroundComboBox.Font = new System.Drawing.Font("MS UI Gothic", 19F);
+            this.backgroundComboBox.Items.Add("White");
+            this.backgroundComboBox.Items.Add("Yellow");
+            this.backgroundComboBox.Items.Add("Gray");
+            this.backgroundComboBox.Items.Add("Dark");
+            this.backgroundComboBox.Items.Add("Black");
+            this.backgroundComboBox.Location = new System.Drawing.Point(136, 212);
+            this.backgroundComboBox.Name = "backgroundComboBox";
+            this.backgroundComboBox.Size = new System.Drawing.Size(185, 33);
+            this.backgroundComboBox.TabIndex = 31;
+            this.backgroundComboBox.Text = "White";
             // 
             // label38
             // 
@@ -1157,13 +1165,16 @@
             // 
             // tabPage13
             // 
+            this.tabPage13.Controls.Add(this.timestampLabel);
+            this.tabPage13.Controls.Add(this.experimentIdLabel);
+            this.tabPage13.Controls.Add(this.fileNameLabel);
             this.tabPage13.Controls.Add(this.label21);
             this.tabPage13.Controls.Add(this.label22);
             this.tabPage13.Controls.Add(this.label18);
             this.tabPage13.Controls.Add(this.label7);
             this.tabPage13.Controls.Add(this.label6);
-            this.tabPage13.Controls.Add(this.button6);
-            this.tabPage13.Controls.Add(this.button3);
+            this.tabPage13.Controls.Add(this.DataExportBt);
+            this.tabPage13.Controls.Add(this.DataListUpdateBt);
             this.tabPage13.Controls.Add(this.listBox1);
             this.tabPage13.Location = new System.Drawing.Point(4, 22);
             this.tabPage13.Name = "tabPage13";
@@ -1192,11 +1203,11 @@
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(27, 212);
+            this.label18.Location = new System.Drawing.Point(21, 212);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(71, 12);
+            this.label18.Size = new System.Drawing.Size(77, 12);
             this.label18.TabIndex = 11;
-            this.label18.Text = "試行番号 　：";
+            this.label18.Text = "タイムスタンプ ：";
             // 
             // label7
             // 
@@ -1216,27 +1227,29 @@
             this.label6.TabIndex = 9;
             this.label6.Text = "選択中のデータ　：";
             // 
-            // button6
+            // DataExportBt
             // 
-            this.button6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.button6.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold);
-            this.button6.Location = new System.Drawing.Point(159, 227);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(223, 38);
-            this.button6.TabIndex = 8;
-            this.button6.Text = "選択したデータの出力";
-            this.button6.UseVisualStyleBackColor = false;
+            this.DataExportBt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.DataExportBt.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold);
+            this.DataExportBt.Location = new System.Drawing.Point(159, 227);
+            this.DataExportBt.Name = "DataExportBt";
+            this.DataExportBt.Size = new System.Drawing.Size(223, 38);
+            this.DataExportBt.TabIndex = 8;
+            this.DataExportBt.Text = "選択したデータの出力";
+            this.DataExportBt.UseVisualStyleBackColor = false;
+            this.DataExportBt.Click += new System.EventHandler(this.DataExportBt_Click);
             // 
-            // button3
+            // DataListUpdateBt
             // 
-            this.button3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.button3.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold);
-            this.button3.Location = new System.Drawing.Point(8, 227);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(145, 38);
-            this.button3.TabIndex = 7;
-            this.button3.Text = "データ一覧更新";
-            this.button3.UseVisualStyleBackColor = false;
+            this.DataListUpdateBt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.DataListUpdateBt.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold);
+            this.DataListUpdateBt.Location = new System.Drawing.Point(8, 227);
+            this.DataListUpdateBt.Name = "DataListUpdateBt";
+            this.DataListUpdateBt.Size = new System.Drawing.Size(145, 38);
+            this.DataListUpdateBt.TabIndex = 7;
+            this.DataListUpdateBt.Text = "データ一覧更新";
+            this.DataListUpdateBt.UseVisualStyleBackColor = false;
+            this.DataListUpdateBt.Click += new System.EventHandler(this.DataListUpdateBt_Click);
             // 
             // listBox1
             // 
@@ -1246,6 +1259,7 @@
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(375, 172);
             this.listBox1.TabIndex = 0;
+            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
             // tabPage14
             // 
@@ -1477,7 +1491,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("MS UI Gothic", 15F);
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label1.Location = new System.Drawing.Point(206, 2);
+            this.label1.Location = new System.Drawing.Point(283, 2);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(14, 20);
             this.label1.TabIndex = 13;
@@ -1488,7 +1502,7 @@
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("MS UI Gothic", 15F);
             this.label8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label8.Location = new System.Drawing.Point(226, 2);
+            this.label8.Location = new System.Drawing.Point(303, 2);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(29, 20);
             this.label8.TabIndex = 14;
@@ -1497,7 +1511,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(226, 23);
+            this.label9.Location = new System.Drawing.Point(303, 23);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(29, 12);
             this.label9.TabIndex = 15;
@@ -1803,17 +1817,96 @@
             this.label39.AutoSize = true;
             this.label39.Font = new System.Drawing.Font("MS UI Gothic", 15F);
             this.label39.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label39.Location = new System.Drawing.Point(261, 2);
+            this.label39.Location = new System.Drawing.Point(338, 2);
             this.label39.Name = "label39";
             this.label39.Size = new System.Drawing.Size(14, 20);
             this.label39.TabIndex = 22;
             this.label39.Text = "|";
+            // 
+            // P4Sign
+            // 
+            this.P4Sign.AutoSize = true;
+            this.P4Sign.Font = new System.Drawing.Font("MS UI Gothic", 15F);
+            this.P4Sign.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.P4Sign.Location = new System.Drawing.Point(206, 2);
+            this.P4Sign.Name = "P4Sign";
+            this.P4Sign.Size = new System.Drawing.Size(29, 20);
+            this.P4Sign.TabIndex = 24;
+            this.P4Sign.Text = "●";
+            // 
+            // port4Lb
+            // 
+            this.port4Lb.AutoSize = true;
+            this.port4Lb.Location = new System.Drawing.Point(206, 23);
+            this.port4Lb.Name = "port4Lb";
+            this.port4Lb.Size = new System.Drawing.Size(29, 12);
+            this.port4Lb.TabIndex = 23;
+            this.port4Lb.Text = "0000";
+            // 
+            // P5Sign
+            // 
+            this.P5Sign.AutoSize = true;
+            this.P5Sign.Font = new System.Drawing.Font("MS UI Gothic", 15F);
+            this.P5Sign.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.P5Sign.Location = new System.Drawing.Point(241, 2);
+            this.P5Sign.Name = "P5Sign";
+            this.P5Sign.Size = new System.Drawing.Size(29, 20);
+            this.P5Sign.TabIndex = 26;
+            this.P5Sign.Text = "●";
+            // 
+            // port5Lb
+            // 
+            this.port5Lb.AutoSize = true;
+            this.port5Lb.Location = new System.Drawing.Point(241, 23);
+            this.port5Lb.Name = "port5Lb";
+            this.port5Lb.Size = new System.Drawing.Size(29, 12);
+            this.port5Lb.TabIndex = 25;
+            this.port5Lb.Text = "0000";
+            // 
+            // fileNameLabel
+            // 
+            this.fileNameLabel.AutoSize = true;
+            this.fileNameLabel.Location = new System.Drawing.Point(100, 188);
+            this.fileNameLabel.Name = "fileNameLabel";
+            this.fileNameLabel.Size = new System.Drawing.Size(77, 12);
+            this.fileNameLabel.TabIndex = 14;
+            this.fileNameLabel.Text = "fileNameLabel";
+            // 
+            // experimentIdLabel
+            // 
+            this.experimentIdLabel.AutoSize = true;
+            this.experimentIdLabel.Location = new System.Drawing.Point(100, 200);
+            this.experimentIdLabel.Name = "experimentIdLabel";
+            this.experimentIdLabel.Size = new System.Drawing.Size(97, 12);
+            this.experimentIdLabel.TabIndex = 15;
+            this.experimentIdLabel.Text = "experimentIdLabel";
+            // 
+            // timestampLabel
+            // 
+            this.timestampLabel.AutoSize = true;
+            this.timestampLabel.Location = new System.Drawing.Point(100, 212);
+            this.timestampLabel.Name = "timestampLabel";
+            this.timestampLabel.Size = new System.Drawing.Size(85, 12);
+            this.timestampLabel.TabIndex = 16;
+            this.timestampLabel.Text = "timestampLabel";
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(690, 23);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(217, 22);
+            this.progressBar1.TabIndex = 17;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(919, 625);
+            this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.P5Sign);
+            this.Controls.Add(this.port5Lb);
+            this.Controls.Add(this.P4Sign);
+            this.Controls.Add(this.port4Lb);
             this.Controls.Add(this.label39);
             this.Controls.Add(this.tabControl2);
             this.Controls.Add(this.button2);
@@ -1862,9 +1955,9 @@
             this.tabPage12.PerformLayout();
             this.tableLayoutPanel4.ResumeLayout(false);
             this.tableLayoutPanel4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.angleNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.distanceNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.brightnessNumericUpDown)).EndInit();
             this.tabPage13.ResumeLayout(false);
             this.tabPage13.PerformLayout();
             this.tabPage14.ResumeLayout(false);
@@ -1992,8 +2085,8 @@
         private System.Windows.Forms.TabControl tabControl3;
         private System.Windows.Forms.TabPage tabPage12;
         private System.Windows.Forms.TabPage tabPage13;
-        private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button DataExportBt;
+        private System.Windows.Forms.Button DataListUpdateBt;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.Label label22;
@@ -2011,15 +2104,15 @@
         private System.Windows.Forms.Label label32;
         private System.Windows.Forms.Label label33;
         private System.Windows.Forms.TextBox exNamebx;
-        private System.Windows.Forms.NumericUpDown numericUpDown3;
-        private System.Windows.Forms.NumericUpDown numericUpDown2;
+        private System.Windows.Forms.NumericUpDown angleNumericUpDown;
+        private System.Windows.Forms.NumericUpDown distanceNumericUpDown;
         private System.Windows.Forms.Button button7;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.NumericUpDown brightnessNumericUpDown;
         private System.Windows.Forms.Label label35;
         private System.Windows.Forms.Label label36;
         private System.Windows.Forms.Label label37;
         private System.Windows.Forms.ListBox listBox1;
-        private System.Windows.Forms.DomainUpDown domainUpDown1;
+        private System.Windows.Forms.DomainUpDown backgroundComboBox;
         private System.Windows.Forms.Label label38;
         private System.Windows.Forms.Button button9;
         private System.Windows.Forms.Button button8;
@@ -2027,6 +2120,14 @@
         private System.Windows.Forms.Button button10;
         private System.Windows.Forms.Timer CountDown;
         private System.Windows.Forms.Label label39;
+        private System.Windows.Forms.Label P4Sign;
+        private System.Windows.Forms.Label port4Lb;
+        private System.Windows.Forms.Label P5Sign;
+        private System.Windows.Forms.Label port5Lb;
+        private System.Windows.Forms.Label timestampLabel;
+        private System.Windows.Forms.Label experimentIdLabel;
+        private System.Windows.Forms.Label fileNameLabel;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }
 

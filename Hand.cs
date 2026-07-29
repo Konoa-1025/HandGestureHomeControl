@@ -16,5 +16,12 @@ namespace HandGestureDashboard
         {
             InitializeComponent();
         }
+
+        private void Hand_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        
     }
 }

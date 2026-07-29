@@ -41,6 +41,7 @@
             this.DoubleBuffered = true;
             this.Name = "Hand";
             this.Text = "Hand";
+            this.Load += new System.EventHandler(this.Hand_Load);
             this.ResumeLayout(false);
 
         }

@@ -1,4 +1,7 @@
-﻿using System;
+﻿using HandGestureHomeControl;
+using K4os.Compression.LZ4.Streams;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,7 +16,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Newtonsoft.Json;
 
 
 
@@ -41,6 +43,13 @@ namespace HandGestureDashboard
         private readonly object _tcpLock = new object();
         private bool _tcpRunning = false;
         public string Command { get; set; }
+
+        private readonly Dictionary<string, PendingFileTransfer>
+    _pendingFileTransfers =
+        new Dictionary<string, PendingFileTransfer>();
+
+        private readonly object _fileTransferLock =
+            new object();
 
         //==============================================================
         // 研究データ
@@ -264,13 +273,13 @@ namespace HandGestureDashboard
 
                 case 4:
                     Properties.Settings.Default.port4 = portNumber;
-                    //port4Lb.Text = portNumber.ToString();
+                    port4Lb.Text = portNumber.ToString();
                     port4PLb.Text = portNumber.ToString();
                     break;
 
                 case 5:
                     Properties.Settings.Default.port5 = portNumber;
-                    //port5Lb.Text = portNumber.ToString();
+                    port5Lb.Text = portNumber.ToString();
                     port5PLb.Text = portNumber.ToString();
                     break;
 
@@ -318,6 +327,8 @@ namespace HandGestureDashboard
             port1Lb.Text = Properties.Settings.Default.port1.ToString();
             port2Lb.Text = Properties.Settings.Default.port2.ToString();
             port3Lb.Text = Properties.Settings.Default.port3.ToString();
+            port4Lb.Text = Properties.Settings.Default.port4.ToString();
+            port5Lb.Text = Properties.Settings.Default.port5.ToString();
 
             port0PLb.Text = Properties.Settings.Default.port0.ToString();
             port1PLb.Text = Properties.Settings.Default.port1.ToString();
@@ -415,7 +426,12 @@ namespace HandGestureDashboard
             if (port == Properties.Settings.Default.port3)
                 return P3Sign;
 
-            // P4Sign / P5Sign をフォームに追加した場合はここへ追加する
+            if (port == Properties.Settings.Default.port4)
+                return P4Sign;
+
+            if (port == Properties.Settings.Default.port5)
+                return P5Sign;
+
             return null;
         }
 
@@ -484,6 +500,8 @@ namespace HandGestureDashboard
             await SetLamp(P1Sign, state);
             await SetLamp(P2Sign, state);
             await SetLamp(P3Sign, state);
+            await SetLamp(P4Sign, state);
+            await SetLamp(P5Sign, state);
 
             SetControlText(P0statusLb, state.ToString());
             SetControlText(P1statusLb, state.ToString());
@@ -925,11 +943,26 @@ namespace HandGestureDashboard
                     SetPortStatus(port, "Connected");
 
                     // 受信中でも次のクライアントを受け付ける
-                    _ = ReceiveClientAsync(
-                        client,
-                        port,
-                        cancellationToken
-                    );
+
+                    if (port == Properties.Settings.Default.port5)
+                    {
+                        _lastLoggedTransferProgress = -1;
+                        ResetFileTransferProgress();
+
+                        _ = ReceiveCompressedFileAsync(
+                            client,
+                            port,
+                            cancellationToken
+                        );
+                    }
+                    else
+                    {
+                        _ = ReceiveClientAsync(
+                            client,
+                            port,
+                            cancellationToken
+                        );
+                    }
                 }
             }
             catch (SocketException ex)
@@ -982,11 +1015,9 @@ namespace HandGestureDashboard
                 SetPortStatus(port, "Disconnected");
             }
         }
-        private async Task ReceiveClientAsync(
-            TcpClient client,
-            int port,
-            CancellationToken cancellationToken)
+        private async Task ReceiveClientAsync(TcpClient client,int port,CancellationToken cancellationToken)
         {
+            StreamWriter writer = null;
             string remoteEndPoint = "不明";
 
             try
@@ -999,9 +1030,21 @@ namespace HandGestureDashboard
 
                 using (client)
                 using (NetworkStream stream = client.GetStream())
-                using (StreamReader reader =
-                    new StreamReader(stream, Encoding.UTF8))
+                using (StreamReader reader = new StreamReader(
+                    stream,
+                    Encoding.UTF8,
+                    false,
+                    1024,
+                    true))
+                using (writer = new StreamWriter(
+                    stream,
+                    new UTF8Encoding(false),
+                    1024,
+                    true))
                 {
+                    writer.AutoFlush = true;
+                    RegisterTcpWriter(port, writer);
+
                     while (!cancellationToken.IsCancellationRequested)
                     {
                         string line;
@@ -1052,6 +1095,11 @@ namespace HandGestureDashboard
             finally
             {
                 int remainingClients;
+
+                if (writer != null)
+                {
+                    UnregisterTcpWriter(port, writer);
+                }
 
                 lock (_tcpLock)
                 {
@@ -1109,6 +1157,22 @@ namespace HandGestureDashboard
         //==============================================================
         private void ProcessReceivedData(int port, string data)
         {
+            if (port == Properties.Settings.Default.port4)
+            {
+                if (TryHandlePrepareResponse(data))
+                {
+                    AppendLog("計測準備結果を認識しました。");
+                    return;
+                }
+
+
+                if (TryHandleDataListResponse(data))
+                    return;
+
+                if (TryHandleDataInfoResponse(data))
+                    return;
+            }
+
             if (string.IsNullOrWhiteSpace(data))
                 return;
 
@@ -1142,10 +1206,6 @@ namespace HandGestureDashboard
                 return;
             }
 
-            if (port == Properties.Settings.Default.port5)
-            {
-                HandlePort5Data(data);
-            }
         }
 
         //==============================================================
@@ -1153,6 +1213,11 @@ namespace HandGestureDashboard
         //==============================================================
         private void HandlePort1Data(string json)
         {
+            if (TryHandlePrepareResponse(json))
+            {
+                return;
+            }
+
             ResearchData researchData;
 
             if (!ResearchManager.TryParse(
@@ -1363,10 +1428,7 @@ namespace HandGestureDashboard
             // port4専用処理
         }
 
-        private void HandlePort5Data(string data)
-        {
-            // port5専用処理
-        }
+        
 
         private ListBox GetPortLogBox(int port)
         {
@@ -1660,93 +1722,22 @@ namespace HandGestureDashboard
             AppendLog("計測開始");
         }
 
-        private void StartPushBt_Click(object sender, EventArgs e)
+        private async void StartPushBt_Click(object sender, EventArgs e)
         {
-            switch (StartPushBt.Text)
+                switch (StartPushBt.Text)
             {
-                // ==========================
-                // 計測準備
-                // ==========================
                 case "計測準備":
-
-                    if (exNamebx.Text == "")
-                    {
-                        AppendLog("実験名を入力してください。");
-                        return;
-                    }
-
-                    if (handForm != null && !handForm.IsDisposed)
-                    {
-                        
-                    }
-                    else
-                    {
-                        handForm = new Hand();
-                        handForm.FormClosed += (s, args) => handForm = null;
-                        handForm.Show();
-                    }
-
-                    
-
-                    if (directionForm != null && !directionForm.IsDisposed)
-                    {
-                        
-                    }
-                    else
-                    {
-                        directionForm = new Direction();
-                        directionForm.FormClosed += (s, args) => directionForm = null;
-                        directionForm.Show();
-                    }
-
-                    
-
-                    if (cameraForm != null && !cameraForm.IsDisposed)
-                    {
-                        
-                    }
-                    else
-                    {
-                        cameraForm = new Camera();
-                        cameraForm.FormClosed += (s, args) => cameraForm = null;
-                        cameraForm.Show();
-                    }
-
-                    
-
-                    AppendLog("環境データ送信します。");
-                    SaveExperimentHistory(exNamebx.Text.Trim(), int.Parse(label34.Text));
-
-                    tableLayoutPanel4.Enabled = false;
-                    DataPushTimer.Start();
-
-                    //StartPushBt.Enabled = false;
-
-                    StartPushBt.Text = "計測開始";
-                    StartPushBt.BackColor = Color.FromArgb(128, 255, 128); // 緑
-
+                    await PrepareExperimentAsync();
                     break;
 
-                // ==========================
-                // 計測開始
-                // ==========================
                 case "計測開始":
+                    count = 8;
+                    StartPushBt.Enabled = false;
                     CountDown.Start();
-
                     break;
 
-                // ==========================
-                // 計測停止
-                // ==========================
                 case "計測停止":
-
-                    StartPushBt.Text = "計測準備";
-                    StartPushBt.BackColor = Color.FromArgb(128, 192, 255); // 青
-
-                    tableLayoutPanel4.Enabled = true;
-
-                    AppendLog("計測停止");
-
+                    ResetMeasurementPreparation("計測を停止しました。");
                     break;
             }
         }
@@ -1855,26 +1846,7 @@ namespace HandGestureDashboard
 
         private void button7_Click_1(object sender, EventArgs e)
         {
-            using (OpenFileDialog dialog = new OpenFileDialog())
-            {
-                dialog.Filter = "CSVファイル (*.csv)|*.csv";
-                dialog.Title = "CSVファイルを選択";
-                dialog.Multiselect = false;
-                dialog.CheckFileExists = true;
-
-                if (dialog.ShowDialog() != DialogResult.OK)
-                    return;
-
-                string csvPath = dialog.FileName;
-
-                // 表示はファイル名だけ
-                button7.Text = Path.GetFileName(csvPath);
-
-                // 内部にはフルパスを保存
-                button7.Tag = csvPath;
-
-                AppendLog("CSVファイルを選択しました: " + csvPath);
-            }
+            SelectCsvFile();
         }
         
         private void button8_Click(object sender, EventArgs e)
@@ -1925,11 +1897,16 @@ namespace HandGestureDashboard
         }
         private void StartExperiment()
         {
+            StartPushBt.Enabled = true;
             StartPushBt.Text = "計測停止";
-            StartPushBt.BackColor = Color.FromArgb(255, 128, 128); // 赤
+            StartPushBt.BackColor = Color.FromArgb(255, 128, 128);
 
             tableLayoutPanel4.Enabled = false;
-            tabControl3.SelectedIndex = 13;
+
+            if (tabControl3.TabPages.Count > 13)
+            {
+                tabControl3.SelectedIndex = 13;
+            }
 
             AppendLog("計測開始");
         }
@@ -1945,5 +1922,846 @@ namespace HandGestureDashboard
                 StartExperiment();
             }
         }
+
+        private async void DataListUpdateBt_Click(object sender, EventArgs e)
+        {
+            bool sent = await SendJsonToPortAsync(
+                Properties.Settings.Default.port4,
+                new
+                {
+                    type = "data_list_request"
+                }
+            );
+
+            if (!sent)
+            {
+                AppendLog(
+                    "JSONファイル一覧の取得要求に失敗しました。"
+                );
+
+                return;
+            }
+
+            AppendLog(
+                "JSONファイル一覧を要求しました。"
+            );
+        }
+
+        private async void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listBox1.SelectedItem == null)
+            {
+                return;
+            }
+
+            string fileName =
+                listBox1.SelectedItem.ToString();
+
+            bool sent = await SendJsonToPortAsync(
+                Properties.Settings.Default.port4,
+                new
+                {
+                    type = "data_info_request",
+                    file_name = fileName
+                }
+            );
+
+            if (!sent)
+            {
+                AppendLog(
+                    "選択したJSONの情報取得に失敗しました。"
+                );
+            }
+        }
+
+        private async void DataExportBt_Click(object sender, EventArgs e)
+        {
+            if (listBox1.SelectedItem == null)
+            {
+                MessageBox.Show(
+                    "出力するデータを選択してください。",
+                    "データ未選択",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+
+                return;
+            }
+
+            string fileName =
+                listBox1.SelectedItem.ToString();
+
+            using (SaveFileDialog dialog =
+                new SaveFileDialog())
+            {
+                dialog.Title =
+                    "JSONLデータの保存先を選択";
+
+                dialog.FileName =
+                    fileName;
+
+                dialog.Filter =
+                    "JSONLファイル (*.jsonl)|*.jsonl|" +
+                    "すべてのファイル (*.*)|*.*";
+
+                dialog.DefaultExt =
+                    "jsonl";
+
+                dialog.AddExtension =
+                    true;
+
+                if (dialog.ShowDialog() !=
+                    DialogResult.OK)
+                {
+                    return;
+                }
+
+                string transferId =
+                    Guid.NewGuid().ToString("N");
+
+                PendingFileTransfer transfer =
+                    new PendingFileTransfer
+                    {
+                        TransferId = transferId,
+                        FileName = fileName,
+                        SavePath = dialog.FileName
+                    };
+
+                lock (_fileTransferLock)
+                {
+                    _pendingFileTransfers[transferId] =
+                        transfer;
+                }
+
+                DataExportRequest request =
+                    new DataExportRequest
+                    {
+                        Type = "data_export_request",
+                        TransferId = transferId,
+                        FileName = fileName,
+                        TransferPort =
+                            Properties.Settings.Default.port5
+                    };
+
+                bool sent =
+                    await SendJsonToPortAsync(
+                        Properties.Settings.Default.port4,
+                        request
+                    );
+
+                if (!sent)
+                {
+                    lock (_fileTransferLock)
+                    {
+                        _pendingFileTransfers.Remove(
+                            transferId
+                        );
+                    }
+
+                    AppendLog(
+                        "データ出力要求の送信に失敗しました。"
+                    );
+
+                    return;
+                }
+
+                DataExportBt.Enabled = false;
+
+                AppendLog(
+                    $"データ出力要求送信: {fileName}"
+                );
+            }
+        }
+
+        private async Task ReceiveCompressedFileAsync(
+    TcpClient client,
+    int port,
+    CancellationToken cancellationToken)
+        {
+            string remoteEndPoint = "不明";
+            string temporaryPath = null;
+            string finalPath = null;
+            string transferId = null;
+
+            bool completed = false;
+
+
+            try
+            {
+                if (client.Client.RemoteEndPoint != null)
+                {
+                    remoteEndPoint =
+                        client.Client.RemoteEndPoint.ToString();
+                }
+
+                using (client)
+                using (NetworkStream networkStream =
+                    client.GetStream())
+                {
+                    /*
+                     * Port5の構造
+                     *
+                     * 1行目：
+                     * JSONヘッダー + \n
+                     *
+                     * 2行目以降：
+                     * LZ4 Frame形式のバイナリ
+                     */
+
+                    string headerJson =
+                        await ReadHeaderLineAsync(
+                            networkStream,
+                            cancellationToken
+                        );
+
+                    if (string.IsNullOrWhiteSpace(headerJson))
+                    {
+                        throw new InvalidDataException(
+                            "ファイル転送ヘッダーが空です。"
+                        );
+                    }
+
+                    AppendPortLog(
+                        port,
+                        "転送ヘッダー受信: " + headerJson
+                    );
+
+                    FileTransferHeader header;
+
+                    try
+                    {
+                        header =
+                            JsonConvert.DeserializeObject
+                            <FileTransferHeader>(headerJson);
+                    }
+                    catch (JsonException ex)
+                    {
+                        throw new InvalidDataException(
+                            "転送ヘッダーのJSON解析に失敗しました。",
+                            ex
+                        );
+                    }
+
+                    if (header == null)
+                    {
+                        throw new InvalidDataException(
+                            "転送ヘッダーを取得できませんでした。"
+                        );
+                    }
+
+                    if (header.Type != "file_transfer")
+                    {
+                        throw new InvalidDataException(
+                            "不明な転送形式です: " +
+                            header.Type
+                        );
+                    }
+
+                    if (string.IsNullOrWhiteSpace(
+                        header.TransferId))
+                    {
+                        throw new InvalidDataException(
+                            "transfer_idがありません。"
+                        );
+                    }
+
+                    if (!string.Equals(
+                        header.Compression,
+                        "lz4",
+                        StringComparison.OrdinalIgnoreCase))
+                    {
+                        throw new InvalidDataException(
+                            "対応していない圧縮形式です: " +
+                            header.Compression
+                        );
+                    }
+
+                    if (header.OriginalSize < 0)
+                    {
+                        throw new InvalidDataException(
+                            "original_sizeが不正です。"
+                        );
+                    }
+
+                    transferId = header.TransferId;
+
+                    PendingFileTransfer pendingTransfer;
+
+                    lock (_fileTransferLock)
+                    {
+                        _pendingFileTransfers.TryGetValue(
+                            transferId,
+                            out pendingTransfer
+                        );
+                    }
+
+                    if (pendingTransfer == null)
+                    {
+                        throw new InvalidDataException(
+                            "対応する転送要求がありません。"
+                        );
+                    }
+
+                    /*
+                     * Pythonから来たファイル名ではなく、
+                     * SaveFileDialogで決めた保存先を使用する。
+                     *
+                     * Python側から任意のパスを書き込まれることを
+                     * 防ぐ意味もある。
+                     */
+                    finalPath = pendingTransfer.SavePath;
+                    temporaryPath = finalPath + ".part";
+
+                    string saveDirectory =
+                        Path.GetDirectoryName(finalPath);
+
+                    if (!string.IsNullOrWhiteSpace(
+                        saveDirectory))
+                    {
+                        Directory.CreateDirectory(
+                            saveDirectory
+                        );
+                    }
+
+                    if (File.Exists(temporaryPath))
+                    {
+                        File.Delete(temporaryPath);
+                    }
+
+                    AppendLog(
+                        $"LZ4転送開始: {pendingTransfer.FileName}"
+                    );
+
+                    AppendLog(
+                        $"展開後サイズ: " +
+                        $"{FormatFileSize(header.OriginalSize)}"
+                    );
+
+                    /*
+                     * leaveOpen=trueにして、
+                     * LZ4Streamを閉じた時にNetworkStreamまで
+                     * 自動で閉じられないようにする。
+                     */
+                    using (Stream lz4Stream =
+                        LZ4Stream.Decode(
+                            networkStream,
+                            leaveOpen: true
+                        ))
+                    using (FileStream outputStream =
+                        new FileStream(
+                            temporaryPath,
+                            FileMode.Create,
+                            FileAccess.Write,
+                            FileShare.None,
+                            1024 * 1024,
+                            true
+                        ))
+                    {
+                        byte[] buffer =
+                            new byte[1024 * 1024];
+
+                        long totalWritten = 0;
+                        int lastProgress = -1;
+
+                        Stopwatch stopwatch =
+                            Stopwatch.StartNew();
+
+                        while (true)
+                        {
+                            cancellationToken
+                                .ThrowIfCancellationRequested();
+
+                            int read =
+                                await lz4Stream.ReadAsync(
+                                    buffer,
+                                    0,
+                                    buffer.Length,
+                                    cancellationToken
+                                );
+
+                            if (read == 0)
+                            {
+                                break;
+                            }
+
+                            await outputStream.WriteAsync(
+                                buffer,
+                                0,
+                                read,
+                                cancellationToken
+                            );
+
+                            totalWritten += read;
+
+                            if (header.OriginalSize > 0)
+                            {
+                                int progress =
+                                    (int)Math.Min(
+                                        100,
+                                        totalWritten * 100L /
+                                        header.OriginalSize
+                                    );
+
+                                /*
+                                 * 1%変化した時だけ更新する。
+                                 * 毎チャンクUI更新すると重くなるため。
+                                 */
+                                if (progress != lastProgress)
+                                {
+                                    lastProgress = progress;
+
+
+                                    UpdateFileTransferProgress(
+                                        progress,
+                                        totalWritten,
+                                        header.OriginalSize,
+                                        stopwatch.Elapsed
+                                    );
+                                }
+                            }
+                        }
+
+                        await outputStream.FlushAsync(
+                            cancellationToken
+                        );
+
+                        /*
+                         * 展開後サイズがヘッダーと一致するか確認。
+                         */
+                        if (header.OriginalSize > 0 &&
+                            totalWritten != header.OriginalSize)
+                        {
+                            throw new InvalidDataException(
+                                "展開後のファイルサイズが一致しません。" +
+                                $" 予定={header.OriginalSize}," +
+                                $" 実際={totalWritten}"
+                            );
+                        }
+                        UpdateFileTransferProgress(100,totalWritten,header.OriginalSize,stopwatch.Elapsed);
+
+                        stopwatch.Stop();
+                    }
+
+                    /*
+                     * 既存ファイルがあれば、
+                     * ユーザーがSaveFileDialogで上書きを許可済みなので削除。
+                     */
+                    if (File.Exists(finalPath))
+                    {
+                        File.Delete(finalPath);
+                    }
+
+                    File.Move(
+                        temporaryPath,
+                        finalPath
+                    );
+
+                    completed = true;
+
+                    lock (_fileTransferLock)
+                    {
+                        _pendingFileTransfers.Remove(
+                            transferId
+                        );
+                    }
+                    
+                    AppendLog(
+                        $"データ出力完了: {finalPath}"
+                    );
+
+                    AppendPortLog(
+                        port,
+                        $"転送完了: {Path.GetFileName(finalPath)}"
+                    );
+
+                    SetFileTransferCompleted(
+                        finalPath
+                    );
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                AppendLog(
+                    "ファイル転送が中止されました。"
+                );
+            }
+            catch (Exception ex)
+            {
+                AppendLog(
+                    "ファイル転送失敗: " +
+                    ex.GetType().Name +
+                    " / " +
+                    ex.Message
+                );
+
+                AppendPortLog(
+                    port,
+                    "転送失敗: " + ex.Message
+                );
+
+                await SetPortLamp(
+                    port,
+                    LampState.Error
+                );
+            }
+            finally
+            {
+                /*
+                 * 失敗時は途中ファイルを消す。
+                 */
+                if (!completed &&
+                    !string.IsNullOrWhiteSpace(
+                        temporaryPath))
+                {
+                    try
+                    {
+                        if (File.Exists(temporaryPath))
+                        {
+                            File.Delete(temporaryPath);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        AppendLog(
+                            ".partファイル削除失敗: " +
+                            ex.Message
+                        );
+                    }
+                }
+
+                if (!completed &&
+                    !string.IsNullOrWhiteSpace(
+                        transferId))
+                {
+                    lock (_fileTransferLock)
+                    {
+                        _pendingFileTransfers.Remove(
+                            transferId
+                        );
+                    }
+                }
+
+                int remainingClients;
+
+                lock (_tcpLock)
+                {
+                    if (_tcpClientCounts.ContainsKey(port))
+                    {
+                        _tcpClientCounts[port]--;
+
+                        if (_tcpClientCounts[port] < 0)
+                        {
+                            _tcpClientCounts[port] = 0;
+                        }
+
+                        remainingClients =
+                            _tcpClientCounts[port];
+                    }
+                    else
+                    {
+                        remainingClients = 0;
+                    }
+                }
+
+                AppendLog(
+                    $"Port {port}: ファイル転送接続終了 " +
+                    remoteEndPoint
+                );
+
+                if (!cancellationToken
+                    .IsCancellationRequested)
+                {
+                    if (remainingClients == 0)
+                    {
+                        await SetPortLamp(
+                            port,
+                            LampState.Idle
+                        );
+
+                        SetPortStatus(
+                            port,
+                            "Listening"
+                        );
+                    }
+                    else
+                    {
+                        await SetPortLamp(
+                            port,
+                            LampState.Connected
+                        );
+
+                        SetPortStatus(
+                            port,
+                            "Connected"
+                        );
+                    }
+                }
+
+                SetDataExportButtonEnabled(true);
+            }
+        }
+
+        private async Task<string> ReadHeaderLineAsync(
+    NetworkStream stream,
+    CancellationToken cancellationToken)
+        {
+            const int maxHeaderSize =
+                64 * 1024;
+
+            using (MemoryStream headerBuffer =
+                new MemoryStream())
+            {
+                byte[] oneByte = new byte[1];
+
+                while (true)
+                {
+                    cancellationToken
+                        .ThrowIfCancellationRequested();
+
+                    int read =
+                        await stream.ReadAsync(
+                            oneByte,
+                            0,
+                            1,
+                            cancellationToken
+                        );
+
+                    if (read == 0)
+                    {
+                        throw new EndOfStreamException(
+                            "ヘッダー受信中に接続が切断されました。"
+                        );
+                    }
+
+                    /*
+                     * 改行でJSONヘッダー終了
+                     */
+                    if (oneByte[0] == (byte)'\n')
+                    {
+                        break;
+                    }
+
+                    /*
+                     * Windows形式の\r\nにも対応。
+                     * \rは保存しない。
+                     */
+                    if (oneByte[0] != (byte)'\r')
+                    {
+                        headerBuffer.WriteByte(
+                            oneByte[0]
+                        );
+                    }
+
+                    if (headerBuffer.Length >
+                        maxHeaderSize)
+                    {
+                        throw new InvalidDataException(
+                            "転送ヘッダーが大きすぎます。"
+                        );
+                    }
+                }
+
+                return Encoding.UTF8.GetString(
+                    headerBuffer.ToArray()
+                );
+            }
+        }
+
+        private string FormatFileSize(long size)
+        {
+            double value = size;
+
+            string[] units =
+            {
+        "B",
+        "KB",
+        "MB",
+        "GB",
+        "TB"
+    };
+
+            int unitIndex = 0;
+
+            while (value >= 1024.0 &&
+                   unitIndex <
+                   units.Length - 1)
+            {
+                value /= 1024.0;
+                unitIndex++;
+            }
+
+            return value.ToString("0.00") +
+                " " +
+                units[unitIndex];
+        }
+
+
+        private int _lastLoggedTransferProgress = -10;
+
+        private void UpdateFileTransferProgress(
+            int progress,
+            long writtenBytes,
+            long originalSize,
+            TimeSpan elapsed)
+        {
+            progress = Math.Max(0, Math.Min(100, progress));
+
+            // プログレスバーは1％単位で更新
+            if (!IsDisposed &&
+                !Disposing &&
+                progressBar1 != null &&
+                !progressBar1.IsDisposed)
+            {
+                Action updateProgressBar = () =>
+                {
+                    progressBar1.Value = progress;
+                };
+
+                if (progressBar1.InvokeRequired)
+                {
+                    try
+                    {
+                        progressBar1.BeginInvoke(updateProgressBar);
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        // フォーム終了中
+                    }
+                }
+                else
+                {
+                    updateProgressBar();
+                }
+            }
+
+            // 10％以上進んだときだけログへ表示
+            if (progress < 100 &&
+                progress < _lastLoggedTransferProgress + 10)
+            {
+                return;
+            }
+
+            int loggedProgress =
+                progress == 100
+                    ? 100
+                    : progress / 10 * 10;
+
+            if (loggedProgress ==
+                _lastLoggedTransferProgress)
+            {
+                return;
+            }
+
+            _lastLoggedTransferProgress =
+                loggedProgress;
+
+            double seconds =
+                Math.Max(
+                    elapsed.TotalSeconds,
+                    0.001
+                );
+
+            long speed =
+                (long)(writtenBytes / seconds);
+
+            AppendLog(
+                $"データ受信中: {loggedProgress}% " +
+                $"({FormatFileSize(writtenBytes)} / " +
+                $"{FormatFileSize(originalSize)}) " +
+                $"{FormatFileSize(speed)}/s"
+            );
+        }
+
+
+
+
+        private void SetFileTransferCompleted(
+    string savedPath)
+        {
+            if (IsDisposed || Disposing)
+            {
+                return;
+            }
+
+            Action action = () =>
+            {
+                DataExportBt.Enabled = true;
+
+                MessageBox.Show(
+                    "JSONLデータの出力が完了しました。\n\n" +
+                    savedPath,
+                    "データ出力完了",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+            };
+
+            if (InvokeRequired)
+            {
+                try
+                {
+                    BeginInvoke(action);
+                }
+                catch (InvalidOperationException)
+                {
+                }
+
+                return;
+            }
+
+            action();
+        }
+
+        private void SetDataExportButtonEnabled(
+    bool enabled)
+        {
+            if (DataExportBt == null ||
+                DataExportBt.IsDisposed ||
+                IsDisposed ||
+                Disposing)
+            {
+                return;
+            }
+
+            if (DataExportBt.InvokeRequired)
+            {
+                try
+                {
+                    DataExportBt.BeginInvoke(
+                        new Action(() =>
+                        {
+                            DataExportBt.Enabled =
+                                enabled;
+                        })
+                    );
+                }
+                catch (InvalidOperationException)
+                {
+                }
+
+                return;
+            }
+
+            DataExportBt.Enabled = enabled;
+        }
+        private void ResetFileTransferProgress()
+        {
+            if (progressBar1.InvokeRequired)
+            {
+                progressBar1.BeginInvoke(new Action(() =>
+                {
+                    progressBar1.Minimum = 0;
+                    progressBar1.Maximum = 100;
+                    progressBar1.Value = 0;
+                }));
+
+                return;
+            }
+
+            progressBar1.Minimum = 0;
+            progressBar1.Maximum = 100;
+            progressBar1.Value = 0;
+        }
+
     }
 }
