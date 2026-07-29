@@ -83,13 +83,31 @@
             this.label26 = new System.Windows.Forms.Label();
             this.MEMLb = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tabControl3 = new System.Windows.Forms.TabControl();
+            this.tabPage12 = new System.Windows.Forms.TabPage();
+            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.label34 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.label24 = new System.Windows.Forms.Label();
+            this.label27 = new System.Windows.Forms.Label();
+            this.label28 = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
+            this.label30 = new System.Windows.Forms.Label();
+            this.label32 = new System.Windows.Forms.Label();
+            this.label33 = new System.Windows.Forms.Label();
+            this.tabPage14 = new System.Windows.Forms.TabPage();
+            this.tabPage13 = new System.Windows.Forms.TabPage();
+            this.label21 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.button6 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
             this.DataPush = new System.Windows.Forms.Button();
             this.StartPushBt = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.groupBox8 = new System.Windows.Forms.GroupBox();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
@@ -135,6 +153,22 @@
             this.Port4LogBox = new System.Windows.Forms.ListBox();
             this.tabPage11 = new System.Windows.Forms.TabPage();
             this.Port5LogBox = new System.Windows.Forms.ListBox();
+            this.DataPushTimer = new System.Windows.Forms.Timer(this.components);
+            this.exNamebx = new System.Windows.Forms.TextBox();
+            this.button7 = new System.Windows.Forms.Button();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
+            this.label35 = new System.Windows.Forms.Label();
+            this.label36 = new System.Windows.Forms.Label();
+            this.label37 = new System.Windows.Forms.Label();
+            this.domainUpDown1 = new System.Windows.Forms.DomainUpDown();
+            this.label38 = new System.Windows.Forms.Label();
+            this.button8 = new System.Windows.Forms.Button();
+            this.button9 = new System.Windows.Forms.Button();
+            this.button10 = new System.Windows.Forms.Button();
+            this.button11 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -150,10 +184,13 @@
             this.groupBox2.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.tabControl3.SuspendLayout();
+            this.tabPage12.SuspendLayout();
+            this.tableLayoutPanel4.SuspendLayout();
+            this.tabPage14.SuspendLayout();
+            this.tabPage13.SuspendLayout();
             this.groupBox9.SuspendLayout();
             this.tabPage3.SuspendLayout();
-            this.groupBox8.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.groupBox7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.panel1.SuspendLayout();
@@ -165,6 +202,9 @@
             this.tabPage9.SuspendLayout();
             this.tabPage10.SuspendLayout();
             this.tabPage11.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -348,7 +388,7 @@
             this.textBox5.Name = "textBox5";
             this.textBox5.Size = new System.Drawing.Size(46, 21);
             this.textBox5.TabIndex = 29;
-            this.textBox5.Text = "映像2";
+            this.textBox5.Text = "なし";
             // 
             // textBox6
             // 
@@ -807,6 +847,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.tabControl3);
             this.tabPage2.Controls.Add(this.groupBox9);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
@@ -816,11 +857,267 @@
             this.tabPage2.Text = "計測";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // tabControl3
+            // 
+            this.tabControl3.Controls.Add(this.tabPage12);
+            this.tabControl3.Controls.Add(this.tabPage13);
+            this.tabControl3.Controls.Add(this.tabPage14);
+            this.tabControl3.Location = new System.Drawing.Point(7, 6);
+            this.tabControl3.Name = "tabControl3";
+            this.tabControl3.SelectedIndex = 0;
+            this.tabControl3.Size = new System.Drawing.Size(396, 297);
+            this.tabControl3.TabIndex = 5;
+            // 
+            // tabPage12
+            // 
+            this.tabPage12.Controls.Add(this.tableLayoutPanel4);
+            this.tabPage12.Controls.Add(this.label33);
+            this.tabPage12.Location = new System.Drawing.Point(4, 22);
+            this.tabPage12.Name = "tabPage12";
+            this.tabPage12.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage12.Size = new System.Drawing.Size(388, 271);
+            this.tabPage12.TabIndex = 0;
+            this.tabPage12.Text = "環境データ入力";
+            this.tabPage12.UseVisualStyleBackColor = true;
+            // 
+            // tableLayoutPanel4
+            // 
+            this.tableLayoutPanel4.ColumnCount = 3;
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 41.10429F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 58.89571F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 44F));
+            this.tableLayoutPanel4.Controls.Add(this.numericUpDown3, 1, 5);
+            this.tableLayoutPanel4.Controls.Add(this.numericUpDown2, 1, 4);
+            this.tableLayoutPanel4.Controls.Add(this.label23, 0, 0);
+            this.tableLayoutPanel4.Controls.Add(this.label24, 0, 1);
+            this.tableLayoutPanel4.Controls.Add(this.label27, 0, 2);
+            this.tableLayoutPanel4.Controls.Add(this.label28, 0, 3);
+            this.tableLayoutPanel4.Controls.Add(this.label29, 0, 4);
+            this.tableLayoutPanel4.Controls.Add(this.label30, 0, 5);
+            this.tableLayoutPanel4.Controls.Add(this.label32, 0, 6);
+            this.tableLayoutPanel4.Controls.Add(this.label34, 1, 1);
+            this.tableLayoutPanel4.Controls.Add(this.button7, 1, 2);
+            this.tableLayoutPanel4.Controls.Add(this.numericUpDown1, 1, 3);
+            this.tableLayoutPanel4.Controls.Add(this.label35, 2, 3);
+            this.tableLayoutPanel4.Controls.Add(this.label36, 2, 4);
+            this.tableLayoutPanel4.Controls.Add(this.label37, 2, 5);
+            this.tableLayoutPanel4.Controls.Add(this.exNamebx, 1, 0);
+            this.tableLayoutPanel4.Controls.Add(this.domainUpDown1, 1, 6);
+            this.tableLayoutPanel4.Controls.Add(this.label38, 2, 1);
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(7, 18);
+            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+            this.tableLayoutPanel4.RowCount = 7;
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 41F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 38F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(375, 247);
+            this.tableLayoutPanel4.TabIndex = 0;
+            // 
+            // label34
+            // 
+            this.label34.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label34.AutoSize = true;
+            this.label34.Font = new System.Drawing.Font("MS UI Gothic", 15F);
+            this.label34.Location = new System.Drawing.Point(139, 36);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(19, 20);
+            this.label34.TabIndex = 22;
+            this.label34.Text = "0";
+            this.label34.TextChanged += new System.EventHandler(this.label34_TextChanged);
+            // 
+            // label23
+            // 
+            this.label23.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.label23.AutoSize = true;
+            this.label23.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.label23.Location = new System.Drawing.Point(54, 6);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(79, 19);
+            this.label23.TabIndex = 11;
+            this.label23.Text = "実験ID：";
+            // 
+            // label24
+            // 
+            this.label24.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.label24.AutoSize = true;
+            this.label24.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.label24.Location = new System.Drawing.Point(33, 37);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(100, 19);
+            this.label24.TabIndex = 12;
+            this.label24.Text = "試行番号：";
+            // 
+            // label27
+            // 
+            this.label27.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.label27.AutoSize = true;
+            this.label27.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.label27.Location = new System.Drawing.Point(41, 68);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(92, 19);
+            this.label27.TabIndex = 13;
+            this.label27.Text = "正解パス:";
+            // 
+            // label28
+            // 
+            this.label28.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.label28.AutoSize = true;
+            this.label28.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.label28.Location = new System.Drawing.Point(6, 105);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(127, 19);
+            this.label28.TabIndex = 14;
+            this.label28.Text = "部屋の明るさ:";
+            // 
+            // label29
+            // 
+            this.label29.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.label29.AutoSize = true;
+            this.label29.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.label29.Location = new System.Drawing.Point(23, 144);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(110, 19);
+            this.label29.TabIndex = 15;
+            this.label29.Text = "人との距離:";
+            // 
+            // label30
+            // 
+            this.label30.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.label30.AutoSize = true;
+            this.label30.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.label30.Location = new System.Drawing.Point(44, 181);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(89, 19);
+            this.label30.TabIndex = 16;
+            this.label30.Text = "手の角度";
+            // 
+            // label32
+            // 
+            this.label32.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.label32.AutoSize = true;
+            this.label32.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.label32.Location = new System.Drawing.Point(64, 218);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(69, 19);
+            this.label32.TabIndex = 17;
+            this.label32.Text = "背景色";
+            // 
+            // label33
+            // 
+            this.label33.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label33.AutoSize = true;
+            this.label33.Location = new System.Drawing.Point(6, 3);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(350, 12);
+            this.label33.TabIndex = 18;
+            this.label33.Text = "※過去の実験IDとして保存されているため試行番号を自動で上げました。";
+            this.label33.Visible = false;
+            // 
+            // tabPage14
+            // 
+            this.tabPage14.Controls.Add(this.button11);
+            this.tabPage14.Controls.Add(this.button10);
+            this.tabPage14.Controls.Add(this.button9);
+            this.tabPage14.Controls.Add(this.button8);
+            this.tabPage14.Location = new System.Drawing.Point(4, 22);
+            this.tabPage14.Name = "tabPage14";
+            this.tabPage14.Size = new System.Drawing.Size(388, 271);
+            this.tabPage14.TabIndex = 2;
+            this.tabPage14.Text = "計測開始画面";
+            this.tabPage14.UseVisualStyleBackColor = true;
+            // 
+            // tabPage13
+            // 
+            this.tabPage13.Controls.Add(this.label21);
+            this.tabPage13.Controls.Add(this.label22);
+            this.tabPage13.Controls.Add(this.label18);
+            this.tabPage13.Controls.Add(this.label7);
+            this.tabPage13.Controls.Add(this.label6);
+            this.tabPage13.Controls.Add(this.button6);
+            this.tabPage13.Controls.Add(this.button3);
+            this.tabPage13.Controls.Add(this.listBox1);
+            this.tabPage13.Location = new System.Drawing.Point(4, 22);
+            this.tabPage13.Name = "tabPage13";
+            this.tabPage13.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage13.Size = new System.Drawing.Size(388, 271);
+            this.tabPage13.TabIndex = 1;
+            this.tabPage13.Text = "計測データの出力";
+            this.tabPage13.UseVisualStyleBackColor = true;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(122, 212);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(0, 12);
+            this.label21.TabIndex = 13;
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(135, 200);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(0, 12);
+            this.label22.TabIndex = 12;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(27, 212);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(71, 12);
+            this.label18.TabIndex = 11;
+            this.label18.Text = "試行番号 　：";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(44, 200);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(54, 12);
+            this.label7.TabIndex = 10;
+            this.label7.Text = "実験ID　：";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(5, 188);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(93, 12);
+            this.label6.TabIndex = 9;
+            this.label6.Text = "選択中のデータ　：";
+            // 
+            // button6
+            // 
+            this.button6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.button6.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold);
+            this.button6.Location = new System.Drawing.Point(159, 227);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(223, 38);
+            this.button6.TabIndex = 8;
+            this.button6.Text = "選択したデータの出力";
+            this.button6.UseVisualStyleBackColor = false;
+            // 
+            // button3
+            // 
+            this.button3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.button3.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold);
+            this.button3.Location = new System.Drawing.Point(8, 227);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(145, 38);
+            this.button3.TabIndex = 7;
+            this.button3.Text = "データ一覧更新";
+            this.button3.UseVisualStyleBackColor = false;
+            // 
             // groupBox9
             // 
             this.groupBox9.Controls.Add(this.DataPush);
             this.groupBox9.Controls.Add(this.StartPushBt);
-            this.groupBox9.Controls.Add(this.button3);
             this.groupBox9.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.groupBox9.Location = new System.Drawing.Point(6, 309);
             this.groupBox9.Name = "groupBox9";
@@ -833,13 +1130,13 @@
             // 
             this.DataPush.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.DataPush.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold);
-            this.DataPush.Location = new System.Drawing.Point(125, 18);
+            this.DataPush.Location = new System.Drawing.Point(6, 19);
             this.DataPush.Name = "DataPush";
-            this.DataPush.Size = new System.Drawing.Size(156, 38);
+            this.DataPush.Size = new System.Drawing.Size(269, 38);
             this.DataPush.TabIndex = 6;
-            this.DataPush.Text = "データ送信";
+            this.DataPush.Text = "環境データ送信";
             this.DataPush.UseVisualStyleBackColor = false;
-            this.DataPush.Click += new System.EventHandler(this.button7_Click);
+            this.DataPush.Click += new System.EventHandler(this.DataPush_Click);
             // 
             // StartPushBt
             // 
@@ -853,18 +1150,8 @@
             this.StartPushBt.UseVisualStyleBackColor = false;
             this.StartPushBt.Click += new System.EventHandler(this.StartPushBt_Click);
             // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(6, 18);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(113, 38);
-            this.button3.TabIndex = 3;
-            this.button3.Text = "計測データの取得";
-            this.button3.UseVisualStyleBackColor = true;
-            // 
             // tabPage3
             // 
-            this.tabPage3.Controls.Add(this.groupBox8);
             this.tabPage3.Controls.Add(this.groupBox7);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
@@ -873,44 +1160,23 @@
             this.tabPage3.Text = "映像";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // groupBox8
-            // 
-            this.groupBox8.Controls.Add(this.pictureBox3);
-            this.groupBox8.Font = new System.Drawing.Font("MS UI Gothic", 10.25F, System.Drawing.FontStyle.Bold);
-            this.groupBox8.Location = new System.Drawing.Point(7, 186);
-            this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(397, 185);
-            this.groupBox8.TabIndex = 9;
-            this.groupBox8.TabStop = false;
-            this.groupBox8.Text = "映像2";
-            // 
-            // pictureBox3
-            // 
-            this.pictureBox3.Image = global::HandGestureDashboard.Properties.Resources.noimage;
-            this.pictureBox3.Location = new System.Drawing.Point(6, 21);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(385, 158);
-            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox3.TabIndex = 0;
-            this.pictureBox3.TabStop = false;
-            // 
             // groupBox7
             // 
             this.groupBox7.Controls.Add(this.pictureBox2);
             this.groupBox7.Font = new System.Drawing.Font("MS UI Gothic", 10.25F, System.Drawing.FontStyle.Bold);
             this.groupBox7.Location = new System.Drawing.Point(7, 3);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(403, 183);
+            this.groupBox7.Size = new System.Drawing.Size(403, 367);
             this.groupBox7.TabIndex = 8;
             this.groupBox7.TabStop = false;
-            this.groupBox7.Text = "映像1";
+            this.groupBox7.Text = "映像";
             // 
             // pictureBox2
             // 
             this.pictureBox2.Image = global::HandGestureDashboard.Properties.Resources.noimage;
             this.pictureBox2.Location = new System.Drawing.Point(6, 21);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(391, 156);
+            this.pictureBox2.Size = new System.Drawing.Size(391, 340);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox2.TabIndex = 0;
             this.pictureBox2.TabStop = false;
@@ -1081,7 +1347,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(261, 2);
+            this.button1.Location = new System.Drawing.Point(572, 2);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(112, 21);
             this.button1.TabIndex = 16;
@@ -1215,7 +1481,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(261, 23);
+            this.button2.Location = new System.Drawing.Point(572, 23);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(112, 21);
             this.button2.TabIndex = 20;
@@ -1364,6 +1630,190 @@
             this.Port5LogBox.Size = new System.Drawing.Size(476, 352);
             this.Port5LogBox.TabIndex = 13;
             // 
+            // DataPushTimer
+            // 
+            this.DataPushTimer.Interval = 250;
+            this.DataPushTimer.Tick += new System.EventHandler(this.DataPushTimer_Tick);
+            // 
+            // exNamebx
+            // 
+            this.exNamebx.Font = new System.Drawing.Font("MS UI Gothic", 15F);
+            this.exNamebx.Location = new System.Drawing.Point(139, 3);
+            this.exNamebx.Name = "exNamebx";
+            this.exNamebx.Size = new System.Drawing.Size(188, 27);
+            this.exNamebx.TabIndex = 23;
+            this.exNamebx.TextChanged += new System.EventHandler(this.textBox7_TextChanged);
+            // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(139, 65);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(185, 26);
+            this.button7.TabIndex = 25;
+            this.button7.Text = "CSV パス名";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click_1);
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Font = new System.Drawing.Font("MS UI Gothic", 19F);
+            this.numericUpDown1.Location = new System.Drawing.Point(139, 97);
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(188, 33);
+            this.numericUpDown1.TabIndex = 26;
+            this.numericUpDown1.Value = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            // 
+            // listBox1
+            // 
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.ItemHeight = 12;
+            this.listBox1.Location = new System.Drawing.Point(7, 6);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(375, 172);
+            this.listBox1.TabIndex = 0;
+            // 
+            // numericUpDown2
+            // 
+            this.numericUpDown2.Font = new System.Drawing.Font("MS UI Gothic", 19F);
+            this.numericUpDown2.Location = new System.Drawing.Point(139, 138);
+            this.numericUpDown2.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.numericUpDown2.Name = "numericUpDown2";
+            this.numericUpDown2.Size = new System.Drawing.Size(188, 33);
+            this.numericUpDown2.TabIndex = 27;
+            this.numericUpDown2.Value = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            // 
+            // numericUpDown3
+            // 
+            this.numericUpDown3.Font = new System.Drawing.Font("MS UI Gothic", 19F);
+            this.numericUpDown3.Location = new System.Drawing.Point(139, 175);
+            this.numericUpDown3.Maximum = new decimal(new int[] {
+            180,
+            0,
+            0,
+            0});
+            this.numericUpDown3.Minimum = new decimal(new int[] {
+            180,
+            0,
+            0,
+            -2147483648});
+            this.numericUpDown3.Name = "numericUpDown3";
+            this.numericUpDown3.Size = new System.Drawing.Size(188, 33);
+            this.numericUpDown3.TabIndex = 28;
+            // 
+            // label35
+            // 
+            this.label35.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label35.AutoSize = true;
+            this.label35.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.label35.Location = new System.Drawing.Point(333, 105);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(29, 19);
+            this.label35.TabIndex = 14;
+            this.label35.Text = "％";
+            // 
+            // label36
+            // 
+            this.label36.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label36.AutoSize = true;
+            this.label36.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.label36.Location = new System.Drawing.Point(333, 144);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(35, 19);
+            this.label36.TabIndex = 29;
+            this.label36.Text = "cm";
+            // 
+            // label37
+            // 
+            this.label37.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label37.AutoSize = true;
+            this.label37.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.label37.Location = new System.Drawing.Point(333, 181);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(29, 19);
+            this.label37.TabIndex = 30;
+            this.label37.Text = "°";
+            // 
+            // domainUpDown1
+            // 
+            this.domainUpDown1.Font = new System.Drawing.Font("MS UI Gothic", 19F);
+            this.domainUpDown1.Items.Add("White");
+            this.domainUpDown1.Items.Add("Yellow");
+            this.domainUpDown1.Items.Add("Gray");
+            this.domainUpDown1.Items.Add("Dark");
+            this.domainUpDown1.Items.Add("Black");
+            this.domainUpDown1.Location = new System.Drawing.Point(139, 212);
+            this.domainUpDown1.Name = "domainUpDown1";
+            this.domainUpDown1.Size = new System.Drawing.Size(188, 33);
+            this.domainUpDown1.TabIndex = 31;
+            this.domainUpDown1.Text = "White";
+            // 
+            // label38
+            // 
+            this.label38.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label38.AutoSize = true;
+            this.label38.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 10.25F, System.Drawing.FontStyle.Bold);
+            this.label38.Location = new System.Drawing.Point(333, 39);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(37, 14);
+            this.label38.TabIndex = 32;
+            this.label38.Text = "自動";
+            // 
+            // button8
+            // 
+            this.button8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.button8.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold);
+            this.button8.Location = new System.Drawing.Point(1, 141);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(187, 127);
+            this.button8.TabIndex = 6;
+            this.button8.Text = "ハンド指定画面";
+            this.button8.UseVisualStyleBackColor = false;
+            // 
+            // button9
+            // 
+            this.button9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.button9.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold);
+            this.button9.Location = new System.Drawing.Point(194, 141);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(191, 127);
+            this.button9.TabIndex = 7;
+            this.button9.Text = "方向指定画面";
+            this.button9.UseVisualStyleBackColor = false;
+            // 
+            // button10
+            // 
+            this.button10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.button10.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold);
+            this.button10.Location = new System.Drawing.Point(3, 8);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(185, 127);
+            this.button10.TabIndex = 8;
+            this.button10.Text = "カメラ映像画面";
+            this.button10.UseVisualStyleBackColor = false;
+            // 
+            // button11
+            // 
+            this.button11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.button11.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold);
+            this.button11.Location = new System.Drawing.Point(194, 8);
+            this.button11.Name = "button11";
+            this.button11.Size = new System.Drawing.Size(191, 127);
+            this.button11.TabIndex = 9;
+            this.button11.Text = "すべて閉じる";
+            this.button11.UseVisualStyleBackColor = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1411,10 +1861,16 @@
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
+            this.tabControl3.ResumeLayout(false);
+            this.tabPage12.ResumeLayout(false);
+            this.tabPage12.PerformLayout();
+            this.tableLayoutPanel4.ResumeLayout(false);
+            this.tableLayoutPanel4.PerformLayout();
+            this.tabPage14.ResumeLayout(false);
+            this.tabPage13.ResumeLayout(false);
+            this.tabPage13.PerformLayout();
             this.groupBox9.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
-            this.groupBox8.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             this.groupBox7.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.panel1.ResumeLayout(false);
@@ -1427,6 +1883,9 @@
             this.tabPage9.ResumeLayout(false);
             this.tabPage10.ResumeLayout(false);
             this.tabPage11.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1485,8 +1944,6 @@
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.GroupBox groupBox8;
-        private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Button button2;
@@ -1538,7 +1995,43 @@
         private System.Windows.Forms.GroupBox groupBox9;
         private System.Windows.Forms.Button DataPush;
         private System.Windows.Forms.Button StartPushBt;
+        private System.Windows.Forms.Timer DataPushTimer;
+        private System.Windows.Forms.TabControl tabControl3;
+        private System.Windows.Forms.TabPage tabPage12;
+        private System.Windows.Forms.TabPage tabPage13;
+        private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.TabPage tabPage14;
+        private System.Windows.Forms.Label label34;
+        private System.Windows.Forms.Label label32;
+        private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.TextBox exNamebx;
+        private System.Windows.Forms.NumericUpDown numericUpDown3;
+        private System.Windows.Forms.NumericUpDown numericUpDown2;
+        private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.Label label35;
+        private System.Windows.Forms.Label label36;
+        private System.Windows.Forms.Label label37;
+        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.DomainUpDown domainUpDown1;
+        private System.Windows.Forms.Label label38;
+        private System.Windows.Forms.Button button9;
+        private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Button button11;
+        private System.Windows.Forms.Button button10;
     }
 }
 

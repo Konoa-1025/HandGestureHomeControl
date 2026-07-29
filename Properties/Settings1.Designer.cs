@@ -94,5 +94,17 @@ namespace HandGestureDashboard.Properties {
                 this["port5"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("test,")]
+        public string exlist {
+            get {
+                return ((string)(this["exlist"]));
+            }
+            set {
+                this["exlist"] = value;
+            }
+        }
     }
 }

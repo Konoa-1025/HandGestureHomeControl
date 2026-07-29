@@ -20,5 +20,8 @@
     <Setting Name="port5" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">6005</Value>
     </Setting>
+    <Setting Name="exlist" Type="System.String" Scope="User">
+      <Value Profile="(Default)">test,</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

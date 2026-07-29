@@ -1645,7 +1645,12 @@ namespace HandGestureDashboard
         {
             StopTcp();
         }
+        //==============================================================
+        //計測アプリケーション
+        //==============================================================
 
+        bool experimented = false;
+        bool failPush = false;
         private void button7_Click(object sender, EventArgs e)
         {
             AppendLog("計測開始");
@@ -1653,7 +1658,150 @@ namespace HandGestureDashboard
 
         private void StartPushBt_Click(object sender, EventArgs e)
         {
+            if(StartPushBt.Text == "計測開始")
+            {
+                StartPushBt.Text = "計測停止";
+                StartPushBt.BackColor = Color.FromArgb(255, 128, 128);
+                DataPush.Enabled = false;
+                tableLayoutPanel4.Enabled = false;
+                tabControl3.SelectedIndex = 13;
+                AppendLog("計測開始");
+            }
+            else
+            {
+                StartPushBt.Text = "計測開始";
+                StartPushBt.BackColor = Color.FromArgb(128, 255, 128);
+                DataPush.Enabled = true;
+                AppendLog("計測停止");
+            }
+        }
 
+        private void DataPushTimer_Tick(object sender, EventArgs e)
+        {
+            if (DataPush.Text.Length >= 6)
+            {
+                DataPush.Text = "送信中";
+            }
+            else
+            {
+                DataPush.Text += ".";
+            }
+        }
+
+        private void DataPush_Click(object sender, EventArgs e)
+        {
+            if(exNamebx.Text == "")
+            {
+                AppendLog("実験名を入力してください。");
+                return;
+            }
+            AppendLog("環境データ送信します。");
+            SaveExperimentHistory(exNamebx.Text.Trim(), int.Parse(label34.Text));
+            tableLayoutPanel4.Enabled = false;
+            DataPushTimer.Start();
+            StartPushBt.Enabled = false;
+            DataPush.Enabled = false;
+        }
+
+        private void textBox7_TextChanged(object sender, EventArgs e)
+        {
+            string experimentId = exNamebx.Text.Trim();
+            string exList = Properties.Settings.Default.exlist;
+
+            int trial = 1; // 初めてなら1回目
+
+            foreach (string item in exList.Split(','))
+            {
+                if (string.IsNullOrWhiteSpace(item))
+                    continue;
+
+                string[] data = item.Split(' ');
+
+                if (data.Length != 2)
+                    continue;
+
+                if (data[0] == experimentId)
+                {
+                    label33.Visible = true;
+                    if (int.TryParse(data[1], out int count))
+                    {
+                        trial = count + 1;
+                        
+                    }
+
+                    break;
+                }
+            }
+
+            label34.Text = trial.ToString();
+
+        }
+
+        private void SaveExperimentHistory(string experimentId, int trialCount)
+        {
+            List<string> list = new List<string>();
+            bool updated = false;
+
+            foreach (string item in Properties.Settings.Default.exlist.Split(','))
+            {
+                if (string.IsNullOrWhiteSpace(item))
+                    continue;
+
+                string[] data = item.Split(' ');
+
+                if (data.Length != 2)
+                    continue;
+
+                if (data[0] == experimentId)
+                {
+                    // 試行回数を更新
+                    list.Add($"{experimentId} {trialCount}");
+                    updated = true;
+                }
+                else
+                {
+                    list.Add(item);
+                }
+            }
+
+            // 新しい実験IDなら追加
+            if (!updated)
+            {
+                list.Add($"{experimentId} {trialCount}");
+            }
+
+            Properties.Settings.Default.exlist = string.Join(",", list) + ",";
+            Properties.Settings.Default.Save();
+        }
+
+        private void label34_TextChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void button7_Click_1(object sender, EventArgs e)
+        {
+            using (OpenFileDialog dialog = new OpenFileDialog())
+            {
+                // CSVファイルのみ表示
+                dialog.Filter = "CSVファイル (*.csv)|*.csv";
+                dialog.Title = "CSVファイルを選択";
+                dialog.Multiselect = false;
+
+                // ファイルが選択されたら
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    // パスを取得
+                    string csvPath = dialog.FileName;
+
+                    // ボタンの文字をファイル名に変更
+                    button7.Text = Path.GetFileName(csvPath);
+
+                    // 必要ならSettingsなどに保存
+                    // Properties.Settings.Default.csvPath = csvPath;
+                    // Properties.Settings.Default.Save();
+                }
+            }
         }
     }
 }
