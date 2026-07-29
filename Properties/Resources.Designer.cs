@@ -73,6 +73,16 @@ namespace HandGestureDashboard.Properties {
         /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
+        internal static System.Drawing.Bitmap down {
+            get {
+                object obj = ResourceManager.GetObject("down", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
         internal static System.Drawing.Bitmap gu {
             get {
                 object obj = ResourceManager.GetObject("gu", resourceCulture);
@@ -86,6 +96,16 @@ namespace HandGestureDashboard.Properties {
         internal static System.Drawing.Bitmap hitosashiyubi {
             get {
                 object obj = ResourceManager.GetObject("hitosashiyubi", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap left {
+            get {
+                object obj = ResourceManager.GetObject("left", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -116,6 +136,26 @@ namespace HandGestureDashboard.Properties {
         internal static System.Drawing.Bitmap question {
             get {
                 object obj = ResourceManager.GetObject("question", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap right {
+            get {
+                object obj = ResourceManager.GetObject("right", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap up {
+            get {
+                object obj = ResourceManager.GetObject("up", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

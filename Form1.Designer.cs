@@ -83,10 +83,12 @@
             this.label26 = new System.Windows.Forms.Label();
             this.MEMLb = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.StartPushBt = new System.Windows.Forms.Button();
             this.tabControl3 = new System.Windows.Forms.TabControl();
             this.tabPage12 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
-            this.label34 = new System.Windows.Forms.Label();
+            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
             this.label23 = new System.Windows.Forms.Label();
             this.label24 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
@@ -94,8 +96,16 @@
             this.label29 = new System.Windows.Forms.Label();
             this.label30 = new System.Windows.Forms.Label();
             this.label32 = new System.Windows.Forms.Label();
+            this.label34 = new System.Windows.Forms.Label();
+            this.button7 = new System.Windows.Forms.Button();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.label35 = new System.Windows.Forms.Label();
+            this.label36 = new System.Windows.Forms.Label();
+            this.label37 = new System.Windows.Forms.Label();
+            this.exNamebx = new System.Windows.Forms.TextBox();
+            this.domainUpDown1 = new System.Windows.Forms.DomainUpDown();
+            this.label38 = new System.Windows.Forms.Label();
             this.label33 = new System.Windows.Forms.Label();
-            this.tabPage14 = new System.Windows.Forms.TabPage();
             this.tabPage13 = new System.Windows.Forms.TabPage();
             this.label21 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
@@ -104,9 +114,12 @@
             this.label6 = new System.Windows.Forms.Label();
             this.button6 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.groupBox9 = new System.Windows.Forms.GroupBox();
-            this.DataPush = new System.Windows.Forms.Button();
-            this.StartPushBt = new System.Windows.Forms.Button();
+            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.tabPage14 = new System.Windows.Forms.TabPage();
+            this.button11 = new System.Windows.Forms.Button();
+            this.button10 = new System.Windows.Forms.Button();
+            this.button9 = new System.Windows.Forms.Button();
+            this.button8 = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
@@ -154,21 +167,8 @@
             this.tabPage11 = new System.Windows.Forms.TabPage();
             this.Port5LogBox = new System.Windows.Forms.ListBox();
             this.DataPushTimer = new System.Windows.Forms.Timer(this.components);
-            this.exNamebx = new System.Windows.Forms.TextBox();
-            this.button7 = new System.Windows.Forms.Button();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.listBox1 = new System.Windows.Forms.ListBox();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
-            this.label35 = new System.Windows.Forms.Label();
-            this.label36 = new System.Windows.Forms.Label();
-            this.label37 = new System.Windows.Forms.Label();
-            this.domainUpDown1 = new System.Windows.Forms.DomainUpDown();
-            this.label38 = new System.Windows.Forms.Label();
-            this.button8 = new System.Windows.Forms.Button();
-            this.button9 = new System.Windows.Forms.Button();
-            this.button10 = new System.Windows.Forms.Button();
-            this.button11 = new System.Windows.Forms.Button();
+            this.CountDown = new System.Windows.Forms.Timer(this.components);
+            this.label39 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -187,9 +187,11 @@
             this.tabControl3.SuspendLayout();
             this.tabPage12.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
-            this.tabPage14.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.tabPage13.SuspendLayout();
-            this.groupBox9.SuspendLayout();
+            this.tabPage14.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.groupBox7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -202,9 +204,6 @@
             this.tabPage9.SuspendLayout();
             this.tabPage10.SuspendLayout();
             this.tabPage11.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -847,8 +846,8 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.StartPushBt);
             this.tabPage2.Controls.Add(this.tabControl3);
-            this.tabPage2.Controls.Add(this.groupBox9);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -856,6 +855,18 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "計測";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // StartPushBt
+            // 
+            this.StartPushBt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.StartPushBt.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold);
+            this.StartPushBt.Location = new System.Drawing.Point(7, 305);
+            this.StartPushBt.Name = "StartPushBt";
+            this.StartPushBt.Size = new System.Drawing.Size(392, 61);
+            this.StartPushBt.TabIndex = 5;
+            this.StartPushBt.Text = "計測準備";
+            this.StartPushBt.UseVisualStyleBackColor = false;
+            this.StartPushBt.Click += new System.EventHandler(this.StartPushBt_Click);
             // 
             // tabControl3
             // 
@@ -885,7 +896,7 @@
             this.tableLayoutPanel4.ColumnCount = 3;
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 41.10429F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 58.89571F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 44F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel4.Controls.Add(this.numericUpDown3, 1, 5);
             this.tableLayoutPanel4.Controls.Add(this.numericUpDown2, 1, 4);
             this.tableLayoutPanel4.Controls.Add(this.label23, 0, 0);
@@ -918,24 +929,48 @@
             this.tableLayoutPanel4.Size = new System.Drawing.Size(375, 247);
             this.tableLayoutPanel4.TabIndex = 0;
             // 
-            // label34
+            // numericUpDown3
             // 
-            this.label34.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.label34.AutoSize = true;
-            this.label34.Font = new System.Drawing.Font("MS UI Gothic", 15F);
-            this.label34.Location = new System.Drawing.Point(139, 36);
-            this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(19, 20);
-            this.label34.TabIndex = 22;
-            this.label34.Text = "0";
-            this.label34.TextChanged += new System.EventHandler(this.label34_TextChanged);
+            this.numericUpDown3.Font = new System.Drawing.Font("MS UI Gothic", 19F);
+            this.numericUpDown3.Location = new System.Drawing.Point(136, 175);
+            this.numericUpDown3.Maximum = new decimal(new int[] {
+            180,
+            0,
+            0,
+            0});
+            this.numericUpDown3.Minimum = new decimal(new int[] {
+            180,
+            0,
+            0,
+            -2147483648});
+            this.numericUpDown3.Name = "numericUpDown3";
+            this.numericUpDown3.Size = new System.Drawing.Size(185, 33);
+            this.numericUpDown3.TabIndex = 28;
+            // 
+            // numericUpDown2
+            // 
+            this.numericUpDown2.Font = new System.Drawing.Font("MS UI Gothic", 19F);
+            this.numericUpDown2.Location = new System.Drawing.Point(136, 138);
+            this.numericUpDown2.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.numericUpDown2.Name = "numericUpDown2";
+            this.numericUpDown2.Size = new System.Drawing.Size(185, 33);
+            this.numericUpDown2.TabIndex = 27;
+            this.numericUpDown2.Value = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
             // 
             // label23
             // 
             this.label23.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label23.AutoSize = true;
             this.label23.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label23.Location = new System.Drawing.Point(54, 6);
+            this.label23.Location = new System.Drawing.Point(51, 6);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(79, 19);
             this.label23.TabIndex = 11;
@@ -946,7 +981,7 @@
             this.label24.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label24.AutoSize = true;
             this.label24.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label24.Location = new System.Drawing.Point(33, 37);
+            this.label24.Location = new System.Drawing.Point(30, 37);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(100, 19);
             this.label24.TabIndex = 12;
@@ -957,7 +992,7 @@
             this.label27.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label27.AutoSize = true;
             this.label27.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label27.Location = new System.Drawing.Point(41, 68);
+            this.label27.Location = new System.Drawing.Point(38, 68);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(92, 19);
             this.label27.TabIndex = 13;
@@ -968,7 +1003,7 @@
             this.label28.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label28.AutoSize = true;
             this.label28.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label28.Location = new System.Drawing.Point(6, 105);
+            this.label28.Location = new System.Drawing.Point(3, 105);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(127, 19);
             this.label28.TabIndex = 14;
@@ -979,7 +1014,7 @@
             this.label29.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label29.AutoSize = true;
             this.label29.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label29.Location = new System.Drawing.Point(23, 144);
+            this.label29.Location = new System.Drawing.Point(20, 144);
             this.label29.Name = "label29";
             this.label29.Size = new System.Drawing.Size(110, 19);
             this.label29.TabIndex = 15;
@@ -990,7 +1025,7 @@
             this.label30.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label30.AutoSize = true;
             this.label30.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label30.Location = new System.Drawing.Point(44, 181);
+            this.label30.Location = new System.Drawing.Point(41, 181);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(89, 19);
             this.label30.TabIndex = 16;
@@ -1001,11 +1036,113 @@
             this.label32.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label32.AutoSize = true;
             this.label32.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label32.Location = new System.Drawing.Point(64, 218);
+            this.label32.Location = new System.Drawing.Point(61, 218);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(69, 19);
             this.label32.TabIndex = 17;
             this.label32.Text = "背景色";
+            // 
+            // label34
+            // 
+            this.label34.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label34.AutoSize = true;
+            this.label34.Font = new System.Drawing.Font("MS UI Gothic", 15F);
+            this.label34.Location = new System.Drawing.Point(136, 36);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(19, 20);
+            this.label34.TabIndex = 22;
+            this.label34.Text = "0";
+            this.label34.TextChanged += new System.EventHandler(this.label34_TextChanged);
+            // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(136, 65);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(185, 26);
+            this.button7.TabIndex = 25;
+            this.button7.Text = "CSV パス名";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click_1);
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Font = new System.Drawing.Font("MS UI Gothic", 19F);
+            this.numericUpDown1.Location = new System.Drawing.Point(136, 97);
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(185, 33);
+            this.numericUpDown1.TabIndex = 26;
+            this.numericUpDown1.Value = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            // 
+            // label35
+            // 
+            this.label35.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label35.AutoSize = true;
+            this.label35.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.label35.Location = new System.Drawing.Point(327, 105);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(29, 19);
+            this.label35.TabIndex = 14;
+            this.label35.Text = "％";
+            // 
+            // label36
+            // 
+            this.label36.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label36.AutoSize = true;
+            this.label36.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.label36.Location = new System.Drawing.Point(327, 144);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(35, 19);
+            this.label36.TabIndex = 29;
+            this.label36.Text = "cm";
+            // 
+            // label37
+            // 
+            this.label37.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label37.AutoSize = true;
+            this.label37.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.label37.Location = new System.Drawing.Point(327, 181);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(29, 19);
+            this.label37.TabIndex = 30;
+            this.label37.Text = "°";
+            // 
+            // exNamebx
+            // 
+            this.exNamebx.Font = new System.Drawing.Font("MS UI Gothic", 15F);
+            this.exNamebx.Location = new System.Drawing.Point(136, 3);
+            this.exNamebx.Name = "exNamebx";
+            this.exNamebx.Size = new System.Drawing.Size(185, 27);
+            this.exNamebx.TabIndex = 23;
+            this.exNamebx.TextChanged += new System.EventHandler(this.textBox7_TextChanged);
+            // 
+            // domainUpDown1
+            // 
+            this.domainUpDown1.Font = new System.Drawing.Font("MS UI Gothic", 19F);
+            this.domainUpDown1.Items.Add("White");
+            this.domainUpDown1.Items.Add("Yellow");
+            this.domainUpDown1.Items.Add("Gray");
+            this.domainUpDown1.Items.Add("Dark");
+            this.domainUpDown1.Items.Add("Black");
+            this.domainUpDown1.Location = new System.Drawing.Point(136, 212);
+            this.domainUpDown1.Name = "domainUpDown1";
+            this.domainUpDown1.Size = new System.Drawing.Size(185, 33);
+            this.domainUpDown1.TabIndex = 31;
+            this.domainUpDown1.Text = "White";
+            // 
+            // label38
+            // 
+            this.label38.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label38.AutoSize = true;
+            this.label38.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 10.25F, System.Drawing.FontStyle.Bold);
+            this.label38.Location = new System.Drawing.Point(327, 39);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(37, 14);
+            this.label38.TabIndex = 32;
+            this.label38.Text = "自動";
             // 
             // label33
             // 
@@ -1017,19 +1154,6 @@
             this.label33.TabIndex = 18;
             this.label33.Text = "※過去の実験IDとして保存されているため試行番号を自動で上げました。";
             this.label33.Visible = false;
-            // 
-            // tabPage14
-            // 
-            this.tabPage14.Controls.Add(this.button11);
-            this.tabPage14.Controls.Add(this.button10);
-            this.tabPage14.Controls.Add(this.button9);
-            this.tabPage14.Controls.Add(this.button8);
-            this.tabPage14.Location = new System.Drawing.Point(4, 22);
-            this.tabPage14.Name = "tabPage14";
-            this.tabPage14.Size = new System.Drawing.Size(388, 271);
-            this.tabPage14.TabIndex = 2;
-            this.tabPage14.Text = "計測開始画面";
-            this.tabPage14.UseVisualStyleBackColor = true;
             // 
             // tabPage13
             // 
@@ -1114,41 +1238,75 @@
             this.button3.Text = "データ一覧更新";
             this.button3.UseVisualStyleBackColor = false;
             // 
-            // groupBox9
+            // listBox1
             // 
-            this.groupBox9.Controls.Add(this.DataPush);
-            this.groupBox9.Controls.Add(this.StartPushBt);
-            this.groupBox9.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.groupBox9.Location = new System.Drawing.Point(6, 309);
-            this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Size = new System.Drawing.Size(404, 62);
-            this.groupBox9.TabIndex = 4;
-            this.groupBox9.TabStop = false;
-            this.groupBox9.Text = "コントロールパネル";
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.ItemHeight = 12;
+            this.listBox1.Location = new System.Drawing.Point(7, 6);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(375, 172);
+            this.listBox1.TabIndex = 0;
             // 
-            // DataPush
+            // tabPage14
             // 
-            this.DataPush.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.DataPush.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold);
-            this.DataPush.Location = new System.Drawing.Point(6, 19);
-            this.DataPush.Name = "DataPush";
-            this.DataPush.Size = new System.Drawing.Size(269, 38);
-            this.DataPush.TabIndex = 6;
-            this.DataPush.Text = "環境データ送信";
-            this.DataPush.UseVisualStyleBackColor = false;
-            this.DataPush.Click += new System.EventHandler(this.DataPush_Click);
+            this.tabPage14.Controls.Add(this.button11);
+            this.tabPage14.Controls.Add(this.button10);
+            this.tabPage14.Controls.Add(this.button9);
+            this.tabPage14.Controls.Add(this.button8);
+            this.tabPage14.Location = new System.Drawing.Point(4, 22);
+            this.tabPage14.Name = "tabPage14";
+            this.tabPage14.Size = new System.Drawing.Size(388, 271);
+            this.tabPage14.TabIndex = 2;
+            this.tabPage14.Text = "計測開始画面";
+            this.tabPage14.UseVisualStyleBackColor = true;
             // 
-            // StartPushBt
+            // button11
             // 
-            this.StartPushBt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.StartPushBt.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold);
-            this.StartPushBt.Location = new System.Drawing.Point(281, 18);
-            this.StartPushBt.Name = "StartPushBt";
-            this.StartPushBt.Size = new System.Drawing.Size(117, 38);
-            this.StartPushBt.TabIndex = 5;
-            this.StartPushBt.Text = "計測開始";
-            this.StartPushBt.UseVisualStyleBackColor = false;
-            this.StartPushBt.Click += new System.EventHandler(this.StartPushBt_Click);
+            this.button11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.button11.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold);
+            this.button11.Location = new System.Drawing.Point(194, 8);
+            this.button11.Name = "button11";
+            this.button11.Size = new System.Drawing.Size(191, 127);
+            this.button11.TabIndex = 9;
+            this.button11.Text = "すべて閉じる";
+            this.button11.UseVisualStyleBackColor = false;
+            this.button11.Click += new System.EventHandler(this.button11_Click);
+            // 
+            // button10
+            // 
+            this.button10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.button10.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold);
+            this.button10.Location = new System.Drawing.Point(3, 8);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(185, 127);
+            this.button10.TabIndex = 8;
+            this.button10.Text = "カメラ映像画面";
+            this.button10.UseVisualStyleBackColor = false;
+            this.button10.Click += new System.EventHandler(this.button10_Click);
+            // 
+            // button9
+            // 
+            this.button9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.button9.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold);
+            this.button9.Location = new System.Drawing.Point(194, 141);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(191, 127);
+            this.button9.TabIndex = 7;
+            this.button9.Text = "方向指定画面";
+            this.button9.UseVisualStyleBackColor = false;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
+            // 
+            // button8
+            // 
+            this.button8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.button8.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold);
+            this.button8.Location = new System.Drawing.Point(1, 141);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(187, 127);
+            this.button8.TabIndex = 6;
+            this.button8.Text = "ハンド指定画面";
+            this.button8.UseVisualStyleBackColor = false;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
             // tabPage3
             // 
@@ -1635,190 +1793,28 @@
             this.DataPushTimer.Interval = 250;
             this.DataPushTimer.Tick += new System.EventHandler(this.DataPushTimer_Tick);
             // 
-            // exNamebx
+            // CountDown
             // 
-            this.exNamebx.Font = new System.Drawing.Font("MS UI Gothic", 15F);
-            this.exNamebx.Location = new System.Drawing.Point(139, 3);
-            this.exNamebx.Name = "exNamebx";
-            this.exNamebx.Size = new System.Drawing.Size(188, 27);
-            this.exNamebx.TabIndex = 23;
-            this.exNamebx.TextChanged += new System.EventHandler(this.textBox7_TextChanged);
+            this.CountDown.Interval = 1000;
+            this.CountDown.Tick += new System.EventHandler(this.CountDown_Tick);
             // 
-            // button7
+            // label39
             // 
-            this.button7.Location = new System.Drawing.Point(139, 65);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(185, 26);
-            this.button7.TabIndex = 25;
-            this.button7.Text = "CSV パス名";
-            this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.button7_Click_1);
-            // 
-            // numericUpDown1
-            // 
-            this.numericUpDown1.Font = new System.Drawing.Font("MS UI Gothic", 19F);
-            this.numericUpDown1.Location = new System.Drawing.Point(139, 97);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(188, 33);
-            this.numericUpDown1.TabIndex = 26;
-            this.numericUpDown1.Value = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
-            // 
-            // listBox1
-            // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 12;
-            this.listBox1.Location = new System.Drawing.Point(7, 6);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(375, 172);
-            this.listBox1.TabIndex = 0;
-            // 
-            // numericUpDown2
-            // 
-            this.numericUpDown2.Font = new System.Drawing.Font("MS UI Gothic", 19F);
-            this.numericUpDown2.Location = new System.Drawing.Point(139, 138);
-            this.numericUpDown2.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(188, 33);
-            this.numericUpDown2.TabIndex = 27;
-            this.numericUpDown2.Value = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            // 
-            // numericUpDown3
-            // 
-            this.numericUpDown3.Font = new System.Drawing.Font("MS UI Gothic", 19F);
-            this.numericUpDown3.Location = new System.Drawing.Point(139, 175);
-            this.numericUpDown3.Maximum = new decimal(new int[] {
-            180,
-            0,
-            0,
-            0});
-            this.numericUpDown3.Minimum = new decimal(new int[] {
-            180,
-            0,
-            0,
-            -2147483648});
-            this.numericUpDown3.Name = "numericUpDown3";
-            this.numericUpDown3.Size = new System.Drawing.Size(188, 33);
-            this.numericUpDown3.TabIndex = 28;
-            // 
-            // label35
-            // 
-            this.label35.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.label35.AutoSize = true;
-            this.label35.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label35.Location = new System.Drawing.Point(333, 105);
-            this.label35.Name = "label35";
-            this.label35.Size = new System.Drawing.Size(29, 19);
-            this.label35.TabIndex = 14;
-            this.label35.Text = "％";
-            // 
-            // label36
-            // 
-            this.label36.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.label36.AutoSize = true;
-            this.label36.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label36.Location = new System.Drawing.Point(333, 144);
-            this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(35, 19);
-            this.label36.TabIndex = 29;
-            this.label36.Text = "cm";
-            // 
-            // label37
-            // 
-            this.label37.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.label37.AutoSize = true;
-            this.label37.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label37.Location = new System.Drawing.Point(333, 181);
-            this.label37.Name = "label37";
-            this.label37.Size = new System.Drawing.Size(29, 19);
-            this.label37.TabIndex = 30;
-            this.label37.Text = "°";
-            // 
-            // domainUpDown1
-            // 
-            this.domainUpDown1.Font = new System.Drawing.Font("MS UI Gothic", 19F);
-            this.domainUpDown1.Items.Add("White");
-            this.domainUpDown1.Items.Add("Yellow");
-            this.domainUpDown1.Items.Add("Gray");
-            this.domainUpDown1.Items.Add("Dark");
-            this.domainUpDown1.Items.Add("Black");
-            this.domainUpDown1.Location = new System.Drawing.Point(139, 212);
-            this.domainUpDown1.Name = "domainUpDown1";
-            this.domainUpDown1.Size = new System.Drawing.Size(188, 33);
-            this.domainUpDown1.TabIndex = 31;
-            this.domainUpDown1.Text = "White";
-            // 
-            // label38
-            // 
-            this.label38.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.label38.AutoSize = true;
-            this.label38.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 10.25F, System.Drawing.FontStyle.Bold);
-            this.label38.Location = new System.Drawing.Point(333, 39);
-            this.label38.Name = "label38";
-            this.label38.Size = new System.Drawing.Size(37, 14);
-            this.label38.TabIndex = 32;
-            this.label38.Text = "自動";
-            // 
-            // button8
-            // 
-            this.button8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.button8.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold);
-            this.button8.Location = new System.Drawing.Point(1, 141);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(187, 127);
-            this.button8.TabIndex = 6;
-            this.button8.Text = "ハンド指定画面";
-            this.button8.UseVisualStyleBackColor = false;
-            // 
-            // button9
-            // 
-            this.button9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.button9.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold);
-            this.button9.Location = new System.Drawing.Point(194, 141);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(191, 127);
-            this.button9.TabIndex = 7;
-            this.button9.Text = "方向指定画面";
-            this.button9.UseVisualStyleBackColor = false;
-            // 
-            // button10
-            // 
-            this.button10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.button10.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold);
-            this.button10.Location = new System.Drawing.Point(3, 8);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(185, 127);
-            this.button10.TabIndex = 8;
-            this.button10.Text = "カメラ映像画面";
-            this.button10.UseVisualStyleBackColor = false;
-            // 
-            // button11
-            // 
-            this.button11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.button11.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold);
-            this.button11.Location = new System.Drawing.Point(194, 8);
-            this.button11.Name = "button11";
-            this.button11.Size = new System.Drawing.Size(191, 127);
-            this.button11.TabIndex = 9;
-            this.button11.Text = "すべて閉じる";
-            this.button11.UseVisualStyleBackColor = false;
+            this.label39.AutoSize = true;
+            this.label39.Font = new System.Drawing.Font("MS UI Gothic", 15F);
+            this.label39.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.label39.Location = new System.Drawing.Point(261, 2);
+            this.label39.Name = "label39";
+            this.label39.Size = new System.Drawing.Size(14, 20);
+            this.label39.TabIndex = 22;
+            this.label39.Text = "|";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(919, 625);
+            this.Controls.Add(this.label39);
             this.Controls.Add(this.tabControl2);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.panel1);
@@ -1866,10 +1862,12 @@
             this.tabPage12.PerformLayout();
             this.tableLayoutPanel4.ResumeLayout(false);
             this.tableLayoutPanel4.PerformLayout();
-            this.tabPage14.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.tabPage13.ResumeLayout(false);
             this.tabPage13.PerformLayout();
-            this.groupBox9.ResumeLayout(false);
+            this.tabPage14.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.groupBox7.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
@@ -1883,9 +1881,6 @@
             this.tabPage9.ResumeLayout(false);
             this.tabPage10.ResumeLayout(false);
             this.tabPage11.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1992,8 +1987,6 @@
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.TextBox textBox5;
-        private System.Windows.Forms.GroupBox groupBox9;
-        private System.Windows.Forms.Button DataPush;
         private System.Windows.Forms.Button StartPushBt;
         private System.Windows.Forms.Timer DataPushTimer;
         private System.Windows.Forms.TabControl tabControl3;
@@ -2032,6 +2025,8 @@
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Button button11;
         private System.Windows.Forms.Button button10;
+        private System.Windows.Forms.Timer CountDown;
+        private System.Windows.Forms.Label label39;
     }
 }
 

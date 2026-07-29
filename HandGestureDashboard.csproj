@@ -49,12 +49,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Camera.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Camera.Designer.cs">
+      <DependentUpon>Camera.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConsoleManager.cs" />
+    <Compile Include="Direction.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Direction.Designer.cs">
+      <DependentUpon>Direction.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Hand.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Hand.Designer.cs">
+      <DependentUpon>Hand.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -65,8 +83,14 @@
     </Compile>
     <Compile Include="ResearchData_Newtonsoft.cs" />
     <Compile Include="ResearchManager.cs" />
+    <EmbeddedResource Include="Direction.resx">
+      <DependentUpon>Direction.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Hand.resx">
+      <DependentUpon>Hand.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -92,10 +116,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="picture\choki.png" />
+    <Content Include="picture\down.png" />
     <Content Include="picture\gu.png" />
     <Content Include="picture\hitosashiyubi.png" />
+    <Content Include="picture\left.png" />
     <Content Include="picture\pa.png" />
     <Content Include="picture\question.png" />
+    <Content Include="picture\right.png" />
+    <Content Include="picture\up.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

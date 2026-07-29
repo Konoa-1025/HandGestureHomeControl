@@ -1651,6 +1651,10 @@ namespace HandGestureDashboard
 
         bool experimented = false;
         bool failPush = false;
+        int count = 8;
+        private Hand handForm;
+        private Direction directionForm;
+        private Camera cameraForm;
         private void button7_Click(object sender, EventArgs e)
         {
             AppendLog("計測開始");
@@ -1658,33 +1662,104 @@ namespace HandGestureDashboard
 
         private void StartPushBt_Click(object sender, EventArgs e)
         {
-            if(StartPushBt.Text == "計測開始")
+            switch (StartPushBt.Text)
             {
-                StartPushBt.Text = "計測停止";
-                StartPushBt.BackColor = Color.FromArgb(255, 128, 128);
-                DataPush.Enabled = false;
-                tableLayoutPanel4.Enabled = false;
-                tabControl3.SelectedIndex = 13;
-                AppendLog("計測開始");
-            }
-            else
-            {
-                StartPushBt.Text = "計測開始";
-                StartPushBt.BackColor = Color.FromArgb(128, 255, 128);
-                DataPush.Enabled = true;
-                AppendLog("計測停止");
+                // ==========================
+                // 計測準備
+                // ==========================
+                case "計測準備":
+
+                    if (exNamebx.Text == "")
+                    {
+                        AppendLog("実験名を入力してください。");
+                        return;
+                    }
+
+                    if (handForm != null && !handForm.IsDisposed)
+                    {
+                        
+                    }
+                    else
+                    {
+                        handForm = new Hand();
+                        handForm.FormClosed += (s, args) => handForm = null;
+                        handForm.Show();
+                    }
+
+                    
+
+                    if (directionForm != null && !directionForm.IsDisposed)
+                    {
+                        
+                    }
+                    else
+                    {
+                        directionForm = new Direction();
+                        directionForm.FormClosed += (s, args) => directionForm = null;
+                        directionForm.Show();
+                    }
+
+                    
+
+                    if (cameraForm != null && !cameraForm.IsDisposed)
+                    {
+                        
+                    }
+                    else
+                    {
+                        cameraForm = new Camera();
+                        cameraForm.FormClosed += (s, args) => cameraForm = null;
+                        cameraForm.Show();
+                    }
+
+                    
+
+                    AppendLog("環境データ送信します。");
+                    SaveExperimentHistory(exNamebx.Text.Trim(), int.Parse(label34.Text));
+
+                    tableLayoutPanel4.Enabled = false;
+                    DataPushTimer.Start();
+
+                    //StartPushBt.Enabled = false;
+
+                    StartPushBt.Text = "計測開始";
+                    StartPushBt.BackColor = Color.FromArgb(128, 255, 128); // 緑
+
+                    break;
+
+                // ==========================
+                // 計測開始
+                // ==========================
+                case "計測開始":
+                    CountDown.Start();
+
+                    break;
+
+                // ==========================
+                // 計測停止
+                // ==========================
+                case "計測停止":
+
+                    StartPushBt.Text = "計測準備";
+                    StartPushBt.BackColor = Color.FromArgb(128, 192, 255); // 青
+
+                    tableLayoutPanel4.Enabled = true;
+
+                    AppendLog("計測停止");
+
+                    break;
             }
         }
 
         private void DataPushTimer_Tick(object sender, EventArgs e)
         {
-            if (DataPush.Text.Length >= 6)
+            if (label9.Text.Length >= 6)
             {
-                DataPush.Text = "送信中";
+                label9.Text = "送信中";
             }
             else
             {
-                DataPush.Text += ".";
+                label9.Text += ".";
             }
         }
 
@@ -1700,7 +1775,6 @@ namespace HandGestureDashboard
             tableLayoutPanel4.Enabled = false;
             DataPushTimer.Start();
             StartPushBt.Enabled = false;
-            DataPush.Enabled = false;
         }
 
         private void textBox7_TextChanged(object sender, EventArgs e)
@@ -1783,24 +1857,92 @@ namespace HandGestureDashboard
         {
             using (OpenFileDialog dialog = new OpenFileDialog())
             {
-                // CSVファイルのみ表示
                 dialog.Filter = "CSVファイル (*.csv)|*.csv";
                 dialog.Title = "CSVファイルを選択";
                 dialog.Multiselect = false;
+                dialog.CheckFileExists = true;
 
-                // ファイルが選択されたら
-                if (dialog.ShowDialog() == DialogResult.OK)
+                if (dialog.ShowDialog() != DialogResult.OK)
+                    return;
+
+                string csvPath = dialog.FileName;
+
+                // 表示はファイル名だけ
+                button7.Text = Path.GetFileName(csvPath);
+
+                // 内部にはフルパスを保存
+                button7.Tag = csvPath;
+
+                AppendLog("CSVファイルを選択しました: " + csvPath);
+            }
+        }
+        
+        private void button8_Click(object sender, EventArgs e)
+        {
+
+            if (handForm != null && !handForm.IsDisposed)
+            {
+                return;
+            }
+
+            handForm = new Hand();
+            handForm.FormClosed += (s, args) => handForm = null;
+            handForm.Show();
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            if(directionForm != null && !directionForm.IsDisposed)
+            {
+                return;
+            }
+
+            directionForm = new Direction();
+            directionForm.FormClosed += (s, args) => directionForm = null;
+            directionForm.Show();
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            if (cameraForm != null && !cameraForm.IsDisposed)
+            {
+                return;
+            }
+            cameraForm = new Camera();
+            cameraForm.FormClosed += (s, args) => cameraForm = null;
+            cameraForm.Show();
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            foreach (Form form in Application.OpenForms.Cast<Form>().ToList())
+            {
+                if (form != this)
                 {
-                    // パスを取得
-                    string csvPath = dialog.FileName;
-
-                    // ボタンの文字をファイル名に変更
-                    button7.Text = Path.GetFileName(csvPath);
-
-                    // 必要ならSettingsなどに保存
-                    // Properties.Settings.Default.csvPath = csvPath;
-                    // Properties.Settings.Default.Save();
+                    form.Close();
                 }
+            }
+        }
+        private void StartExperiment()
+        {
+            StartPushBt.Text = "計測停止";
+            StartPushBt.BackColor = Color.FromArgb(255, 128, 128); // 赤
+
+            tableLayoutPanel4.Enabled = false;
+            tabControl3.SelectedIndex = 13;
+
+            AppendLog("計測開始");
+        }
+        private void CountDown_Tick(object sender, EventArgs e)
+        {
+            if(count-- > 0)
+            {
+                StartPushBt.Text = "計測開始まで" + count.ToString();
+
+            }
+            else { 
+                CountDown.Stop();
+                StartExperiment();
             }
         }
     }
