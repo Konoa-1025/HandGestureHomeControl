@@ -299,11 +299,12 @@ def record_frame(_frame_data):
 
     _send_live_if_due(_record)
 
-    if (
-        _current_time - _measurement_start_time
-        >= _measurement_duration
-    ):
-        stop_measurement()
+    #if (
+    #    _current_time - _measurement_start_time
+    #    >= _measurement_duration
+    #):
+    #    #top_measurement()
+    #    p.debug("デバックで自動計測終了をストップしています。")
 
     return True
 

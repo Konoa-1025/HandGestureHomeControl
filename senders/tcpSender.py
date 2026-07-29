@@ -16,6 +16,8 @@ _selected_host = None
 
 _log_client = None
 _research_log_client = None
+_experiment_log_client = None
+_test_log_client = None
 _front_video_client = None
 _side_video_client = None
 
@@ -53,6 +55,8 @@ def _connect(_port):
 def _set_client(_client_name, _client):
     global _log_client
     global _research_log_client
+    global _experiment_log_client
+    global _test_log_client
     global _front_video_client
     global _side_video_client
 
@@ -60,6 +64,10 @@ def _set_client(_client_name, _client):
         _log_client = _client
     elif _client_name == "research":
         _research_log_client = _client
+    elif _client_name == "experiment":
+        _experiment_log_client = _client
+    elif _client_name == "test":
+        _test_log_client = _client
     elif _client_name == "front_video":
         _front_video_client = _client
     elif _client_name == "side_video":
@@ -71,6 +79,10 @@ def _get_client(_client_name):
         return _log_client
     if _client_name == "research":
         return _research_log_client
+    if _client_name == "experiment":
+        return _experiment_log_client
+    if _client_name == "test":
+        return _test_log_client
     if _client_name == "front_video":
         return _front_video_client
     if _client_name == "side_video":
@@ -140,6 +152,18 @@ def connect_all(_config):
 
     threading.Thread(
         target=_client_worker,
+        args=(_ports["experiment"], "experiment"),
+        daemon=True
+    ).start()
+
+    threading.Thread(
+        target=_client_worker,
+        args=(_ports["test"], "test"),
+        daemon=True
+    ).start()
+
+    threading.Thread(
+        target=_client_worker,
         args=(_ports["front_video"], "front_video"),
         daemon=True
     ).start()
@@ -197,6 +221,12 @@ def send_log(_text):
 def send_research_log(_text):
     return _send_text("research", _text)
 
+def send_experiment_log(_text):
+    return _send_text("experiment", _text)
+
+def send_test_log(_text):
+    return _send_text("test", _text)
+
 
 def _send_frame(_client_name, _frame, _quality=70):
     if _frame is None:
@@ -248,6 +278,8 @@ def close_all():
 
     _disconnect_client("log")
     _disconnect_client("research")
+    _disconnect_client("experiment")
+    _disconnect_client("test")
     _disconnect_client("front_video")
     _disconnect_client("side_video")
 

@@ -18,6 +18,8 @@ import managers.modelManager as model
 import managers.recognitionManager as rico
 import managers.conboManager as target
 import managers.dataManager as data
+import senders.tcpResponse as tcpres
+
 
 
 def main():
@@ -36,6 +38,8 @@ def main():
         "angle_degrees": 0,
         "background": "WHITE"
     })
+
+    tcpres.start_server(_config)
 
     _previous_frame_time = time.perf_counter()
 
@@ -69,6 +73,8 @@ def main():
             )
 
             action.run(_combo_result)
+
+            #!以下は計測アプリケーション用の取得系
 
             _hands = _model_result.get("hands", [])
             _hand_detected = len(_hands) > 0
