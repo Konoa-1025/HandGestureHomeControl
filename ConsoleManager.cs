@@ -12,7 +12,8 @@ namespace HandGestureDashboard
         TcpStop,
         TcpList,
         TcpEdit,
-        PowerShell
+        PowerShell,
+        IP
     }
 
     public class ConsoleCommandResult
@@ -71,6 +72,9 @@ namespace HandGestureDashboard
 
                 case "save":
                     return CreateResult(ConsoleCommandType.Save);
+
+                case "ip":
+                    return CreateResult(ConsoleCommandType.IP);
 
                 case "status":
                     return CreateMessage("System: Ready");

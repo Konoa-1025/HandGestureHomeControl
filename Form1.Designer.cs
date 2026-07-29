@@ -83,7 +83,6 @@
             this.label9 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.Chelp = new System.Windows.Forms.Label();
             this.CClear = new System.Windows.Forms.Label();
@@ -93,6 +92,39 @@
             this.label20 = new System.Windows.Forms.Label();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.button2 = new System.Windows.Forms.Button();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.tabControl2 = new System.Windows.Forms.TabControl();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.tabPage8 = new System.Windows.Forms.TabPage();
+            this.tabPage9 = new System.Windows.Forms.TabPage();
+            this.tabPage10 = new System.Windows.Forms.TabPage();
+            this.tabPage11 = new System.Windows.Forms.TabPage();
+            this.Port0LogBox = new System.Windows.Forms.ListBox();
+            this.Port1LogBox = new System.Windows.Forms.ListBox();
+            this.Port2LogBox = new System.Windows.Forms.ListBox();
+            this.Port3LogBox = new System.Windows.Forms.ListBox();
+            this.Port4LogBox = new System.Windows.Forms.ListBox();
+            this.Port5LogBox = new System.Windows.Forms.ListBox();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.P0statusLb = new System.Windows.Forms.Label();
+            this.port0PLb = new System.Windows.Forms.Label();
+            this.port1PLb = new System.Windows.Forms.Label();
+            this.port2PLb = new System.Windows.Forms.Label();
+            this.P2statusLb = new System.Windows.Forms.Label();
+            this.P1statusLb = new System.Windows.Forms.Label();
+            this.IPLb = new System.Windows.Forms.Label();
+            this.port3PLb = new System.Windows.Forms.Label();
+            this.port4PLb = new System.Windows.Forms.Label();
+            this.port5PLb = new System.Windows.Forms.Label();
+            this.P3statusLb = new System.Windows.Forms.Label();
+            this.P4statusLb = new System.Windows.Forms.Label();
+            this.P5statusLb = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.label31 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -101,6 +133,7 @@
             this.groupBox10.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             this.groupBox9.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -112,6 +145,15 @@
             this.groupBox7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.panel1.SuspendLayout();
+            this.tabControl2.SuspendLayout();
+            this.tabPage5.SuspendLayout();
+            this.tabPage6.SuspendLayout();
+            this.tabPage7.SuspendLayout();
+            this.tabPage8.SuspendLayout();
+            this.tabPage9.SuspendLayout();
+            this.tabPage10.SuspendLayout();
+            this.tabPage11.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -227,10 +269,14 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.IPLb);
+            this.groupBox3.Controls.Add(this.tableLayoutPanel3);
+            this.groupBox3.Controls.Add(this.button5);
+            this.groupBox3.Controls.Add(this.button4);
             this.groupBox3.Font = new System.Drawing.Font("MS UI Gothic", 10.25F, System.Drawing.FontStyle.Bold);
             this.groupBox3.Location = new System.Drawing.Point(215, 6);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(317, 200);
+            this.groupBox3.Size = new System.Drawing.Size(134, 200);
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "通信";
@@ -652,9 +698,9 @@
             // 
             this.LogBox.FormattingEnabled = true;
             this.LogBox.ItemHeight = 12;
-            this.LogBox.Location = new System.Drawing.Point(549, 7);
+            this.LogBox.Location = new System.Drawing.Point(2, 3);
             this.LogBox.Name = "LogBox";
-            this.LogBox.Size = new System.Drawing.Size(227, 424);
+            this.LogBox.Size = new System.Drawing.Size(355, 352);
             this.LogBox.TabIndex = 12;
             // 
             // NTimer
@@ -706,7 +752,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.Black;
-            this.panel1.Controls.Add(this.label5);
+            this.panel1.Controls.Add(this.flowLayoutPanel1);
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.Chelp);
             this.panel1.Controls.Add(this.CClear);
@@ -718,26 +764,17 @@
             this.panel1.ForeColor = System.Drawing.Color.White;
             this.panel1.Location = new System.Drawing.Point(-13, 437);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(804, 199);
+            this.panel1.Size = new System.Drawing.Size(940, 199);
             this.panel1.TabIndex = 19;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.ForeColor = System.Drawing.Color.LimeGreen;
-            this.label5.Location = new System.Drawing.Point(659, 12);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(11, 12);
-            this.label5.TabIndex = 25;
-            this.label5.Text = "/";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("MS UI Gothic", 20F);
             this.label4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label4.Location = new System.Drawing.Point(670, 11);
+            this.label4.Location = new System.Drawing.Point(861, 112);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(29, 12);
+            this.label4.Size = new System.Drawing.Size(64, 27);
             this.label4.TabIndex = 24;
             this.label4.Text = "shell";
             this.label4.Click += new System.EventHandler(this.label4_Click);
@@ -745,34 +782,37 @@
             // Chelp
             // 
             this.Chelp.AutoSize = true;
+            this.Chelp.Font = new System.Drawing.Font("MS UI Gothic", 20F);
             this.Chelp.ForeColor = System.Drawing.Color.LimeGreen;
-            this.Chelp.Location = new System.Drawing.Point(738, 11);
+            this.Chelp.Location = new System.Drawing.Point(861, 64);
             this.Chelp.Name = "Chelp";
-            this.Chelp.Size = new System.Drawing.Size(33, 12);
+            this.Chelp.Size = new System.Drawing.Size(59, 27);
             this.Chelp.TabIndex = 23;
-            this.Chelp.Text = "| help";
+            this.Chelp.Text = "help";
             this.Chelp.Click += new System.EventHandler(this.Chelp_Click);
             // 
             // CClear
             // 
             this.CClear.AutoSize = true;
+            this.CClear.Font = new System.Drawing.Font("MS UI Gothic", 20F);
             this.CClear.ForeColor = System.Drawing.Color.LimeGreen;
-            this.CClear.Location = new System.Drawing.Point(702, 11);
+            this.CClear.Location = new System.Drawing.Point(857, 11);
             this.CClear.Name = "CClear";
-            this.CClear.Size = new System.Drawing.Size(37, 12);
+            this.CClear.Size = new System.Drawing.Size(68, 27);
             this.CClear.TabIndex = 22;
-            this.CClear.Text = "| clear";
+            this.CClear.Text = "clear";
             this.CClear.Click += new System.EventHandler(this.CClear_Click);
             // 
             // label10
             // 
             this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("MS UI Gothic", 14F);
             this.label10.ForeColor = System.Drawing.Color.Yellow;
-            this.label10.Location = new System.Drawing.Point(573, 11);
+            this.label10.Location = new System.Drawing.Point(862, 159);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(87, 12);
+            this.label10.Size = new System.Drawing.Size(62, 19);
             this.label10.TabIndex = 20;
-            this.label10.Text = "開発用コンソール";
+            this.label10.Text = "consol";
             this.label10.Click += new System.EventHandler(this.label10_Click);
             // 
             // Console
@@ -784,7 +824,7 @@
             this.Console.Location = new System.Drawing.Point(36, 26);
             this.Console.Name = "Console";
             this.Console.ReadOnly = true;
-            this.Console.Size = new System.Drawing.Size(734, 129);
+            this.Console.Size = new System.Drawing.Size(789, 129);
             this.Console.TabIndex = 17;
             this.Console.Text = ">";
             // 
@@ -795,7 +835,7 @@
             this.UConsole.ForeColor = System.Drawing.Color.LimeGreen;
             this.UConsole.Location = new System.Drawing.Point(49, 161);
             this.UConsole.Name = "UConsole";
-            this.UConsole.Size = new System.Drawing.Size(717, 12);
+            this.UConsole.Size = new System.Drawing.Size(776, 12);
             this.UConsole.TabIndex = 18;
             this.UConsole.TextChanged += new System.EventHandler(this.UConsole_TextChanged);
             this.UConsole.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
@@ -835,11 +875,392 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.BackColor = System.Drawing.Color.LimeGreen;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(847, 3);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(3, 183);
+            this.flowLayoutPanel1.TabIndex = 22;
+            // 
+            // tabControl2
+            // 
+            this.tabControl2.Controls.Add(this.tabPage5);
+            this.tabControl2.Controls.Add(this.tabPage6);
+            this.tabControl2.Controls.Add(this.tabPage7);
+            this.tabControl2.Controls.Add(this.tabPage8);
+            this.tabControl2.Controls.Add(this.tabPage9);
+            this.tabControl2.Controls.Add(this.tabPage10);
+            this.tabControl2.Controls.Add(this.tabPage11);
+            this.tabControl2.Location = new System.Drawing.Point(549, 49);
+            this.tabControl2.Name = "tabControl2";
+            this.tabControl2.SelectedIndex = 0;
+            this.tabControl2.Size = new System.Drawing.Size(368, 385);
+            this.tabControl2.TabIndex = 21;
+            // 
+            // tabPage5
+            // 
+            this.tabPage5.Controls.Add(this.LogBox);
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage5.Size = new System.Drawing.Size(360, 359);
+            this.tabPage5.TabIndex = 0;
+            this.tabPage5.Text = "All port";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // tabPage6
+            // 
+            this.tabPage6.Controls.Add(this.Port0LogBox);
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage6.Size = new System.Drawing.Size(360, 359);
+            this.tabPage6.TabIndex = 1;
+            this.tabPage6.Text = "port0";
+            this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // tabPage7
+            // 
+            this.tabPage7.Controls.Add(this.Port1LogBox);
+            this.tabPage7.Location = new System.Drawing.Point(4, 22);
+            this.tabPage7.Name = "tabPage7";
+            this.tabPage7.Size = new System.Drawing.Size(360, 359);
+            this.tabPage7.TabIndex = 2;
+            this.tabPage7.Text = "port1";
+            this.tabPage7.UseVisualStyleBackColor = true;
+            // 
+            // tabPage8
+            // 
+            this.tabPage8.Controls.Add(this.Port2LogBox);
+            this.tabPage8.Location = new System.Drawing.Point(4, 22);
+            this.tabPage8.Name = "tabPage8";
+            this.tabPage8.Size = new System.Drawing.Size(360, 359);
+            this.tabPage8.TabIndex = 3;
+            this.tabPage8.Text = "port2";
+            this.tabPage8.UseVisualStyleBackColor = true;
+            // 
+            // tabPage9
+            // 
+            this.tabPage9.Controls.Add(this.Port3LogBox);
+            this.tabPage9.Location = new System.Drawing.Point(4, 22);
+            this.tabPage9.Name = "tabPage9";
+            this.tabPage9.Size = new System.Drawing.Size(360, 359);
+            this.tabPage9.TabIndex = 4;
+            this.tabPage9.Text = "port3";
+            this.tabPage9.UseVisualStyleBackColor = true;
+            // 
+            // tabPage10
+            // 
+            this.tabPage10.Controls.Add(this.Port4LogBox);
+            this.tabPage10.Location = new System.Drawing.Point(4, 22);
+            this.tabPage10.Name = "tabPage10";
+            this.tabPage10.Size = new System.Drawing.Size(360, 359);
+            this.tabPage10.TabIndex = 5;
+            this.tabPage10.Text = "port4";
+            this.tabPage10.UseVisualStyleBackColor = true;
+            // 
+            // tabPage11
+            // 
+            this.tabPage11.Controls.Add(this.Port5LogBox);
+            this.tabPage11.Location = new System.Drawing.Point(4, 22);
+            this.tabPage11.Name = "tabPage11";
+            this.tabPage11.Size = new System.Drawing.Size(360, 359);
+            this.tabPage11.TabIndex = 6;
+            this.tabPage11.Text = "port5";
+            this.tabPage11.UseVisualStyleBackColor = true;
+            // 
+            // Port0LogBox
+            // 
+            this.Port0LogBox.FormattingEnabled = true;
+            this.Port0LogBox.ItemHeight = 12;
+            this.Port0LogBox.Location = new System.Drawing.Point(3, 3);
+            this.Port0LogBox.Name = "Port0LogBox";
+            this.Port0LogBox.Size = new System.Drawing.Size(355, 352);
+            this.Port0LogBox.TabIndex = 13;
+            // 
+            // Port1LogBox
+            // 
+            this.Port1LogBox.FormattingEnabled = true;
+            this.Port1LogBox.ItemHeight = 12;
+            this.Port1LogBox.Location = new System.Drawing.Point(3, 3);
+            this.Port1LogBox.Name = "Port1LogBox";
+            this.Port1LogBox.Size = new System.Drawing.Size(355, 352);
+            this.Port1LogBox.TabIndex = 13;
+            // 
+            // Port2LogBox
+            // 
+            this.Port2LogBox.FormattingEnabled = true;
+            this.Port2LogBox.ItemHeight = 12;
+            this.Port2LogBox.Location = new System.Drawing.Point(3, 3);
+            this.Port2LogBox.Name = "Port2LogBox";
+            this.Port2LogBox.Size = new System.Drawing.Size(355, 352);
+            this.Port2LogBox.TabIndex = 13;
+            // 
+            // Port3LogBox
+            // 
+            this.Port3LogBox.FormattingEnabled = true;
+            this.Port3LogBox.ItemHeight = 12;
+            this.Port3LogBox.Location = new System.Drawing.Point(3, 3);
+            this.Port3LogBox.Name = "Port3LogBox";
+            this.Port3LogBox.Size = new System.Drawing.Size(355, 352);
+            this.Port3LogBox.TabIndex = 13;
+            // 
+            // Port4LogBox
+            // 
+            this.Port4LogBox.FormattingEnabled = true;
+            this.Port4LogBox.ItemHeight = 12;
+            this.Port4LogBox.Location = new System.Drawing.Point(3, 3);
+            this.Port4LogBox.Name = "Port4LogBox";
+            this.Port4LogBox.Size = new System.Drawing.Size(355, 352);
+            this.Port4LogBox.TabIndex = 13;
+            // 
+            // Port5LogBox
+            // 
+            this.Port5LogBox.FormattingEnabled = true;
+            this.Port5LogBox.ItemHeight = 12;
+            this.Port5LogBox.Location = new System.Drawing.Point(3, 3);
+            this.Port5LogBox.Name = "Port5LogBox";
+            this.Port5LogBox.Size = new System.Drawing.Size(355, 352);
+            this.Port5LogBox.TabIndex = 13;
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(71, 167);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(53, 25);
+            this.button4.TabIndex = 1;
+            this.button4.Text = "停止";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(9, 167);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(56, 25);
+            this.button5.TabIndex = 2;
+            this.button5.Text = "開始";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
+            // tableLayoutPanel3
+            // 
+            this.tableLayoutPanel3.ColumnCount = 2;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40.17857F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 59.82143F));
+            this.tableLayoutPanel3.Controls.Add(this.P3statusLb, 1, 4);
+            this.tableLayoutPanel3.Controls.Add(this.port3PLb, 0, 4);
+            this.tableLayoutPanel3.Controls.Add(this.label31, 0, 0);
+            this.tableLayoutPanel3.Controls.Add(this.P0statusLb, 1, 1);
+            this.tableLayoutPanel3.Controls.Add(this.port0PLb, 0, 1);
+            this.tableLayoutPanel3.Controls.Add(this.port1PLb, 0, 2);
+            this.tableLayoutPanel3.Controls.Add(this.port2PLb, 0, 3);
+            this.tableLayoutPanel3.Controls.Add(this.P2statusLb, 1, 3);
+            this.tableLayoutPanel3.Controls.Add(this.P1statusLb, 1, 2);
+            this.tableLayoutPanel3.Controls.Add(this.label25, 1, 0);
+            this.tableLayoutPanel3.Controls.Add(this.port4PLb, 0, 6);
+            this.tableLayoutPanel3.Controls.Add(this.port5PLb, 0, 7);
+            this.tableLayoutPanel3.Controls.Add(this.P4statusLb, 1, 6);
+            this.tableLayoutPanel3.Controls.Add(this.P5statusLb, 1, 7);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(10, 34);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.RowCount = 9;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 19F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 17F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 17F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(112, 127);
+            this.tableLayoutPanel3.TabIndex = 3;
+            // 
+            // P0statusLb
+            // 
+            this.P0statusLb.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.P0statusLb.AutoSize = true;
+            this.P0statusLb.Font = new System.Drawing.Font("MS UI Gothic", 10.25F);
+            this.P0statusLb.Location = new System.Drawing.Point(57, 22);
+            this.P0statusLb.Name = "P0statusLb";
+            this.P0statusLb.Size = new System.Drawing.Size(42, 14);
+            this.P0statusLb.TabIndex = 3;
+            this.P0statusLb.Text = "100％";
+            this.P0statusLb.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // port0PLb
+            // 
+            this.port0PLb.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.port0PLb.AutoSize = true;
+            this.port0PLb.Font = new System.Drawing.Font("MS UI Gothic", 10.25F);
+            this.port0PLb.Location = new System.Drawing.Point(15, 22);
+            this.port0PLb.Name = "port0PLb";
+            this.port0PLb.Size = new System.Drawing.Size(14, 14);
+            this.port0PLb.TabIndex = 0;
+            this.port0PLb.Text = "0";
+            this.port0PLb.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // port1PLb
+            // 
+            this.port1PLb.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.port1PLb.AutoSize = true;
+            this.port1PLb.Font = new System.Drawing.Font("MS UI Gothic", 10.25F);
+            this.port1PLb.Location = new System.Drawing.Point(15, 40);
+            this.port1PLb.Name = "port1PLb";
+            this.port1PLb.Size = new System.Drawing.Size(14, 14);
+            this.port1PLb.TabIndex = 1;
+            this.port1PLb.Text = "0";
+            this.port1PLb.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // port2PLb
+            // 
+            this.port2PLb.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.port2PLb.AutoSize = true;
+            this.port2PLb.Font = new System.Drawing.Font("MS UI Gothic", 10.25F);
+            this.port2PLb.Location = new System.Drawing.Point(15, 56);
+            this.port2PLb.Name = "port2PLb";
+            this.port2PLb.Size = new System.Drawing.Size(14, 14);
+            this.port2PLb.TabIndex = 2;
+            this.port2PLb.Text = "0";
+            this.port2PLb.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // P2statusLb
+            // 
+            this.P2statusLb.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.P2statusLb.AutoSize = true;
+            this.P2statusLb.Font = new System.Drawing.Font("MS UI Gothic", 10.25F);
+            this.P2statusLb.Location = new System.Drawing.Point(57, 56);
+            this.P2statusLb.Name = "P2statusLb";
+            this.P2statusLb.Size = new System.Drawing.Size(42, 14);
+            this.P2statusLb.TabIndex = 4;
+            this.P2statusLb.Text = "100％";
+            this.P2statusLb.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // P1statusLb
+            // 
+            this.P1statusLb.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.P1statusLb.AutoSize = true;
+            this.P1statusLb.Font = new System.Drawing.Font("MS UI Gothic", 10.25F);
+            this.P1statusLb.Location = new System.Drawing.Point(57, 40);
+            this.P1statusLb.Name = "P1statusLb";
+            this.P1statusLb.Size = new System.Drawing.Size(42, 14);
+            this.P1statusLb.TabIndex = 5;
+            this.P1statusLb.Text = "100％";
+            this.P1statusLb.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // IPLb
+            // 
+            this.IPLb.AutoSize = true;
+            this.IPLb.Location = new System.Drawing.Point(7, 17);
+            this.IPLb.Name = "IPLb";
+            this.IPLb.Size = new System.Drawing.Size(115, 14);
+            this.IPLb.TabIndex = 4;
+            this.IPLb.Text = "IP : 000.000.000";
+            // 
+            // port3PLb
+            // 
+            this.port3PLb.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.port3PLb.AutoSize = true;
+            this.port3PLb.Font = new System.Drawing.Font("MS UI Gothic", 10.25F);
+            this.port3PLb.Location = new System.Drawing.Point(15, 73);
+            this.port3PLb.Name = "port3PLb";
+            this.port3PLb.Size = new System.Drawing.Size(14, 14);
+            this.port3PLb.TabIndex = 12;
+            this.port3PLb.Text = "0";
+            this.port3PLb.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // port4PLb
+            // 
+            this.port4PLb.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.port4PLb.AutoSize = true;
+            this.port4PLb.Font = new System.Drawing.Font("MS UI Gothic", 10.25F);
+            this.port4PLb.Location = new System.Drawing.Point(15, 89);
+            this.port4PLb.Name = "port4PLb";
+            this.port4PLb.Size = new System.Drawing.Size(14, 14);
+            this.port4PLb.TabIndex = 13;
+            this.port4PLb.Text = "0";
+            this.port4PLb.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // port5PLb
+            // 
+            this.port5PLb.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.port5PLb.AutoSize = true;
+            this.port5PLb.Font = new System.Drawing.Font("MS UI Gothic", 10.25F);
+            this.port5PLb.Location = new System.Drawing.Point(15, 108);
+            this.port5PLb.Name = "port5PLb";
+            this.port5PLb.Size = new System.Drawing.Size(14, 14);
+            this.port5PLb.TabIndex = 14;
+            this.port5PLb.Text = "0";
+            this.port5PLb.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // P3statusLb
+            // 
+            this.P3statusLb.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.P3statusLb.AutoSize = true;
+            this.P3statusLb.Font = new System.Drawing.Font("MS UI Gothic", 10.25F);
+            this.P3statusLb.Location = new System.Drawing.Point(57, 73);
+            this.P3statusLb.Name = "P3statusLb";
+            this.P3statusLb.Size = new System.Drawing.Size(42, 14);
+            this.P3statusLb.TabIndex = 15;
+            this.P3statusLb.Text = "100％";
+            this.P3statusLb.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // P4statusLb
+            // 
+            this.P4statusLb.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.P4statusLb.AutoSize = true;
+            this.P4statusLb.Font = new System.Drawing.Font("MS UI Gothic", 10.25F);
+            this.P4statusLb.Location = new System.Drawing.Point(57, 89);
+            this.P4statusLb.Name = "P4statusLb";
+            this.P4statusLb.Size = new System.Drawing.Size(42, 14);
+            this.P4statusLb.TabIndex = 16;
+            this.P4statusLb.Text = "100％";
+            this.P4statusLb.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // P5statusLb
+            // 
+            this.P5statusLb.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.P5statusLb.AutoSize = true;
+            this.P5statusLb.Font = new System.Drawing.Font("MS UI Gothic", 10.25F);
+            this.P5statusLb.Location = new System.Drawing.Point(57, 108);
+            this.P5statusLb.Name = "P5statusLb";
+            this.P5statusLb.Size = new System.Drawing.Size(42, 14);
+            this.P5statusLb.TabIndex = 17;
+            this.P5statusLb.Text = "100％";
+            this.P5statusLb.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label25
+            // 
+            this.label25.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label25.AutoSize = true;
+            this.label25.Font = new System.Drawing.Font("MS UI Gothic", 10.25F);
+            this.label25.Location = new System.Drawing.Point(61, 3);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(35, 14);
+            this.label25.TabIndex = 6;
+            this.label25.Text = "状態";
+            this.label25.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label31
+            // 
+            this.label31.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label31.AutoSize = true;
+            this.label31.Font = new System.Drawing.Font("MS UI Gothic", 10.25F);
+            this.label31.Location = new System.Drawing.Point(6, 3);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(33, 14);
+            this.label31.TabIndex = 11;
+            this.label31.Text = "Port";
+            this.label31.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(780, 625);
+            this.ClientSize = new System.Drawing.Size(919, 625);
+            this.Controls.Add(this.tabControl2);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.NTimeLB);
@@ -847,7 +1268,6 @@
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.LogBox);
             this.Controls.Add(this.P3Sign);
             this.Controls.Add(this.P2Sign);
             this.Controls.Add(this.P1Sign);
@@ -871,6 +1291,8 @@
             this.groupBox10.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
             this.groupBox9.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
@@ -885,6 +1307,16 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.tabControl2.ResumeLayout(false);
+            this.tabPage5.ResumeLayout(false);
+            this.tabPage6.ResumeLayout(false);
+            this.tabPage7.ResumeLayout(false);
+            this.tabPage8.ResumeLayout(false);
+            this.tabPage9.ResumeLayout(false);
+            this.tabPage10.ResumeLayout(false);
+            this.tabPage11.ResumeLayout(false);
+            this.tableLayoutPanel3.ResumeLayout(false);
+            this.tableLayoutPanel3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -954,8 +1386,40 @@
         private System.Windows.Forms.TabPage tabPage4;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.ListBox listBox2;
-        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.TabControl tabControl2;
+        private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.TabPage tabPage6;
+        private System.Windows.Forms.ListBox Port0LogBox;
+        private System.Windows.Forms.TabPage tabPage7;
+        private System.Windows.Forms.ListBox Port1LogBox;
+        private System.Windows.Forms.TabPage tabPage8;
+        private System.Windows.Forms.ListBox Port2LogBox;
+        private System.Windows.Forms.TabPage tabPage9;
+        private System.Windows.Forms.ListBox Port3LogBox;
+        private System.Windows.Forms.TabPage tabPage10;
+        private System.Windows.Forms.ListBox Port4LogBox;
+        private System.Windows.Forms.TabPage tabPage11;
+        private System.Windows.Forms.ListBox Port5LogBox;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        private System.Windows.Forms.Label P0statusLb;
+        private System.Windows.Forms.Label port0PLb;
+        private System.Windows.Forms.Label port1PLb;
+        private System.Windows.Forms.Label port2PLb;
+        private System.Windows.Forms.Label P2statusLb;
+        private System.Windows.Forms.Label P1statusLb;
+        private System.Windows.Forms.Label IPLb;
+        private System.Windows.Forms.Label port3PLb;
+        private System.Windows.Forms.Label port4PLb;
+        private System.Windows.Forms.Label port5PLb;
+        private System.Windows.Forms.Label P3statusLb;
+        private System.Windows.Forms.Label P4statusLb;
+        private System.Windows.Forms.Label P5statusLb;
+        private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.Label label25;
     }
 }
 
