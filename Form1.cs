@@ -1645,5 +1645,15 @@ namespace HandGestureDashboard
         {
             StopTcp();
         }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            AppendLog("計測開始");
+        }
+
+        private void StartPushBt_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
