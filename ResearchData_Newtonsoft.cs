@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace HandGestureDashboard
 {
@@ -8,28 +8,28 @@ namespace HandGestureDashboard
     //==============================================================
     public class ResearchData
     {
-        [JsonPropertyName("timestamp")]
+        [JsonProperty("timestamp")]
         public DateTimeOffset Timestamp { get; set; }
 
-        [JsonPropertyName("elapsed_ms")]
+        [JsonProperty("elapsed_ms")]
         public double ElapsedMs { get; set; }
 
-        [JsonPropertyName("frame_id")]
+        [JsonProperty("frame_id")]
         public long FrameId { get; set; }
 
-        [JsonPropertyName("experiment")]
+        [JsonProperty("experiment")]
         public ExperimentData Experiment { get; set; }
 
-        [JsonPropertyName("system")]
+        [JsonProperty("system")]
         public SystemData System { get; set; }
 
-        [JsonPropertyName("performance")]
+        [JsonProperty("performance")]
         public PerformanceData Performance { get; set; }
 
-        [JsonPropertyName("model")]
+        [JsonProperty("model")]
         public ModelData Model { get; set; }
 
-        [JsonPropertyName("recognition")]
+        [JsonProperty("recognition")]
         public RecognitionData Recognition { get; set; }
     }
 
@@ -38,25 +38,25 @@ namespace HandGestureDashboard
     //==============================================================
     public class ExperimentData
     {
-        [JsonPropertyName("experiment_id")]
+        [JsonProperty("experiment_id")]
         public string ExperimentId { get; set; }
 
-        [JsonPropertyName("trial_id")]
+        [JsonProperty("trial_id")]
         public int TrialId { get; set; }
 
-        [JsonPropertyName("expected_gesture")]
+        [JsonProperty("expected_gesture")]
         public string ExpectedGesture { get; set; }
 
-        [JsonPropertyName("brightness_percent")]
+        [JsonProperty("brightness_percent")]
         public double BrightnessPercent { get; set; }
 
-        [JsonPropertyName("distance_m")]
+        [JsonProperty("distance_m")]
         public double DistanceM { get; set; }
 
-        [JsonPropertyName("angle_degrees")]
+        [JsonProperty("angle_degrees")]
         public double AngleDegrees { get; set; }
 
-        [JsonPropertyName("background")]
+        [JsonProperty("background")]
         public string Background { get; set; }
     }
 
@@ -65,14 +65,14 @@ namespace HandGestureDashboard
     //==============================================================
     public class SystemData
     {
-        [JsonPropertyName("cpu_percent")]
+        [JsonProperty("cpu_percent")]
         public double CpuPercent { get; set; }
 
-        // JSONでnullが来るためnullable
-        [JsonPropertyName("gpu_percent")]
+        // nullが来る可能性があるためnullable
+        [JsonProperty("gpu_percent")]
         public double? GpuPercent { get; set; }
 
-        [JsonPropertyName("memory_percent")]
+        [JsonProperty("memory_percent")]
         public double MemoryPercent { get; set; }
     }
 
@@ -81,35 +81,35 @@ namespace HandGestureDashboard
     //==============================================================
     public class PerformanceData
     {
-        [JsonPropertyName("fps")]
+        [JsonProperty("fps")]
         public double Fps { get; set; }
 
-        // JSONでnullが来るためnullable
-        [JsonPropertyName("video_latency_ms")]
+        // nullが来る可能性があるためnullable
+        [JsonProperty("video_latency_ms")]
         public double? VideoLatencyMs { get; set; }
     }
 
     //==============================================================
-    // 現在使用中のモデル
+    // 使用モデル
     //==============================================================
     public class ModelData
     {
-        [JsonPropertyName("current")]
+        [JsonProperty("current")]
         public string Current { get; set; }
     }
 
     //==============================================================
-    // 手・ジェスチャー認識結果
+    // 認識結果
     //==============================================================
     public class RecognitionData
     {
-        [JsonPropertyName("hand_detected")]
+        [JsonProperty("hand_detected")]
         public bool HandDetected { get; set; }
 
-        [JsonPropertyName("raw_gesture")]
+        [JsonProperty("raw_gesture")]
         public string RawGesture { get; set; }
 
-        [JsonPropertyName("stable_gesture")]
+        [JsonProperty("stable_gesture")]
         public string StableGesture { get; set; }
     }
 }

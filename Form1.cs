@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 
 
 
@@ -40,6 +41,17 @@ namespace HandGestureDashboard
         private readonly object _tcpLock = new object();
         private bool _tcpRunning = false;
         public string Command { get; set; }
+
+        //==============================================================
+        // 研究データ
+        //==============================================================
+        private ResearchData _latestResearchData;
+
+        public ResearchData LatestResearchData
+        {
+            get { return _latestResearchData; }
+        }
+
 
         private void NTimer_Tick(object sender, EventArgs e)
         {
@@ -281,10 +293,18 @@ namespace HandGestureDashboard
             await Initialize();
         }
 
-        public async Task Initialize() //初期化
+        //==============================================================
+        // 初期化
+        //==============================================================
+        public async Task Initialize()
         {
             UpdateIPAddress();
-            StopTcp();
+
+            // 起動中のときだけ停止する
+            if (_tcpRunning)
+            {
+                StopTcp(false);
+            }
 
             this.Size = new Size(937, 475);
 
@@ -292,17 +312,12 @@ namespace HandGestureDashboard
             Console.Text = "";
             NTimer.Start();
 
-            await SetLamp(P0Sign, LampState.Disconnected);
-            await SetLamp(P1Sign, LampState.Disconnected);
-            await SetLamp(P2Sign, LampState.Disconnected);
-            await SetLamp(P3Sign, LampState.Disconnected);
+            await SetAllPortLamps(LampState.Disconnected);
 
             port0Lb.Text = Properties.Settings.Default.port0.ToString();
             port1Lb.Text = Properties.Settings.Default.port1.ToString();
             port2Lb.Text = Properties.Settings.Default.port2.ToString();
             port3Lb.Text = Properties.Settings.Default.port3.ToString();
-            //port4Lb.Text = Properties.Settings.Default.port4.ToString();
-            //port5Lb.Text = Properties.Settings.Default.port5.ToString();
 
             port0PLb.Text = Properties.Settings.Default.port0.ToString();
             port1PLb.Text = Properties.Settings.Default.port1.ToString();
@@ -466,15 +481,77 @@ namespace HandGestureDashboard
         private async Task SetAllPortLamps(LampState state)
         {
             await SetLamp(P0Sign, state);
-                P0statusLb.Text = state.ToString();
             await SetLamp(P1Sign, state);
-                P1statusLb.Text = state.ToString();
             await SetLamp(P2Sign, state);
-                P2statusLb.Text = state.ToString();
             await SetLamp(P3Sign, state);
-            P3statusLb.Text = state.ToString();
-            P4statusLb.Text = state.ToString();
-            P5statusLb.Text = state.ToString();
+
+            SetControlText(P0statusLb, state.ToString());
+            SetControlText(P1statusLb, state.ToString());
+            SetControlText(P2statusLb, state.ToString());
+            SetControlText(P3statusLb, state.ToString());
+            SetControlText(P4statusLb, state.ToString());
+            SetControlText(P5statusLb, state.ToString());
+        }
+
+        //==============================================================
+        // UIスレッド安全更新
+        //==============================================================
+        private void SetControlText(Control control, string text)
+        {
+            if (control == null ||
+                control.IsDisposed ||
+                IsDisposed ||
+                Disposing)
+            {
+                return;
+            }
+
+            if (control.InvokeRequired)
+            {
+                try
+                {
+                    control.BeginInvoke(new Action(() =>
+                    {
+                        control.Text = text;
+                    }));
+                }
+                catch (InvalidOperationException)
+                {
+                    // フォーム終了中
+                }
+
+                return;
+            }
+
+            control.Text = text;
+        }
+
+        private Label GetPortStatusLabel(int port)
+        {
+            if (port == Properties.Settings.Default.port0)
+                return P0statusLb;
+
+            if (port == Properties.Settings.Default.port1)
+                return P1statusLb;
+
+            if (port == Properties.Settings.Default.port2)
+                return P2statusLb;
+
+            if (port == Properties.Settings.Default.port3)
+                return P3statusLb;
+
+            if (port == Properties.Settings.Default.port4)
+                return P4statusLb;
+
+            if (port == Properties.Settings.Default.port5)
+                return P5statusLb;
+
+            return null;
+        }
+
+        private void SetPortStatus(int port, string status)
+        {
+            SetControlText(GetPortStatusLabel(port), status);
         }
 
         private async void button1_Click(object sender, EventArgs e)
@@ -717,12 +794,6 @@ namespace HandGestureDashboard
 
             }
 
-            P0statusLb.Text = "Listening";
-            P1statusLb.Text = "Listening";
-            P2statusLb.Text = "Listening";
-            P3statusLb.Text = "Listening";
-            P4statusLb.Text = "Listening";
-            P5statusLb.Text = "Listening";
 
             try
             {
@@ -732,12 +803,6 @@ namespace HandGestureDashboard
             {
                 // StopTcpによる正常な停止
 
-                P0statusLb.Text = "Disconnected";
-                P1statusLb.Text = "Disconnected";
-                P2statusLb.Text = "Disconnected";
-                P3statusLb.Text = "Disconnected";
-                P4statusLb.Text = "Disconnected";
-                P5statusLb.Text = "Disconnected";
             }
             catch (Exception ex)
             {
@@ -746,12 +811,6 @@ namespace HandGestureDashboard
                     ex.Message
                 );
 
-                P0statusLb.Text = "Error";
-                P1statusLb.Text = "Error";
-                P2statusLb.Text = "Error";
-                P3statusLb.Text = "Error";
-                P4statusLb.Text = "Error";
-                P5statusLb.Text = "Error";
             }
             finally
             {
@@ -759,25 +818,45 @@ namespace HandGestureDashboard
             }
         }
 
+        //==============================================================
+        // IPアドレス取得
+        //==============================================================
         private void UpdateIPAddress(bool forceUpdate = false)
         {
             string ip = "取得できません";
 
-            foreach (IPAddress address in Dns.GetHostEntry(Dns.GetHostName()).AddressList)
+            try
             {
-                if (address.AddressFamily == AddressFamily.InterNetwork)
+                IPAddress selectedAddress =
+                    Dns.GetHostEntry(Dns.GetHostName())
+                    .AddressList
+                    .Where(address =>
+                        address.AddressFamily ==
+                        AddressFamily.InterNetwork)
+                    .OrderBy(address =>
+                        address.ToString().StartsWith("169.254.") ? 1 : 0)
+                    .FirstOrDefault();
+
+                if (selectedAddress != null)
                 {
-                    ip = address.ToString();
-                    break;
+                    ip = selectedAddress.ToString();
                 }
             }
-
-            if(forceUpdate == true)
+            catch (Exception ex)
             {
-                ConsoleWriteLine("IPアドレス: " + ip);
+                AppendLog(
+                    "IPアドレス取得エラー: " + ex.Message
+                );
             }
 
-            IPLb.Text = "IP:"+ip;
+            SetControlText(IPLb, "IP:" + ip);
+
+            if (forceUpdate)
+            {
+                ConsoleWriteLine(
+                    "IPアドレス: " + ip
+                );
+            }
         }
 
         private async Task StartTcpServerAsync(
@@ -801,6 +880,7 @@ namespace HandGestureDashboard
                 AppendLog($"Port {port}: 接続待機中");
 
                 await SetPortLamp(port, LampState.Idle);
+                SetPortStatus(port, "Listening");
 
                 while (!cancellationToken.IsCancellationRequested)
                 {
@@ -842,6 +922,7 @@ namespace HandGestureDashboard
                     );
 
                     await SetPortLamp(port, LampState.Connected);
+                    SetPortStatus(port, "Connected");
 
                     // 受信中でも次のクライアントを受け付ける
                     _ = ReceiveClientAsync(
@@ -860,6 +941,7 @@ namespace HandGestureDashboard
                     );
 
                     await SetPortLamp(port, LampState.Error);
+                    SetPortStatus(port, "Error");
                 }
             }
             catch (Exception ex)
@@ -871,6 +953,7 @@ namespace HandGestureDashboard
                     );
 
                     await SetPortLamp(port, LampState.Error);
+                    SetPortStatus(port, "Error");
                 }
             }
             finally
@@ -896,6 +979,7 @@ namespace HandGestureDashboard
                 AppendLog($"Port {port}: サーバー停止");
 
                 await SetPortLamp(port, LampState.Disconnected);
+                SetPortStatus(port, "Disconnected");
             }
         }
         private async Task ReceiveClientAsync(
@@ -1006,6 +1090,7 @@ namespace HandGestureDashboard
                             port,
                             LampState.Idle
                         );
+                        SetPortStatus(port, "Listening");
                     }
                     else
                     {
@@ -1013,45 +1098,19 @@ namespace HandGestureDashboard
                             port,
                             LampState.Connected
                         );
+                        SetPortStatus(port, "Connected");
                     }
                 }
             }
         }
 
+        //==============================================================
+        // 受信データ振り分け
+        //==============================================================
         private void ProcessReceivedData(int port, string data)
         {
             if (string.IsNullOrWhiteSpace(data))
                 return;
-
-            string normalizedData =
-                data.Trim().ToLowerInvariant();
-
-            if (normalizedData.Contains("error"))
-            {
-
-                _ = SetPortLamp(
-                    port,
-                    LampState.Error
-                );
-            }
-
-            if (normalizedData.Contains("gesture"))
-            {
-               
-
-                HandleGestureData(port, data);
-            }
-
-            if (normalizedData.Contains("cpu"))
-            {
-                
-
-                HandleCpuData(port, data);
-            }
-
-            if (normalizedData.Contains("connected"))
-            {
-            }
 
             if (port == Properties.Settings.Default.port0)
             {
@@ -1089,48 +1148,224 @@ namespace HandGestureDashboard
             }
         }
 
-        private void HandleGestureData(int port, string data)
+        //==============================================================
+        // Port1：研究JSONデータ
+        //==============================================================
+        private void HandlePort1Data(string json)
         {
-            AppendLog(
-                $"Port {port}: ジェスチャーデータ処理を実行"
-            );
+            ResearchData researchData;
+
+            if (!ResearchManager.TryParse(
+                json,
+                out researchData))
+            {
+                AppendPortLog(
+                    Properties.Settings.Default.port1,
+                    "JSON解析失敗"
+                );
+
+                return;
+            }
+
+            _latestResearchData = researchData;
+
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action(() =>
+                {
+                    ProcessResearchData(researchData);
+                }));
+
+                return;
+            }
+
+            ProcessResearchData(researchData);
         }
 
-        private void HandleCpuData(int port, string data)
+        //==============================================================
+        // 研究データを使った条件分岐
+        //==============================================================
+        double FPS;
+        private void ProcessResearchData(
+            ResearchData data)
         {
-            AppendLog(
-                $"Port {port}: CPUデータ処理を実行"
-            );
+            AppendPortLog(
+    Properties.Settings.Default.port1,
+    JsonConvert.SerializeObject(data)
+);
+            /*
+             * ここへ自由にif文を追加する。
+             *
+             * 例:
+             * if (data.Recognition != null &&
+             *     data.Recognition.StableGesture == "FIST")
+             * {
+             *     // グーを認識した時の処理
+             * }
+             */
+
+            if (data.Recognition != null &&
+                data.Recognition.HandDetected)
+            {
+                // 手を検出した時
+            }
+
+            if (data.Recognition == null)
+            {
+                NowGesPicture.Image = Properties.Resources.question;
+            }
+            else
+            {
+                switch (data.Recognition.StableGesture)
+                {
+                    case "OPEN_HAND":
+                        NowGesPicture.Image = Properties.Resources.pa;
+                        break;
+
+                    case "FIST":
+                        NowGesPicture.Image = Properties.Resources.gu;
+                        break;
+
+                    case "PEACE":
+                        NowGesPicture.Image = Properties.Resources.choki;
+                        break;
+
+                    case "POINT":
+                        NowGesPicture.Image = Properties.Resources.hitosashiyubi;
+                        break;
+
+                    default:
+                        NowGesPicture.Image = Properties.Resources.question;
+                        break;
+                }
+            }
+
+
+            if (data.Experiment != null &&
+                data.Recognition != null &&
+                !string.IsNullOrWhiteSpace(
+                    data.Experiment.ExpectedGesture) &&
+                data.Experiment.ExpectedGesture ==
+                data.Recognition.StableGesture)
+            {
+                // 期待ジェスチャーと認識結果が一致した時
+            }
+
+            if (data.System != null)
+            {
+                CPULb.Text = data.System.CpuPercent.ToString() + "%";
+            }
+            else
+            {
+                CPULb.Text = "N/A";
+            }
+
+            if (data.System != null && data.System.GpuPercent.HasValue)
+            {
+                GPULb.Text = data.System.GpuPercent.HasValue + "%";
+            }
+            else
+            {
+                GPULb.Text = "N/A";
+            }
+
+            if (data.System != null)
+            {
+                MEMLb.Text = data.System.MemoryPercent.ToString() + "%";
+            }
+            else
+            {
+                MEMLb.Text = "N/A";
+            }
+
+            if (data.System != null)
+            {
+                FPS = Math.Floor(data.Performance.Fps);
+            }
+
+            if (data.System != null && data.Performance.VideoLatencyMs != null)
+            {
+                FPSLb.Text = FPS.ToString() +" / ";
+            }
+            else
+            {
+                FPSLb.Text = FPS.ToString() + " / " + "N/A";
+            }
+
+            if (data.System != null &&
+                data.System.GpuPercent.HasValue &&
+                data.System.GpuPercent.Value >= 80.0)
+            {
+                // GPU使用率が取得でき、80%以上
+            }
+
+            if (data.Performance != null &&
+                data.Performance.Fps < 10.0)
+            {
+                // FPSが10未満
+            }
+
+            
+
+            if (data.Model == null)
+            {
+                ModelLb.Text = "Model NULL";
+            }
+            else
+            {
+                switch (data.Model.Current)
+                {
+                    case "high":
+                        ModelLb.Text = "High Model";
+                        break;
+
+                    case "low":
+                        ModelLb.Text = "Low Model";
+                        break;
+
+                    case "standby":
+                        ModelLb.Text = "Standby Model";
+                        break;
+
+                    case null:
+                    case "":
+                        ModelLb.Text = "Current NULL";
+                        break;
+
+                    default:
+                        ModelLb.Text =
+                            data.Model.Current + " ?";
+                        break;
+                }
+            }
         }
 
+        //==============================================================
+        // その他ポート専用処理
+        //==============================================================
         private void HandlePort0Data(string data)
         {
-            // port0専用の処理
-        }
-
-        private void HandlePort1Data(string data)
-        {
-            // port1専用の処理
+            // port0専用処理
         }
 
         private void HandlePort2Data(string data)
         {
-            // port2専用の処理
+            // port2専用処理
         }
 
         private void HandlePort3Data(string data)
         {
-            // port3専用の処理
+            // port3専用処理
         }
 
         private void HandlePort4Data(string data)
         {
-            // port4専用の処理
+            // port4専用処理
         }
 
         private void HandlePort5Data(string data)
         {
-            // port5専用の処理
+            // port5専用処理
         }
 
         private ListBox GetPortLogBox(int port)
@@ -1207,13 +1442,19 @@ namespace HandGestureDashboard
             }
         }
 
-        private void StopTcp()
+        //==============================================================
+        // TCP停止
+        //==============================================================
+        private void StopTcp(bool showMessage = true)
         {
             if (!_tcpRunning)
             {
-                ConsoleWriteLine(
-                    "TCPサーバーは起動していません。"
-                );
+                if (showMessage)
+                {
+                    ConsoleWriteLine(
+                        "TCPサーバーは起動していません。"
+                    );
+                }
 
                 return;
             }
@@ -1250,10 +1491,20 @@ namespace HandGestureDashboard
                 _tcpClientCounts.Clear();
             }
 
-            ConsoleWriteLine("TCPサーバーを停止しました。");
-            AppendLog("すべてのTCPサーバーを停止しました。");
+            if (showMessage)
+            {
+                ConsoleWriteLine(
+                    "TCPサーバーを停止しました。"
+                );
+            }
 
-            _ = SetAllPortLamps(LampState.Disconnected);
+            AppendLog(
+                "すべてのTCPサーバーを停止しました。"
+            );
+
+            _ = SetAllPortLamps(
+                LampState.Disconnected
+            );
         }
 
         private const int MaxLogCount = 1000;
@@ -1374,7 +1625,7 @@ namespace HandGestureDashboard
         protected override void OnFormClosing(
     FormClosingEventArgs e)
         {
-            StopTcp();
+            StopTcp(false);
 
             if (_tcpCancellationTokenSource != null)
             {
