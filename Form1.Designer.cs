@@ -33,9 +33,11 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.Camera1Picture = new System.Windows.Forms.PictureBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.ModelLb = new System.Windows.Forms.Label();
             this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.NowGesPicture = new System.Windows.Forms.PictureBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.IPLb = new System.Windows.Forms.Label();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
@@ -124,6 +126,8 @@
             this.button8 = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.Camera2Picture = new System.Windows.Forms.PictureBox();
+            this.Camera1PictureSub = new System.Windows.Forms.PictureBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.NTimeLB = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -173,17 +177,16 @@
             this.P5Sign = new System.Windows.Forms.Label();
             this.port5Lb = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.Camera1StatusLabel = new System.Windows.Forms.Label();
-            this.Camera2StatusLabel = new System.Windows.Forms.Label();
-            this.Camera1Picture = new System.Windows.Forms.PictureBox();
-            this.NowGesPicture = new System.Windows.Forms.PictureBox();
-            this.Camera2Picture = new System.Windows.Forms.PictureBox();
-            this.Camera1PictureSub = new System.Windows.Forms.PictureBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.button6 = new System.Windows.Forms.Button();
+            this.button12 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Camera1Picture)).BeginInit();
             this.groupBox6.SuspendLayout();
             this.groupBox10.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NowGesPicture)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -202,6 +205,8 @@
             this.tabPage14.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.groupBox7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Camera2Picture)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Camera1PictureSub)).BeginInit();
             this.panel1.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPage5.SuspendLayout();
@@ -211,10 +216,6 @@
             this.tabPage9.SuspendLayout();
             this.tabPage10.SuspendLayout();
             this.tabPage11.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Camera1Picture)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NowGesPicture)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Camera2Picture)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Camera1PictureSub)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -254,6 +255,17 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "映像";
             // 
+            // Camera1Picture
+            // 
+            this.Camera1Picture.Image = global::HandGestureDashboard.Properties.Resources.noimage;
+            this.Camera1Picture.Location = new System.Drawing.Point(6, 20);
+            this.Camera1Picture.Name = "Camera1Picture";
+            this.Camera1Picture.Size = new System.Drawing.Size(184, 132);
+            this.Camera1Picture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.Camera1Picture.TabIndex = 0;
+            this.Camera1Picture.TabStop = false;
+            this.Camera1Picture.Click += new System.EventHandler(this.Camera1Picture_Click);
+            // 
             // groupBox6
             // 
             this.groupBox6.Controls.Add(this.ModelLb);
@@ -286,6 +298,17 @@
             this.groupBox10.TabIndex = 6;
             this.groupBox10.TabStop = false;
             this.groupBox10.Text = "現在のジェスチャー";
+            // 
+            // NowGesPicture
+            // 
+            this.NowGesPicture.ErrorImage = ((System.Drawing.Image)(resources.GetObject("NowGesPicture.ErrorImage")));
+            this.NowGesPicture.Image = global::HandGestureDashboard.Properties.Resources.question;
+            this.NowGesPicture.Location = new System.Drawing.Point(6, 17);
+            this.NowGesPicture.Name = "NowGesPicture";
+            this.NowGesPicture.Size = new System.Drawing.Size(159, 114);
+            this.NowGesPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.NowGesPicture.TabIndex = 1;
+            this.NowGesPicture.TabStop = false;
             // 
             // groupBox3
             // 
@@ -886,7 +909,7 @@
             this.tableLayoutPanel4.ColumnCount = 3;
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 41.10429F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 58.89571F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
             this.tableLayoutPanel4.Controls.Add(this.angleNumericUpDown, 1, 5);
             this.tableLayoutPanel4.Controls.Add(this.distanceNumericUpDown, 1, 4);
             this.tableLayoutPanel4.Controls.Add(this.label23, 0, 0);
@@ -934,7 +957,7 @@
             0,
             -2147483648});
             this.angleNumericUpDown.Name = "angleNumericUpDown";
-            this.angleNumericUpDown.Size = new System.Drawing.Size(183, 33);
+            this.angleNumericUpDown.Size = new System.Drawing.Size(182, 33);
             this.angleNumericUpDown.TabIndex = 28;
             // 
             // distanceNumericUpDown
@@ -947,7 +970,7 @@
             0,
             0});
             this.distanceNumericUpDown.Name = "distanceNumericUpDown";
-            this.distanceNumericUpDown.Size = new System.Drawing.Size(183, 33);
+            this.distanceNumericUpDown.Size = new System.Drawing.Size(182, 33);
             this.distanceNumericUpDown.TabIndex = 27;
             this.distanceNumericUpDown.Value = new decimal(new int[] {
             1000,
@@ -1048,7 +1071,7 @@
             // 
             this.button7.Location = new System.Drawing.Point(134, 65);
             this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(183, 26);
+            this.button7.Size = new System.Drawing.Size(182, 26);
             this.button7.TabIndex = 25;
             this.button7.Text = "CSV パス名";
             this.button7.UseVisualStyleBackColor = true;
@@ -1059,7 +1082,7 @@
             this.brightnessNumericUpDown.Font = new System.Drawing.Font("MS UI Gothic", 19F);
             this.brightnessNumericUpDown.Location = new System.Drawing.Point(134, 97);
             this.brightnessNumericUpDown.Name = "brightnessNumericUpDown";
-            this.brightnessNumericUpDown.Size = new System.Drawing.Size(183, 33);
+            this.brightnessNumericUpDown.Size = new System.Drawing.Size(182, 33);
             this.brightnessNumericUpDown.TabIndex = 26;
             this.brightnessNumericUpDown.Value = new decimal(new int[] {
             50,
@@ -1072,7 +1095,7 @@
             this.label35.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label35.AutoSize = true;
             this.label35.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label35.Location = new System.Drawing.Point(323, 105);
+            this.label35.Location = new System.Drawing.Point(322, 105);
             this.label35.Name = "label35";
             this.label35.Size = new System.Drawing.Size(29, 19);
             this.label35.TabIndex = 14;
@@ -1083,7 +1106,7 @@
             this.label36.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label36.AutoSize = true;
             this.label36.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label36.Location = new System.Drawing.Point(323, 144);
+            this.label36.Location = new System.Drawing.Point(322, 144);
             this.label36.Name = "label36";
             this.label36.Size = new System.Drawing.Size(35, 19);
             this.label36.TabIndex = 29;
@@ -1094,7 +1117,7 @@
             this.label37.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label37.AutoSize = true;
             this.label37.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label37.Location = new System.Drawing.Point(323, 181);
+            this.label37.Location = new System.Drawing.Point(322, 181);
             this.label37.Name = "label37";
             this.label37.Size = new System.Drawing.Size(29, 19);
             this.label37.TabIndex = 30;
@@ -1105,7 +1128,7 @@
             this.exNamebx.Font = new System.Drawing.Font("MS UI Gothic", 15F);
             this.exNamebx.Location = new System.Drawing.Point(134, 3);
             this.exNamebx.Name = "exNamebx";
-            this.exNamebx.Size = new System.Drawing.Size(183, 27);
+            this.exNamebx.Size = new System.Drawing.Size(182, 27);
             this.exNamebx.TabIndex = 23;
             this.exNamebx.TextChanged += new System.EventHandler(this.textBox7_TextChanged);
             // 
@@ -1119,7 +1142,7 @@
             this.backgroundComboBox.Items.Add("Black");
             this.backgroundComboBox.Location = new System.Drawing.Point(134, 212);
             this.backgroundComboBox.Name = "backgroundComboBox";
-            this.backgroundComboBox.Size = new System.Drawing.Size(183, 33);
+            this.backgroundComboBox.Size = new System.Drawing.Size(182, 33);
             this.backgroundComboBox.TabIndex = 31;
             this.backgroundComboBox.Text = "White";
             // 
@@ -1128,7 +1151,7 @@
             this.label38.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label38.AutoSize = true;
             this.label38.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 10.25F, System.Drawing.FontStyle.Bold);
-            this.label38.Location = new System.Drawing.Point(323, 39);
+            this.label38.Location = new System.Drawing.Point(322, 39);
             this.label38.Name = "label38";
             this.label38.Size = new System.Drawing.Size(37, 14);
             this.label38.TabIndex = 32;
@@ -1366,6 +1389,26 @@
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "映像";
             // 
+            // Camera2Picture
+            // 
+            this.Camera2Picture.Image = global::HandGestureDashboard.Properties.Resources.noimage;
+            this.Camera2Picture.Location = new System.Drawing.Point(6, 199);
+            this.Camera2Picture.Name = "Camera2Picture";
+            this.Camera2Picture.Size = new System.Drawing.Size(391, 168);
+            this.Camera2Picture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.Camera2Picture.TabIndex = 1;
+            this.Camera2Picture.TabStop = false;
+            // 
+            // Camera1PictureSub
+            // 
+            this.Camera1PictureSub.Image = global::HandGestureDashboard.Properties.Resources.noimage;
+            this.Camera1PictureSub.Location = new System.Drawing.Point(6, 21);
+            this.Camera1PictureSub.Name = "Camera1PictureSub";
+            this.Camera1PictureSub.Size = new System.Drawing.Size(391, 172);
+            this.Camera1PictureSub.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.Camera1PictureSub.TabIndex = 0;
+            this.Camera1PictureSub.TabStop = false;
+            // 
             // tabPage4
             // 
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
@@ -1380,7 +1423,7 @@
             // 
             this.NTimeLB.AutoSize = true;
             this.NTimeLB.Font = new System.Drawing.Font("BIZ UDPゴシック", 24.75F, System.Drawing.FontStyle.Bold);
-            this.NTimeLB.Location = new System.Drawing.Point(379, 8);
+            this.NTimeLB.Location = new System.Drawing.Point(368, 8);
             this.NTimeLB.Name = "NTimeLB";
             this.NTimeLB.Size = new System.Drawing.Size(187, 33);
             this.NTimeLB.TabIndex = 1;
@@ -1521,11 +1564,11 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(572, 2);
+            this.button1.Location = new System.Drawing.Point(561, 6);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(112, 21);
+            this.button1.Size = new System.Drawing.Size(86, 21);
             this.button1.TabIndex = 16;
-            this.button1.Text = "初期化";
+            this.button1.Text = "再起動";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -1655,9 +1698,9 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(572, 23);
+            this.button2.Location = new System.Drawing.Point(561, 26);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(112, 21);
+            this.button2.Size = new System.Drawing.Size(86, 21);
             this.button2.TabIndex = 20;
             this.button2.Text = "コンソール";
             this.button2.UseVisualStyleBackColor = true;
@@ -1856,80 +1899,49 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(690, 23);
+            this.progressBar1.Location = new System.Drawing.Point(653, 23);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(182, 21);
+            this.progressBar1.Size = new System.Drawing.Size(219, 21);
             this.progressBar1.TabIndex = 17;
             // 
-            // Camera1StatusLabel
+            // checkBox1
             // 
-            this.Camera1StatusLabel.AutoSize = true;
-            this.Camera1StatusLabel.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.Camera1StatusLabel.Location = new System.Drawing.Point(286, 9);
-            this.Camera1StatusLabel.Name = "Camera1StatusLabel";
-            this.Camera1StatusLabel.Size = new System.Drawing.Size(29, 12);
-            this.Camera1StatusLabel.TabIndex = 7;
-            this.Camera1StatusLabel.Text = "情報";
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(653, 6);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(99, 16);
+            this.checkBox1.TabIndex = 27;
+            this.checkBox1.Text = "DEBUG MODE";
+            this.checkBox1.UseVisualStyleBackColor = true;
             // 
-            // Camera2StatusLabel
+            // button6
             // 
-            this.Camera2StatusLabel.AutoSize = true;
-            this.Camera2StatusLabel.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.Camera2StatusLabel.Location = new System.Drawing.Point(287, 30);
-            this.Camera2StatusLabel.Name = "Camera2StatusLabel";
-            this.Camera2StatusLabel.Size = new System.Drawing.Size(29, 12);
-            this.Camera2StatusLabel.TabIndex = 8;
-            this.Camera2StatusLabel.Text = "情報";
+            this.button6.Location = new System.Drawing.Point(276, 5);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(86, 21);
+            this.button6.TabIndex = 28;
+            this.button6.Text = "アップデート";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
-            // Camera1Picture
+            // button12
             // 
-            this.Camera1Picture.Image = global::HandGestureDashboard.Properties.Resources.noimage;
-            this.Camera1Picture.Location = new System.Drawing.Point(6, 20);
-            this.Camera1Picture.Name = "Camera1Picture";
-            this.Camera1Picture.Size = new System.Drawing.Size(184, 132);
-            this.Camera1Picture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.Camera1Picture.TabIndex = 0;
-            this.Camera1Picture.TabStop = false;
-            this.Camera1Picture.Click += new System.EventHandler(this.Camera1Picture_Click);
-            // 
-            // NowGesPicture
-            // 
-            this.NowGesPicture.ErrorImage = ((System.Drawing.Image)(resources.GetObject("NowGesPicture.ErrorImage")));
-            this.NowGesPicture.Image = global::HandGestureDashboard.Properties.Resources.question;
-            this.NowGesPicture.Location = new System.Drawing.Point(6, 17);
-            this.NowGesPicture.Name = "NowGesPicture";
-            this.NowGesPicture.Size = new System.Drawing.Size(159, 114);
-            this.NowGesPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.NowGesPicture.TabIndex = 1;
-            this.NowGesPicture.TabStop = false;
-            // 
-            // Camera2Picture
-            // 
-            this.Camera2Picture.Image = global::HandGestureDashboard.Properties.Resources.noimage;
-            this.Camera2Picture.Location = new System.Drawing.Point(6, 199);
-            this.Camera2Picture.Name = "Camera2Picture";
-            this.Camera2Picture.Size = new System.Drawing.Size(391, 168);
-            this.Camera2Picture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.Camera2Picture.TabIndex = 1;
-            this.Camera2Picture.TabStop = false;
-            // 
-            // Camera1PictureSub
-            // 
-            this.Camera1PictureSub.Image = global::HandGestureDashboard.Properties.Resources.noimage;
-            this.Camera1PictureSub.Location = new System.Drawing.Point(6, 21);
-            this.Camera1PictureSub.Name = "Camera1PictureSub";
-            this.Camera1PictureSub.Size = new System.Drawing.Size(391, 172);
-            this.Camera1PictureSub.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.Camera1PictureSub.TabIndex = 0;
-            this.Camera1PictureSub.TabStop = false;
+            this.button12.Location = new System.Drawing.Point(276, 26);
+            this.button12.Name = "button12";
+            this.button12.Size = new System.Drawing.Size(86, 21);
+            this.button12.TabIndex = 29;
+            this.button12.Text = "GitHub";
+            this.button12.UseVisualStyleBackColor = true;
+            this.button12.Click += new System.EventHandler(this.button12_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(919, 625);
-            this.Controls.Add(this.Camera1StatusLabel);
-            this.Controls.Add(this.Camera2StatusLabel);
+            this.Controls.Add(this.button12);
+            this.Controls.Add(this.button6);
+            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.P5Sign);
             this.Controls.Add(this.port5Lb);
@@ -1959,9 +1971,11 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.Camera1Picture)).EndInit();
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
             this.groupBox10.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.NowGesPicture)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.tableLayoutPanel3.ResumeLayout(false);
@@ -1987,6 +2001,8 @@
             this.tabPage14.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.groupBox7.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.Camera2Picture)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Camera1PictureSub)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.tabControl2.ResumeLayout(false);
@@ -1997,10 +2013,6 @@
             this.tabPage9.ResumeLayout(false);
             this.tabPage10.ResumeLayout(false);
             this.tabPage11.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.Camera1Picture)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NowGesPicture)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Camera2Picture)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Camera1PictureSub)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2154,9 +2166,10 @@
         private System.Windows.Forms.Label fileNameLabel;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.PictureBox Camera2Picture;
-        private System.Windows.Forms.Label Camera1StatusLabel;
-        private System.Windows.Forms.Label Camera2StatusLabel;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Button button12;
     }
 }
 

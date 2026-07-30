@@ -574,9 +574,16 @@ namespace HandGestureDashboard
             SetControlText(GetPortStatusLabel(port), status);
         }
 
-        private async void button1_Click(object sender, EventArgs e)
+        private  void button1_Click(object sender, EventArgs e)
         {
-            await Initialize();
+            DialogResult result = MessageBox.Show("アプリを再起動しますか？", "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes)
+            {
+                Application.Restart();
+                Environment.Exit(0);
+            }
+
         }
 
         //-------------------------
@@ -3491,7 +3498,31 @@ namespace HandGestureDashboard
             cameraForm.Show();
         }
 
+        private void button12_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show(
+                "GitHubを開きますか？",     
+                "確認",                         
+                MessageBoxButtons.YesNo,        
+                MessageBoxIcon.Question         
+            );
 
+            if (result == DialogResult.Yes)
+            {
+                string url = "https://github.com/Konoa-1025/HandGestureHomeControl/tree/dashboard";
+
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = url,
+                    UseShellExecute = true
+                });
+            }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
 
