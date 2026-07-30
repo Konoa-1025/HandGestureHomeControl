@@ -8,5 +8,17 @@ import art
 art.tprint("HandGestureHC")
 
 import Utils.logger as p
+import Utils.configLoader as figload
+import Core.initializer as initializer
 
-p.debug("でkた")
+def main():
+    setting_config = figload.load_setting_config()
+
+    try:
+        while True:
+            pass
+    finally:
+        p.debug("終わり")
+
+if __name__ == "__main__":
+    main()
