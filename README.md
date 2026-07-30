@@ -1,4 +1,4 @@
-# HandGestureHomeControl Python3.8 NEW
+# HandGestureHomeControl Jetson
 **No remote. No voice. Just your hand.**
 
 「あれ。リモコンどこ？」
@@ -67,6 +67,5 @@ Norifumi Konndo
 ## 注意
 Jetsonの導入に伴いPythonのバージョンをダウングレードしています。
 Python3.8を使用しています。
-こちらのブランチが最新です。
 
 このプロジェクトを使用すると家のすべてのリモコンの場所を忘れる可能性があります！（もう必要になることがなくなるので）
