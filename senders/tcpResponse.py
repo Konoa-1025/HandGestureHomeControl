@@ -23,34 +23,123 @@ _SOCKET_LOCK = threading.Lock()
 
 
 # --------------------------------------------------
+# 実験状態管理クラス (ExperimentState)
+# --------------------------------------------------
+
+class ExperimentState:
+    """
+    計測の状態、受信済みCSV/設定、保存用ファイルハンドラを保持・管理するクラス
+    """
+    def __init__(self):
+        self._lock = threading.Lock()
+        self.is_measuring = False
+        self.prepared_data = None      # experiment_prepare で保存したデータ (CSV等)
+        self.current_experiment_id = None
+        self.current_trial_id = None
+        self.log_file = None           # JSONL書き込み用ファイルハンドラ
+
+    def prepare(self, data):
+        """実験準備データの保存"""
+        with self._lock:
+            self.prepared_data = data
+            p.info(f"実験準備完了: experiment_id={data.get('experiment_id')}", "ExperimentState")
+
+    def start(self, experiment_id, trial_id):
+        """計測開始"""
+        with self._lock:
+            if self.is_measuring:
+                raise RuntimeError("すでに計測が開始されています。")
+
+            if not self.prepared_data:
+                raise RuntimeError("計測準備(experiment_prepare)が完了していません。")
+
+            self.is_measuring = True
+            self.current_experiment_id = experiment_id
+            self.current_trial_id = trial_id
+
+            # 保存先ディレクトリの作成
+            if not os.path.exists(DATA_DIRECTORY):
+                os.makedirs(DATA_DIRECTORY, exist_ok=True)
+
+            # JSONLログファイルのオープン (例: research_logs/EXP_1_trial_1_timestamp.jsonl)
+            timestamp_str = time.strftime("%Y%m%d_%H%M%S")
+            file_name = f"exp_{experiment_id}_trial_{trial_id}_{timestamp_str}.jsonl"
+            file_path = os.path.join(DATA_DIRECTORY, file_name)
+
+            self.log_file = open(file_path, "a", encoding="utf-8")
+
+            # ヘッダー情報（実験条件等）を1行目として書き込み
+            init_header = {
+                "type": "experiment_header",
+                "timestamp": time.time(),
+                "experiment_id": experiment_id,
+                "trial_id": trial_id,
+                "prepared_data": self.prepared_data
+            }
+            self.log_file.write(json.dumps(init_header, ensure_ascii=False) + "\n")
+            self.log_file.flush()
+            
+            p.success(f"計測開始: {file_name}", "ExperimentState")
+
+    def abort(self):
+        """計測中止・安全なクローズ"""
+        with self._lock:
+            if not self.is_measuring and self.log_file is None:
+                p.warning("計測中ではありませんが、破棄処理を実行しました。", "ExperimentState")
+
+            self.is_measuring = False
+
+            # ファイルハンドラの安全なクローズ
+            if self.log_file:
+                try:
+                    abort_record = {
+                        "type": "experiment_aborted",
+                        "timestamp": time.time()
+                    }
+                    self.log_file.write(json.dumps(abort_record, ensure_ascii=False) + "\n")
+                    self.log_file.flush()
+                    self.log_file.close()
+                except Exception as e:
+                    p.error(f"ログファイルクローズ時のエラー: {e}", "ExperimentState")
+                finally:
+                    self.log_file = None
+
+            self.current_experiment_id = None
+            self.current_trial_id = None
+            p.info("計測を安全に停止・破棄しました。", "ExperimentState")
+
+    def write_measurement_frame(self, record_dict):
+        """計測中にフレームデータ等を書き込む外部用関数"""
+        with self._lock:
+            if self.is_measuring and self.log_file:
+                record_dict["timestamp"] = time.time()
+                self.log_file.write(json.dumps(record_dict, ensure_ascii=False) + "\n")
+                self.log_file.flush()
+
+
+# シングルトンインスタンス化
+experiment_state = ExperimentState()
+
+
+# --------------------------------------------------
 # ヘルパー関数: JSON / JSONL ファイルの取得・解析
 # --------------------------------------------------
 
 def _get_json_file_names():
-    """
-    DATA_DIRECTORY 内の .jsonl (.json) ファイル名一覧を取得し、降順で返す。
-    """
     if not os.path.isdir(DATA_DIRECTORY):
         return []
 
     file_names = []
-
     for file_name in os.listdir(DATA_DIRECTORY):
         ext = os.path.splitext(file_name)[1].lower()
         if ext in [".jsonl", ".json"]:
             file_names.append(file_name)
 
-    # 降順ソート（新しいファイルが上に来るように）
     file_names.sort(reverse=True)
-
     return file_names
 
 
 def _get_json_file_info(file_name):
-    """
-    指定された JSONL / JSON ファイルを開き、ファイル名・実験ID・タイムスタンプを抽出して返す。
-    """
-    # ディレクトリトラバーサル防止（パス指定を除外してファイル名のみ使用）
     safe_file_name = os.path.basename(file_name)
 
     if safe_file_name != file_name:
@@ -64,17 +153,14 @@ def _get_json_file_info(file_name):
     json_data = {}
 
     with open(file_path, "r", encoding="utf-8") as file:
-        # JSONLファイル対応：1行目を読み込んでパースを試みる
         first_line = file.readline().strip()
         if first_line:
             try:
                 json_data = json.loads(first_line)
             except json.JSONDecodeError:
-                # 1行目で読み込めない場合はファイル全体でのロードを試行
                 file.seek(0)
                 json_data = json.load(file)
 
-    # JSON構造のネストの違いを吸収
     data = json_data.get("data", json_data)
     experiment = data.get("experiment", {})
 
@@ -100,11 +186,6 @@ def _get_json_file_info(file_name):
 
 
 def _send_file_lz4_stream(windows_ip, transfer_port, transfer_id, file_path):
-    """
-    【追加箇所】
-    Port 6005 (transfer_port) に接続し、
-    [1行JSONヘッダー + \n] -> [LZ4Frameバイナリデータ] をストリーミング送信する。
-    """
     file_name = os.path.basename(file_path)
     original_size = os.path.getsize(file_path)
 
@@ -112,13 +193,11 @@ def _send_file_lz4_stream(windows_ip, transfer_port, transfer_id, file_path):
     try:
         p.info(f"転送用ソケット接続中: {windows_ip}:{transfer_port}", "tcpResponse")
 
-        # 1. Port 6005 へ接続
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.settimeout(10.0)
         sock.connect((windows_ip, transfer_port))
         sock.settimeout(None)
 
-        # 2. ヘッダー送信 (1行JSON + \n)
         header = {
             "type": "file_transfer",
             "transfer_id": transfer_id,
@@ -131,20 +210,17 @@ def _send_file_lz4_stream(windows_ip, transfer_port, transfer_id, file_path):
 
         p.info(f"ファイル転送開始 (LZ4ストリーム): {file_name} ({original_size} bytes)", "tcpResponse")
 
-        # 3. 1MBずつ読み込みながら LZ4 圧縮ストリームで送信
         sock_file = sock.makefile("wb")
 
         try:
             with open(file_path, "rb") as source:
-                # lz4.frame でソケットの書き込みストリームを包む
                 with lz4.frame.open(sock_file, mode="wb") as compressed:
                     while True:
-                        chunk = source.read(1024 * 1024)  # 1MB単位
+                        chunk = source.read(1024 * 1024)
                         if not chunk:
                             break
-                        compressed.write(chunk)
+                        compressed.write(chunk) #type:ignore
 
-            # LZ4 フッターを確定させてバッファを吐き出す
             sock_file.flush()
         finally:
             sock_file.close()
@@ -218,7 +294,7 @@ def _process_request(request, server_host):
                 "message": str(e)
             }
 
-    # ③ エクスポート要求 (data_export_request) - 【追加箇所】
+    # ③ エクスポート要求 (data_export_request)
     if request_type == "data_export_request":
         transfer_id = request.get("transfer_id")
         file_name = request.get("file_name")
@@ -234,7 +310,6 @@ def _process_request(request, server_host):
         safe_file_name = os.path.basename(file_name)
         file_path = os.path.join(DATA_DIRECTORY, safe_file_name)
 
-        # ファイルが存在しない場合は Port 6005 へ接続せず 6004 でエラー返信
         if not os.path.isfile(file_path):
             p.error(f"転送対象ファイルが存在しません: {safe_file_name}", "tcpResponse")
             return {
@@ -243,7 +318,6 @@ def _process_request(request, server_host):
                 "message": f"ファイルが存在しません: {safe_file_name}"
             }
 
-        # 別スレッドで Port 6005 への転送を開始
         def run_export():
             try:
                 _send_file_lz4_stream(
@@ -257,14 +331,13 @@ def _process_request(request, server_host):
 
         threading.Thread(target=run_export, daemon=True).start()
 
-        # Port 6004 への即時レスポンス
         return {
             "type": "data_export_started",
             "transfer_id": transfer_id,
             "message": "ファイル転送を開始しました。"
         }
 
-    # ④ 実験準備要求 (experiment_prepare) - 既存処理
+    # ④ 実験準備要求 (experiment_prepare)
     if request_type == "experiment_prepare":
         data = request.get("data")
 
@@ -289,10 +362,50 @@ def _process_request(request, server_host):
                 "csv_contentが空です。"
             )
 
+        # 実験状態オブジェクトへセット
+        experiment_state.prepare(data)
+
         return _make_response(
             True,
             "CSVを受信し、計測準備が完了しました。"
         )
+
+    # ⑤ 実験開始要求 (experiment_start) - 【新規追加】
+    if request_type == "experiment_start":
+        experiment_id = request.get("experiment_id")
+        trial_id = request.get("trial_id", 1)
+
+        try:
+            experiment_state.start(experiment_id, trial_id)
+            return {
+                "type": "experiment_start_result",
+                "success": True,
+                "message": "計測を開始しました"
+            }
+        except Exception as e:
+            p.error(f"計測開始失敗: {e}", "tcpResponse")
+            return {
+                "type": "experiment_start_result",
+                "success": False,
+                "message": f"計測開始失敗: {e}"
+            }
+
+    # ⑥ 実験中止要求 (experiment_abort) - 【新規追加】
+    if request_type == "experiment_abort":
+        try:
+            experiment_state.abort()
+            return {
+                "type": "experiment_abort_result",
+                "success": True,
+                "message": "計測を中止しました"
+            }
+        except Exception as e:
+            p.error(f"計測中止処理エラー: {e}", "tcpResponse")
+            return {
+                "type": "experiment_abort_result",
+                "success": False,
+                "message": f"計測中止エラー: {e}"
+            }
 
     # 未対応タイプ
     return {
@@ -303,10 +416,6 @@ def _process_request(request, server_host):
 
 
 def _send_json(sock, data):
-    """
-    JSONを1行形式で送信する。
-    Windows側のReadLineAsyncに合わせて末尾へ改行を付ける。
-    """
     json_text = json.dumps(
         data,
         ensure_ascii=False,
@@ -387,7 +496,6 @@ def _client_worker(host, port, reconnect_seconds):
                     }
                 else:
                     try:
-                        # host(接続先IP) を一緒に渡すよう修正
                         response = _process_request(request, host)
                     except Exception as e:
                         response = {
@@ -428,6 +536,11 @@ def _client_worker(host, port, reconnect_seconds):
                     pass
 
         if _is_running:
+            # 万が一通信が切断された場合、安全のため計測も停止・クローズする
+            if experiment_state.is_measuring:
+                p.warning("通信切断のため、計測を強制停止します。", "tcpResponse")
+                experiment_state.abort()
+
             p.info(
                 f"{reconnect_seconds}秒後に再接続します。",
                 "tcpResponse"
@@ -445,9 +558,6 @@ def _client_worker(host, port, reconnect_seconds):
 # --------------------------------------------------
 
 def start_client(config, host=None):
-    """
-    Windows側TCPサーバーへ接続する。
-    """
     global _client_thread
     global _is_running
 
@@ -502,14 +612,15 @@ def start_client(config, host=None):
 
 
 def close_client():
-    """
-    TCPクライアントを安全に停止する。
-    """
     global _is_running
     global _client_socket
     global _client_file
 
     _is_running = False
+
+    # プログラム停止時にも安全にログファイルをクローズ
+    if experiment_state.is_measuring:
+        experiment_state.abort()
 
     with _SOCKET_LOCK:
         file_reader = _client_file

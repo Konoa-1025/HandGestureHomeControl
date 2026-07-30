@@ -2,6 +2,7 @@
 #Norifumi Konndo
 #フレームの映像を確認する
 import cv2
+import senders.tcpSender as tcp
 
 
 _windows = set()
@@ -44,5 +45,5 @@ def modelPreview(_frame, _name, _landmarks=None):
                 (0, 255, 0),
                 -1
             )
-
+    tcp.send_front_frame(_preview_frame)
     show(_preview_frame, _name)
