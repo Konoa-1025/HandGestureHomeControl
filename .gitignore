@@ -1,5 +1,7 @@
 #config
-.config
+config.json
+
+# Experiment Data
 
 # Python
 __pycache__/
