@@ -44,12 +44,62 @@ namespace HandGestureHomeControl
     /// <summary>
     /// Windows側で待機中のファイル転送
     /// </summary>
+    /// 
+    /// <summary>
+    /// Pythonへ送信する計測開始要求
+    /// </summary>
+    public class ExperimentStartRequest
+    {
+        [JsonProperty("type")]
+        public string Type { get; set; }
+
+        [JsonProperty("experiment_id")]
+        public string ExperimentId { get; set; }
+
+        [JsonProperty("trial_id")]
+        public int TrialId { get; set; }
+    }
+
+    /// <summary>
+    /// Pythonへ送信する計測中止要求
+    /// </summary>
+    public class ExperimentAbortRequest
+    {
+        [JsonProperty("type")]
+        public string Type { get; set; }
+
+        [JsonProperty("experiment_id")]
+        public string ExperimentId { get; set; }
+
+        [JsonProperty("trial_id")]
+        public int TrialId { get; set; }
+    }
+
     public class PendingFileTransfer
     {
+        /// <summary>
+        /// 転送ID
+        /// </summary>
         public string TransferId { get; set; }
 
-        public string FileName { get; set; }
+        /// <summary>
+        /// 保存先ファイルパス
+        /// </summary>
+        public string FilePath { get; set; }
 
-        public string SavePath { get; set; }
+        /// <summary>
+        /// 受信予定のファイルサイズ
+        /// </summary>
+        public long FileSize { get; set; }
+
+        /// <summary>
+        /// 現在までに受信したサイズ
+        /// </summary>
+        public long ReceivedSize { get; set; }
+
+        /// <summary>
+        /// ファイル名
+        /// </summary>
+        public string FileName { get; set; }
     }
 }

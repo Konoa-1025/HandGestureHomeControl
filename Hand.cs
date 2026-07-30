@@ -22,6 +22,42 @@ namespace HandGestureDashboard
 
         }
 
-        
+        public void SetGesture(string gesture)
+        {
+            switch (gesture)
+            {
+                case "FIST":
+                    BackgroundImage = Properties.Resources.gu;
+                    BackColor = Color.Red;
+                    break;
+
+                case "OPEN_HAND":
+                    BackgroundImage = Properties.Resources.pa;
+                    BackColor = Color.Lime;
+                    break;
+
+                case "PEACE":
+                    BackgroundImage = Properties.Resources.choki;
+                    BackColor = Color.DeepSkyBlue;
+                    break;
+
+                case "POINT":
+                    BackgroundImage = Properties.Resources.hitosashiyubi;
+                    BackColor = Color.Orange;
+                    break;
+
+                default:
+                    BackgroundImage = Properties.Resources.question;
+                    BackColor = Color.Gray;
+                    break;
+            }
+        }
+
+        public void Reset()
+        {
+            BackgroundImage = Properties.Resources.question;
+            BackColor = Color.Gray;
+        }
+
     }
 }

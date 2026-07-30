@@ -16,5 +16,22 @@ namespace HandGestureDashboard
         {
             InitializeComponent();
         }
+
+        private void Camera_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        public void SetImage(Image image)
+        {
+            if (image == null)
+                return;
+
+            Image old = this.BackgroundImage;
+
+            BackgroundImage = (Image)image.Clone();
+
+            old?.Dispose();
+        }
     }
 }

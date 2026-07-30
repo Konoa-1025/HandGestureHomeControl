@@ -42,7 +42,9 @@ namespace HandGestureDashboard
             new Dictionary<int, int>();
         private readonly object _tcpLock = new object();
         private bool _tcpRunning = false;
+
         public string Command { get; set; }
+
 
         private readonly Dictionary<string, PendingFileTransfer>
     _pendingFileTransfers =
@@ -1025,7 +1027,7 @@ namespace HandGestureDashboard
                 SetPortStatus(port, "Disconnected");
             }
         }
-        private async Task ReceiveClientAsync(TcpClient client,int port,CancellationToken cancellationToken)
+        private async Task ReceiveClientAsync(TcpClient client, int port, CancellationToken cancellationToken)
         {
             StreamWriter writer = null;
             string remoteEndPoint = "不明";
@@ -1360,7 +1362,7 @@ namespace HandGestureDashboard
 
             if (data.System != null && data.Performance.VideoLatencyMs != null)
             {
-                FPSLb.Text = FPS.ToString() +" / ";
+                FPSLb.Text = FPS.ToString() + " / ";
             }
             else
             {
@@ -1380,7 +1382,7 @@ namespace HandGestureDashboard
                 // FPSが10未満
             }
 
-            
+
 
             if (data.Model == null)
             {
@@ -1438,7 +1440,7 @@ namespace HandGestureDashboard
             // port4専用処理
         }
 
-        
+
 
         private ListBox GetPortLogBox(int port)
         {
@@ -1727,6 +1729,7 @@ namespace HandGestureDashboard
         private Hand handForm;
         private Direction directionForm;
         private Camera cameraForm;
+        private MeasurementInfo measurementInfoForm;
         private void button7_Click(object sender, EventArgs e)
         {
             AppendLog("計測開始");
@@ -1734,7 +1737,7 @@ namespace HandGestureDashboard
 
         private async void StartPushBt_Click(object sender, EventArgs e)
         {
-                switch (StartPushBt.Text)
+            switch (StartPushBt.Text)
             {
                 case "計測準備":
                     await PrepareExperimentAsync();
@@ -1747,7 +1750,43 @@ namespace HandGestureDashboard
                     break;
 
                 case "計測停止":
-                    ResetMeasurementPreparation("計測を停止しました。");
+                    if (_measurementCancellationTokenSource == null)
+                    {
+                        AppendLog(
+                            "現在、計測は実行されていません。"
+                        );
+
+                        break;
+                    }
+
+                    /*
+                     * Python側へ先に計測中止要求を送信する。
+                     *
+                     * Cancelを先に実行するとStartExperimentのfinallyが動き、
+                     * 実験情報が初期化される可能性があるため、
+                     * TCP送信を先に完了させる。
+                     */
+                    if (_experimentStartSent)
+                    {
+                        AppendLog(
+                            "Pythonへ計測中止要求を送信します。"
+                        );
+
+                        await SendExperimentAbortAsync();
+                    }
+                    else
+                    {
+                        AppendLog(
+                            "計測開始要求が送信されていないため、" +
+                            "中止要求は送信しません。"
+                        );
+                    }
+
+                    /*
+                     * Dashboard側のCSV表示を停止する。
+                     */
+                    _measurementCancellationTokenSource.Cancel();
+
                     break;
             }
         }
@@ -1766,7 +1805,7 @@ namespace HandGestureDashboard
 
         private void DataPush_Click(object sender, EventArgs e)
         {
-            if(exNamebx.Text == "")
+            if (exNamebx.Text == "")
             {
                 AppendLog("実験名を入力してください。");
                 return;
@@ -1801,7 +1840,7 @@ namespace HandGestureDashboard
                     if (int.TryParse(data[1], out int count))
                     {
                         trial = count + 1;
-                        
+
                     }
 
                     break;
@@ -1851,14 +1890,14 @@ namespace HandGestureDashboard
 
         private void label34_TextChanged(object sender, EventArgs e)
         {
-            
+
         }
 
         private void button7_Click_1(object sender, EventArgs e)
         {
             SelectCsvFile();
         }
-        
+
         private void button8_Click(object sender, EventArgs e)
         {
 
@@ -1874,7 +1913,7 @@ namespace HandGestureDashboard
 
         private void button9_Click(object sender, EventArgs e)
         {
-            if(directionForm != null && !directionForm.IsDisposed)
+            if (directionForm != null && !directionForm.IsDisposed)
             {
                 return;
             }
@@ -1895,6 +1934,17 @@ namespace HandGestureDashboard
             cameraForm.Show();
         }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (measurementInfoForm != null && !measurementInfoForm.IsDisposed)
+            {
+                return;
+            }
+            measurementInfoForm = new MeasurementInfo();
+            measurementInfoForm.FormClosed += (s, args) => measurementInfoForm = null;
+            measurementInfoForm.Show();
+        }
+
         private void button11_Click(object sender, EventArgs e)
         {
             foreach (Form form in Application.OpenForms.Cast<Form>().ToList())
@@ -1905,11 +1955,153 @@ namespace HandGestureDashboard
                 }
             }
         }
-        private void StartExperiment()
+
+        private async Task<bool> SendExperimentStartAsync()
         {
+            ExperimentStartRequest request =
+                new ExperimentStartRequest
+                {
+                    Type = "experiment_start",
+                    ExperimentId = _activeExperimentId,
+                    TrialId = _activeTrialId
+                };
+
+            bool sent =
+                await SendJsonToPortAsync(
+                    Properties.Settings.Default.port4,
+                    request
+                );
+
+            if (sent)
+            {
+                AppendLog(
+                    $"計測開始要求を送信しました: " +
+                    $"{_activeExperimentId} / " +
+                    $"試行{_activeTrialId}"
+                );
+            }
+            else
+            {
+                AppendLog(
+                    "計測開始要求の送信に失敗しました。"
+                );
+            }
+
+            return sent;
+        }
+
+        private async Task<bool> SendExperimentAbortAsync()
+        {
+            ExperimentAbortRequest request =
+                new ExperimentAbortRequest
+                {
+                    Type = "experiment_abort",
+                    ExperimentId = _activeExperimentId,
+                    TrialId = _activeTrialId
+                };
+
+            bool sent =
+                await SendJsonToPortAsync(
+                    Properties.Settings.Default.port4,
+                    request
+                );
+
+            if (sent)
+            {
+                AppendLog(
+                    $"計測中止要求を送信しました: " +
+                    $"{_activeExperimentId} / " +
+                    $"試行{_activeTrialId}"
+                );
+            }
+            else
+            {
+                AppendLog(
+                    "計測中止要求の送信に失敗しました。"
+                );
+            }
+
+            return sent;
+        }
+
+
+        private async Task StartExperiment()
+        {
+            string experimentId =
+                exNamebx.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(experimentId))
+            {
+                AppendLog(
+                    "実験名が入力されていません。"
+                );
+
+                CompleteMeasurement();
+                return;
+            }
+
+            int trialId;
+
+            if (!int.TryParse(
+                label34.Text,
+                out trialId))
+            {
+                AppendLog(
+                    "試行番号が正しくありません。"
+                );
+
+                CompleteMeasurement();
+                return;
+            }
+
+            if (ResearchManager.StepCount == 0)
+            {
+                AppendLog(
+                    "計測データが読み込まれていません。"
+                );
+
+                CompleteMeasurement();
+                return;
+            }
+
+            /*
+             * 開始時点の実験情報を保存する。
+             * 中止時も同じ値を使用する。
+             */
+            _activeExperimentId = experimentId;
+            _activeTrialId = trialId;
+            _experimentStartSent = false;
+
+            /*
+             * Pythonへ計測開始要求を送信する。
+             */
+            bool startSent =
+                await SendExperimentStartAsync();
+
+            if (!startSent)
+            {
+                AppendLog(
+                    "Pythonへ計測開始要求を送信できないため、" +
+                    "計測を開始しません。"
+                );
+
+                CompleteMeasurement();
+                ClearActiveExperiment();
+                return;
+            }
+
+            _experimentStartSent = true;
+
+            _measurementCancellationTokenSource
+                ?.Dispose();
+
+            _measurementCancellationTokenSource =
+                new CancellationTokenSource();
+
             StartPushBt.Enabled = true;
             StartPushBt.Text = "計測停止";
-            StartPushBt.BackColor = Color.FromArgb(255, 128, 128);
+            StartPushBt.BackColor =
+                Color.FromArgb(255, 128, 128);
 
             tableLayoutPanel4.Enabled = false;
 
@@ -1918,19 +2110,67 @@ namespace HandGestureDashboard
                 tabControl3.SelectedIndex = 13;
             }
 
-            AppendLog("計測開始");
-        }
-        private void CountDown_Tick(object sender, EventArgs e)
-        {
-            if(count-- > 0)
-            {
-                StartPushBt.Text = "計測開始まで" + count.ToString();
+            AppendLog(
+                $"計測開始: {_activeExperimentId} " +
+                $"試行{_activeTrialId}"
+            );
 
+            try
+            {
+                await PlayMeasurementAsync(
+                    _measurementCancellationTokenSource.Token
+                );
+
+                AppendLog("計測完了");
+
+                /*
+                 * 正常終了用のexperiment_endは、
+                 * 次の実装でここへ追加する。
+                 */
+                CompleteMeasurement();
             }
-            else { 
-                CountDown.Stop();
-                StartExperiment();
+            catch (OperationCanceledException)
+            {
+                AppendLog(
+                    "Dashboard側の計測表示を中止しました。"
+                );
+
+                CompleteMeasurement();
             }
+            catch (Exception ex)
+            {
+                AppendLog(
+                    "計測中にエラーが発生しました: " +
+                    ex.Message
+                );
+
+                CompleteMeasurement();
+            }
+            finally
+            {
+                _measurementCancellationTokenSource
+                    ?.Dispose();
+
+                _measurementCancellationTokenSource =
+                    null;
+
+                ClearActiveExperiment();
+            }
+        }
+        private async void CountDown_Tick(object sender, EventArgs e)
+        {
+            if (count > 0)
+            {
+                StartPushBt.Text =
+                    "計測開始まで " + count.ToString();
+
+                count--;
+                return;
+            }
+
+            CountDown.Stop();
+
+            await StartExperiment();
         }
 
         private async void DataListUpdateBt_Click(object sender, EventArgs e)
@@ -2034,7 +2274,7 @@ namespace HandGestureDashboard
                     {
                         TransferId = transferId,
                         FileName = fileName,
-                        SavePath = dialog.FileName
+                        FilePath = dialog.FileName
                     };
 
                 lock (_fileTransferLock)
@@ -2219,7 +2459,7 @@ namespace HandGestureDashboard
                      * Python側から任意のパスを書き込まれることを
                      * 防ぐ意味もある。
                      */
-                    finalPath = pendingTransfer.SavePath;
+                    finalPath = pendingTransfer.FilePath;
                     temporaryPath = finalPath + ".part";
 
                     string saveDirectory =
@@ -2347,7 +2587,7 @@ namespace HandGestureDashboard
                                 $" 実際={totalWritten}"
                             );
                         }
-                        UpdateFileTransferProgress(100,totalWritten,header.OriginalSize,stopwatch.Elapsed);
+                        UpdateFileTransferProgress(100, totalWritten, header.OriginalSize, stopwatch.Elapsed);
 
                         stopwatch.Stop();
                     }
@@ -2374,7 +2614,7 @@ namespace HandGestureDashboard
                             transferId
                         );
                     }
-                    
+
                     AppendLog(
                         $"データ出力完了: {finalPath}"
                     );
@@ -2716,6 +2956,10 @@ namespace HandGestureDashboard
                                     ? receivedImage
                                     : (Image)receivedImage.Clone());
                         }
+                        if (cameraForm != null && !cameraForm.IsDisposed)
+                        {
+                            cameraForm.SetImage(receivedImage);
+                        }
 
                         await FlashPortLamp(port);
                     }
@@ -2895,7 +3139,7 @@ namespace HandGestureDashboard
             updateAction();
         }
 
-        
+
 
         private async Task<string> ReadHeaderLineAsync(
     NetworkStream stream,
@@ -3158,5 +3402,96 @@ namespace HandGestureDashboard
             progressBar1.Maximum = 100;
             progressBar1.Value = 0;
         }
+
+        //---------------------------------
+        //計測実行
+        //---------------------------------
+        private CancellationTokenSource _measurementCancellationTokenSource;
+        private string _activeExperimentId;
+        private int _activeTrialId;
+        private bool _experimentStartSent;
+
+        public void UpdateMeasurementUI(
+    MeasurementStep step,
+    int current,
+    int total,
+    double remainingSeconds)
+        {
+            if (step == null)
+            {
+                return;
+            }
+
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action(() =>
+                {
+                    UpdateMeasurementUI(
+                        step,
+                        current,
+                        total,
+                        remainingSeconds
+                    );
+                }));
+
+                return;
+            }
+
+            if (handForm != null &&
+                !handForm.IsDisposed)
+            {
+                handForm.SetGesture(step.Gesture);
+            }
+
+            if (directionForm != null &&
+                !directionForm.IsDisposed)
+            {
+                directionForm.SetDirection(step.Direction);
+            }
+
+            if (measurementInfoForm != null &&
+                !measurementInfoForm.IsDisposed)
+            {
+                measurementInfoForm.UpdateInfo(
+                    step.HandNumber,
+                    remainingSeconds,
+                    current,
+                    total
+                );
+            }
+        }
+        private void ClearActiveExperiment()
+        {
+            _activeExperimentId = null;
+            _activeTrialId = 0;
+            _experimentStartSent = false;
+        }
+        private void CompleteMeasurement()
+        {
+            StartPushBt.Enabled = true;
+            StartPushBt.Text = "計測準備";
+            StartPushBt.BackColor = SystemColors.Control;
+
+            tableLayoutPanel4.Enabled = true;
+
+            handForm?.Reset();
+            measurementInfoForm?.ResetInfo();
+
+            AppendLog("計測状態を初期化しました。");
+        }
+
+        private void Camera1Picture_Click(object sender, EventArgs e)
+        {
+            if (cameraForm != null && !cameraForm.IsDisposed)
+            {
+                return;
+            }
+            cameraForm = new Camera();
+            cameraForm.FormClosed += (s, args) => cameraForm = null;
+            cameraForm.Show();
+        }
+
+
     }
 }
+

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -103,8 +104,9 @@ namespace HandGestureDashboard
         public string Timestamp { get; set; }
     }
 
-    public partial class Form1
+    public partial class Form1: Form
     {
+
         private readonly Dictionary<int, StreamWriter> _tcpWriters =
             new Dictionary<int, StreamWriter>();
 
@@ -112,6 +114,7 @@ namespace HandGestureDashboard
 
         private TaskCompletionSource<ExperimentPrepareResponse>
             _prepareResponseSource;
+
 
         private void SelectCsvFile()
         {
@@ -220,6 +223,13 @@ namespace HandGestureDashboard
                 cameraForm.FormClosed += (s, args) => cameraForm = null;
                 cameraForm.Show();
             }
+
+            if (measurementInfoForm == null || measurementInfoForm.IsDisposed)
+            {
+                measurementInfoForm = new MeasurementInfo();
+                measurementInfoForm.FormClosed += (s, args) => measurementInfoForm = null;
+                measurementInfoForm.Show();
+            }
         }
 
         private void ResetMeasurementPreparation(string message)
@@ -282,15 +292,45 @@ namespace HandGestureDashboard
             }
             catch (Exception ex)
             {
-                ResetMeasurementPreparation("CSV読込失敗: " + ex.Message);
+                ResetMeasurementPreparation(
+                    "CSV読込失敗: " + ex.Message
+                );
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(csvContent))
             {
-                ResetMeasurementPreparation("CSVファイルの中身が空です。");
+                ResetMeasurementPreparation(
+                    "CSVファイルの中身が空です。"
+                );
                 return;
             }
+
+            // Dashboardで再生する計測手順としてCSVを解析
+            try
+            {
+                ResearchManager.LoadMeasurementCsv(csvPath);
+            }
+            catch (Exception ex)
+            {
+                ResetMeasurementPreparation(
+                    "計測用CSVの解析に失敗しました: " +
+                    ex.Message
+                );
+                return;
+            }
+
+            if (ResearchManager.StepCount == 0)
+            {
+                ResetMeasurementPreparation(
+                    "CSVに有効な計測データがありません。"
+                );
+                return;
+            }
+
+            AppendLog(
+                $"計測CSV読込完了: {ResearchManager.StepCount}件"
+            );
 
             OpenMeasurementForms();
 
@@ -526,6 +566,72 @@ namespace HandGestureDashboard
                 );
 
                 return true;
+            }
+        }
+
+
+
+        private async Task PlayMeasurementAsync(
+    CancellationToken cancellationToken)
+        {
+            for (int i = 0; i < ResearchManager.StepCount; i++)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                MeasurementStep step =
+                    ResearchManager.GetStep(i);
+
+                if (step == null)
+                {
+                    continue;
+                }
+
+                AppendLog(
+                    $"[{i + 1}/{ResearchManager.StepCount}] " +
+                    $"{step.Gesture} " +
+                    $"{step.Direction} " +
+                    $"{step.HoldTime}秒"
+                );
+
+                if (handForm != null &&
+                    !handForm.IsDisposed)
+                {
+                    handForm.SetGesture(step.Gesture);
+                }
+
+                if (directionForm != null &&
+                    !directionForm.IsDisposed)
+                {
+                    directionForm.SetDirection(step.Direction);
+                }
+
+                double remain = step.HoldTime;
+
+                while (remain > 0)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    measurementInfoForm?.UpdateInfo(
+                        step.HandNumber,
+                        remain,
+                        i + 1,
+                        ResearchManager.StepCount
+                    );
+
+                    await Task.Delay(
+                        100,
+                        cancellationToken
+                    );
+
+                    remain -= 0.1;
+                }
+
+                measurementInfoForm?.UpdateInfo(
+                    step.HandNumber,
+                    0,
+                    i + 1,
+                    ResearchManager.StepCount
+                );
             }
         }
     }
