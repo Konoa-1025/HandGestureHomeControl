@@ -33,7 +33,7 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.Camera1Picture = new System.Windows.Forms.PictureBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.ModelLb = new System.Windows.Forms.Label();
             this.groupBox10 = new System.Windows.Forms.GroupBox();
@@ -107,6 +107,9 @@
             this.label38 = new System.Windows.Forms.Label();
             this.label33 = new System.Windows.Forms.Label();
             this.tabPage13 = new System.Windows.Forms.TabPage();
+            this.timestampLabel = new System.Windows.Forms.Label();
+            this.experimentIdLabel = new System.Windows.Forms.Label();
+            this.fileNameLabel = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
@@ -122,7 +125,7 @@
             this.button8 = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.Camera1PictureSub = new System.Windows.Forms.PictureBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.NTimeLB = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -137,7 +140,6 @@
             this.P3Sign = new System.Windows.Forms.Label();
             this.LogBox = new System.Windows.Forms.ListBox();
             this.NTimer = new System.Windows.Forms.Timer(this.components);
-            this.label1 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
@@ -168,19 +170,18 @@
             this.Port5LogBox = new System.Windows.Forms.ListBox();
             this.DataPushTimer = new System.Windows.Forms.Timer(this.components);
             this.CountDown = new System.Windows.Forms.Timer(this.components);
-            this.label39 = new System.Windows.Forms.Label();
             this.P4Sign = new System.Windows.Forms.Label();
             this.port4Lb = new System.Windows.Forms.Label();
             this.P5Sign = new System.Windows.Forms.Label();
             this.port5Lb = new System.Windows.Forms.Label();
-            this.fileNameLabel = new System.Windows.Forms.Label();
-            this.experimentIdLabel = new System.Windows.Forms.Label();
-            this.timestampLabel = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.Camera2Picture = new System.Windows.Forms.PictureBox();
+            this.Camera1StatusLabel = new System.Windows.Forms.Label();
+            this.Camera2StatusLabel = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Camera1Picture)).BeginInit();
             this.groupBox6.SuspendLayout();
             this.groupBox10.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NowGesPicture)).BeginInit();
@@ -202,7 +203,7 @@
             this.tabPage14.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.groupBox7.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Camera1PictureSub)).BeginInit();
             this.panel1.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPage5.SuspendLayout();
@@ -212,6 +213,7 @@
             this.tabPage9.SuspendLayout();
             this.tabPage10.SuspendLayout();
             this.tabPage11.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Camera2Picture)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -242,7 +244,7 @@
             // 
             // groupBox5
             // 
-            this.groupBox5.Controls.Add(this.pictureBox1);
+            this.groupBox5.Controls.Add(this.Camera1Picture);
             this.groupBox5.Font = new System.Drawing.Font("MS UI Gothic", 10.25F, System.Drawing.FontStyle.Bold);
             this.groupBox5.Location = new System.Drawing.Point(7, 212);
             this.groupBox5.Name = "groupBox5";
@@ -251,15 +253,15 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "映像";
             // 
-            // pictureBox1
+            // Camera1Picture
             // 
-            this.pictureBox1.Image = global::HandGestureDashboard.Properties.Resources.noimage;
-            this.pictureBox1.Location = new System.Drawing.Point(6, 20);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(184, 132);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
+            this.Camera1Picture.Image = global::HandGestureDashboard.Properties.Resources.noimage;
+            this.Camera1Picture.Location = new System.Drawing.Point(6, 20);
+            this.Camera1Picture.Name = "Camera1Picture";
+            this.Camera1Picture.Size = new System.Drawing.Size(184, 132);
+            this.Camera1Picture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.Camera1Picture.TabIndex = 0;
+            this.Camera1Picture.TabStop = false;
             // 
             // groupBox6
             // 
@@ -379,7 +381,7 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(46, 21);
             this.textBox1.TabIndex = 25;
-            this.textBox1.Text = "なし";
+            this.textBox1.Text = "データ";
             // 
             // textBox4
             // 
@@ -904,7 +906,7 @@
             this.tableLayoutPanel4.ColumnCount = 3;
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 41.10429F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 58.89571F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 51F));
             this.tableLayoutPanel4.Controls.Add(this.angleNumericUpDown, 1, 5);
             this.tableLayoutPanel4.Controls.Add(this.distanceNumericUpDown, 1, 4);
             this.tableLayoutPanel4.Controls.Add(this.label23, 0, 0);
@@ -952,7 +954,7 @@
             0,
             -2147483648});
             this.angleNumericUpDown.Name = "angleNumericUpDown";
-            this.angleNumericUpDown.Size = new System.Drawing.Size(185, 33);
+            this.angleNumericUpDown.Size = new System.Drawing.Size(184, 33);
             this.angleNumericUpDown.TabIndex = 28;
             // 
             // distanceNumericUpDown
@@ -965,7 +967,7 @@
             0,
             0});
             this.distanceNumericUpDown.Name = "distanceNumericUpDown";
-            this.distanceNumericUpDown.Size = new System.Drawing.Size(185, 33);
+            this.distanceNumericUpDown.Size = new System.Drawing.Size(184, 33);
             this.distanceNumericUpDown.TabIndex = 27;
             this.distanceNumericUpDown.Value = new decimal(new int[] {
             1000,
@@ -1066,7 +1068,7 @@
             // 
             this.button7.Location = new System.Drawing.Point(136, 65);
             this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(185, 26);
+            this.button7.Size = new System.Drawing.Size(184, 26);
             this.button7.TabIndex = 25;
             this.button7.Text = "CSV パス名";
             this.button7.UseVisualStyleBackColor = true;
@@ -1077,7 +1079,7 @@
             this.brightnessNumericUpDown.Font = new System.Drawing.Font("MS UI Gothic", 19F);
             this.brightnessNumericUpDown.Location = new System.Drawing.Point(136, 97);
             this.brightnessNumericUpDown.Name = "brightnessNumericUpDown";
-            this.brightnessNumericUpDown.Size = new System.Drawing.Size(185, 33);
+            this.brightnessNumericUpDown.Size = new System.Drawing.Size(184, 33);
             this.brightnessNumericUpDown.TabIndex = 26;
             this.brightnessNumericUpDown.Value = new decimal(new int[] {
             50,
@@ -1090,7 +1092,7 @@
             this.label35.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label35.AutoSize = true;
             this.label35.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label35.Location = new System.Drawing.Point(327, 105);
+            this.label35.Location = new System.Drawing.Point(326, 105);
             this.label35.Name = "label35";
             this.label35.Size = new System.Drawing.Size(29, 19);
             this.label35.TabIndex = 14;
@@ -1101,7 +1103,7 @@
             this.label36.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label36.AutoSize = true;
             this.label36.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label36.Location = new System.Drawing.Point(327, 144);
+            this.label36.Location = new System.Drawing.Point(326, 144);
             this.label36.Name = "label36";
             this.label36.Size = new System.Drawing.Size(35, 19);
             this.label36.TabIndex = 29;
@@ -1112,7 +1114,7 @@
             this.label37.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label37.AutoSize = true;
             this.label37.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label37.Location = new System.Drawing.Point(327, 181);
+            this.label37.Location = new System.Drawing.Point(326, 181);
             this.label37.Name = "label37";
             this.label37.Size = new System.Drawing.Size(29, 19);
             this.label37.TabIndex = 30;
@@ -1123,7 +1125,7 @@
             this.exNamebx.Font = new System.Drawing.Font("MS UI Gothic", 15F);
             this.exNamebx.Location = new System.Drawing.Point(136, 3);
             this.exNamebx.Name = "exNamebx";
-            this.exNamebx.Size = new System.Drawing.Size(185, 27);
+            this.exNamebx.Size = new System.Drawing.Size(184, 27);
             this.exNamebx.TabIndex = 23;
             this.exNamebx.TextChanged += new System.EventHandler(this.textBox7_TextChanged);
             // 
@@ -1137,7 +1139,7 @@
             this.backgroundComboBox.Items.Add("Black");
             this.backgroundComboBox.Location = new System.Drawing.Point(136, 212);
             this.backgroundComboBox.Name = "backgroundComboBox";
-            this.backgroundComboBox.Size = new System.Drawing.Size(185, 33);
+            this.backgroundComboBox.Size = new System.Drawing.Size(184, 33);
             this.backgroundComboBox.TabIndex = 31;
             this.backgroundComboBox.Text = "White";
             // 
@@ -1146,7 +1148,7 @@
             this.label38.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label38.AutoSize = true;
             this.label38.Font = new System.Drawing.Font("ＭＳ Ｐゴシック", 10.25F, System.Drawing.FontStyle.Bold);
-            this.label38.Location = new System.Drawing.Point(327, 39);
+            this.label38.Location = new System.Drawing.Point(326, 39);
             this.label38.Name = "label38";
             this.label38.Size = new System.Drawing.Size(37, 14);
             this.label38.TabIndex = 32;
@@ -1183,6 +1185,33 @@
             this.tabPage13.TabIndex = 1;
             this.tabPage13.Text = "計測データの出力";
             this.tabPage13.UseVisualStyleBackColor = true;
+            // 
+            // timestampLabel
+            // 
+            this.timestampLabel.AutoSize = true;
+            this.timestampLabel.Location = new System.Drawing.Point(100, 212);
+            this.timestampLabel.Name = "timestampLabel";
+            this.timestampLabel.Size = new System.Drawing.Size(85, 12);
+            this.timestampLabel.TabIndex = 16;
+            this.timestampLabel.Text = "timestampLabel";
+            // 
+            // experimentIdLabel
+            // 
+            this.experimentIdLabel.AutoSize = true;
+            this.experimentIdLabel.Location = new System.Drawing.Point(100, 200);
+            this.experimentIdLabel.Name = "experimentIdLabel";
+            this.experimentIdLabel.Size = new System.Drawing.Size(97, 12);
+            this.experimentIdLabel.TabIndex = 15;
+            this.experimentIdLabel.Text = "experimentIdLabel";
+            // 
+            // fileNameLabel
+            // 
+            this.fileNameLabel.AutoSize = true;
+            this.fileNameLabel.Location = new System.Drawing.Point(100, 188);
+            this.fileNameLabel.Name = "fileNameLabel";
+            this.fileNameLabel.Size = new System.Drawing.Size(77, 12);
+            this.fileNameLabel.TabIndex = 14;
+            this.fileNameLabel.Text = "fileNameLabel";
             // 
             // label21
             // 
@@ -1334,7 +1363,8 @@
             // 
             // groupBox7
             // 
-            this.groupBox7.Controls.Add(this.pictureBox2);
+            this.groupBox7.Controls.Add(this.Camera2Picture);
+            this.groupBox7.Controls.Add(this.Camera1PictureSub);
             this.groupBox7.Font = new System.Drawing.Font("MS UI Gothic", 10.25F, System.Drawing.FontStyle.Bold);
             this.groupBox7.Location = new System.Drawing.Point(7, 3);
             this.groupBox7.Name = "groupBox7";
@@ -1343,15 +1373,15 @@
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "映像";
             // 
-            // pictureBox2
+            // Camera1PictureSub
             // 
-            this.pictureBox2.Image = global::HandGestureDashboard.Properties.Resources.noimage;
-            this.pictureBox2.Location = new System.Drawing.Point(6, 21);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(391, 340);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox2.TabIndex = 0;
-            this.pictureBox2.TabStop = false;
+            this.Camera1PictureSub.Image = global::HandGestureDashboard.Properties.Resources.noimage;
+            this.Camera1PictureSub.Location = new System.Drawing.Point(6, 21);
+            this.Camera1PictureSub.Name = "Camera1PictureSub";
+            this.Camera1PictureSub.Size = new System.Drawing.Size(391, 172);
+            this.Camera1PictureSub.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.Camera1PictureSub.TabIndex = 0;
+            this.Camera1PictureSub.TabStop = false;
             // 
             // tabPage4
             // 
@@ -1486,23 +1516,12 @@
             this.NTimer.Interval = 1000;
             this.NTimer.Tick += new System.EventHandler(this.NTimer_Tick);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("MS UI Gothic", 15F);
-            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label1.Location = new System.Drawing.Point(283, 2);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(14, 20);
-            this.label1.TabIndex = 13;
-            this.label1.Text = "|";
-            // 
             // label8
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("MS UI Gothic", 15F);
             this.label8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label8.Location = new System.Drawing.Point(303, 2);
+            this.label8.Location = new System.Drawing.Point(878, 9);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(29, 20);
             this.label8.TabIndex = 14;
@@ -1511,7 +1530,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(303, 23);
+            this.label9.Location = new System.Drawing.Point(878, 30);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(29, 12);
             this.label9.TabIndex = 15;
@@ -1812,17 +1831,6 @@
             this.CountDown.Interval = 1000;
             this.CountDown.Tick += new System.EventHandler(this.CountDown_Tick);
             // 
-            // label39
-            // 
-            this.label39.AutoSize = true;
-            this.label39.Font = new System.Drawing.Font("MS UI Gothic", 15F);
-            this.label39.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label39.Location = new System.Drawing.Point(338, 2);
-            this.label39.Name = "label39";
-            this.label39.Size = new System.Drawing.Size(14, 20);
-            this.label39.TabIndex = 22;
-            this.label39.Text = "|";
-            // 
             // P4Sign
             // 
             this.P4Sign.AutoSize = true;
@@ -1863,51 +1871,55 @@
             this.port5Lb.TabIndex = 25;
             this.port5Lb.Text = "0000";
             // 
-            // fileNameLabel
-            // 
-            this.fileNameLabel.AutoSize = true;
-            this.fileNameLabel.Location = new System.Drawing.Point(100, 188);
-            this.fileNameLabel.Name = "fileNameLabel";
-            this.fileNameLabel.Size = new System.Drawing.Size(77, 12);
-            this.fileNameLabel.TabIndex = 14;
-            this.fileNameLabel.Text = "fileNameLabel";
-            // 
-            // experimentIdLabel
-            // 
-            this.experimentIdLabel.AutoSize = true;
-            this.experimentIdLabel.Location = new System.Drawing.Point(100, 200);
-            this.experimentIdLabel.Name = "experimentIdLabel";
-            this.experimentIdLabel.Size = new System.Drawing.Size(97, 12);
-            this.experimentIdLabel.TabIndex = 15;
-            this.experimentIdLabel.Text = "experimentIdLabel";
-            // 
-            // timestampLabel
-            // 
-            this.timestampLabel.AutoSize = true;
-            this.timestampLabel.Location = new System.Drawing.Point(100, 212);
-            this.timestampLabel.Name = "timestampLabel";
-            this.timestampLabel.Size = new System.Drawing.Size(85, 12);
-            this.timestampLabel.TabIndex = 16;
-            this.timestampLabel.Text = "timestampLabel";
-            // 
             // progressBar1
             // 
             this.progressBar1.Location = new System.Drawing.Point(690, 23);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(217, 22);
+            this.progressBar1.Size = new System.Drawing.Size(182, 21);
             this.progressBar1.TabIndex = 17;
+            // 
+            // Camera2Picture
+            // 
+            this.Camera2Picture.Image = global::HandGestureDashboard.Properties.Resources.noimage;
+            this.Camera2Picture.Location = new System.Drawing.Point(6, 199);
+            this.Camera2Picture.Name = "Camera2Picture";
+            this.Camera2Picture.Size = new System.Drawing.Size(391, 168);
+            this.Camera2Picture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.Camera2Picture.TabIndex = 1;
+            this.Camera2Picture.TabStop = false;
+            // 
+            // Camera1StatusLabel
+            // 
+            this.Camera1StatusLabel.AutoSize = true;
+            this.Camera1StatusLabel.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.Camera1StatusLabel.Location = new System.Drawing.Point(286, 9);
+            this.Camera1StatusLabel.Name = "Camera1StatusLabel";
+            this.Camera1StatusLabel.Size = new System.Drawing.Size(29, 12);
+            this.Camera1StatusLabel.TabIndex = 7;
+            this.Camera1StatusLabel.Text = "情報";
+            // 
+            // Camera2StatusLabel
+            // 
+            this.Camera2StatusLabel.AutoSize = true;
+            this.Camera2StatusLabel.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.Camera2StatusLabel.Location = new System.Drawing.Point(287, 30);
+            this.Camera2StatusLabel.Name = "Camera2StatusLabel";
+            this.Camera2StatusLabel.Size = new System.Drawing.Size(29, 12);
+            this.Camera2StatusLabel.TabIndex = 8;
+            this.Camera2StatusLabel.Text = "情報";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(919, 625);
+            this.Controls.Add(this.Camera1StatusLabel);
+            this.Controls.Add(this.Camera2StatusLabel);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.P5Sign);
             this.Controls.Add(this.port5Lb);
             this.Controls.Add(this.P4Sign);
             this.Controls.Add(this.port4Lb);
-            this.Controls.Add(this.label39);
             this.Controls.Add(this.tabControl2);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.panel1);
@@ -1915,7 +1927,6 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.P3Sign);
             this.Controls.Add(this.P2Sign);
             this.Controls.Add(this.P1Sign);
@@ -1933,7 +1944,7 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Camera1Picture)).EndInit();
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
             this.groupBox10.ResumeLayout(false);
@@ -1963,7 +1974,7 @@
             this.tabPage14.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.groupBox7.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Camera1PictureSub)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.tabControl2.ResumeLayout(false);
@@ -1974,6 +1985,7 @@
             this.tabPage9.ResumeLayout(false);
             this.tabPage10.ResumeLayout(false);
             this.tabPage11.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.Camera2Picture)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1997,7 +2009,6 @@
         private System.Windows.Forms.Label P3Sign;
         private System.Windows.Forms.ListBox LogBox;
         private System.Windows.Forms.Timer NTimer;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Button button1;
@@ -2031,9 +2042,9 @@
         private System.Windows.Forms.Label CClear;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox Camera1Picture;
         private System.Windows.Forms.GroupBox groupBox7;
-        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.PictureBox Camera1PictureSub;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.GroupBox groupBox10;
         private System.Windows.Forms.PictureBox NowGesPicture;
@@ -2119,7 +2130,6 @@
         private System.Windows.Forms.Button button11;
         private System.Windows.Forms.Button button10;
         private System.Windows.Forms.Timer CountDown;
-        private System.Windows.Forms.Label label39;
         private System.Windows.Forms.Label P4Sign;
         private System.Windows.Forms.Label port4Lb;
         private System.Windows.Forms.Label P5Sign;
@@ -2128,6 +2138,9 @@
         private System.Windows.Forms.Label experimentIdLabel;
         private System.Windows.Forms.Label fileNameLabel;
         private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.PictureBox Camera2Picture;
+        private System.Windows.Forms.Label Camera1StatusLabel;
+        private System.Windows.Forms.Label Camera2StatusLabel;
     }
 }
 

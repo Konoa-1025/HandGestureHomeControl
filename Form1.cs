@@ -955,6 +955,16 @@ namespace HandGestureDashboard
                             cancellationToken
                         );
                     }
+                    else if (
+                        port == Properties.Settings.Default.port2 ||
+                        port == Properties.Settings.Default.port3)
+                    {
+                        _ = ReceiveCameraStreamAsync(
+                            client,
+                            port,
+                            cancellationToken
+                        );
+                    }
                     else
                     {
                         _ = ReceiveClientAsync(
@@ -2501,6 +2511,392 @@ namespace HandGestureDashboard
             }
         }
 
+        private async Task ReadExactlyAsync(
+    NetworkStream stream,
+    byte[] buffer,
+    int offset,
+    int count,
+    CancellationToken cancellationToken)
+        {
+            while (count > 0)
+            {
+                int read =
+                    await stream.ReadAsync(
+                        buffer,
+                        offset,
+                        count,
+                        cancellationToken
+                    );
+
+                if (read == 0)
+                {
+                    throw new EndOfStreamException(
+                        "通信が切断されました。"
+                    );
+                }
+
+                offset += read;
+                count -= read;
+            }
+        }
+
+        private async Task ReceiveCameraStreamAsync(
+    TcpClient client,
+    int port,
+    CancellationToken cancellationToken)
+        {
+            string remoteEndPoint = "不明";
+
+            try
+            {
+                if (client.Client.RemoteEndPoint != null)
+                {
+                    remoteEndPoint =
+                        client.Client.RemoteEndPoint.ToString();
+                }
+
+                using (client)
+                using (NetworkStream stream = client.GetStream())
+                {
+                    PictureBox[] targets;
+
+                    if (port == Properties.Settings.Default.port2)
+                    {
+                        targets = new[]
+                        {
+                            Camera1Picture,
+                            Camera1PictureSub
+                        };
+                    }
+                    else if (port == Properties.Settings.Default.port3)
+                    {
+                        targets = new[]
+                        {
+                            Camera2Picture
+                        };
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException(
+                            "カメラ用ではないポートが指定されました。"
+                        );
+                    }
+
+                    AppendPortLog(
+                        port,
+                        "カメラ映像受信開始: " + remoteEndPoint
+                    );
+
+
+                    while (!cancellationToken.IsCancellationRequested)
+                    {
+                        /*
+                         * 先頭4バイト：
+                         * JPEGデータサイズ
+                         * Big-Endian UInt32
+                         */
+                        byte[] sizeBuffer = new byte[4];
+
+                        try
+                        {
+                            await ReadExactlyAsync(
+                                stream,
+                                sizeBuffer,
+                                0,
+                                sizeBuffer.Length,
+                                cancellationToken
+                            );
+                        }
+                        catch (EndOfStreamException)
+                        {
+                            /*
+                             * 送信側が正常に切断した場合。
+                             * エラー扱いにはせず、接続待機へ戻す。
+                             */
+                            break;
+                        }
+
+                        uint imageSizeUnsigned =
+                            ((uint)sizeBuffer[0] << 24) |
+                            ((uint)sizeBuffer[1] << 16) |
+                            ((uint)sizeBuffer[2] << 8) |
+                            sizeBuffer[3];
+
+                        /*
+                         * 0バイトや異常に大きい画像から
+                         * メモリ確保を守る。
+                         */
+                        const uint maxImageSize =
+                            20U * 1024U * 1024U;
+
+                        if (imageSizeUnsigned == 0 ||
+                            imageSizeUnsigned > maxImageSize)
+                        {
+                            throw new InvalidDataException(
+                                "JPEGサイズが不正です: " +
+                                imageSizeUnsigned +
+                                " bytes"
+                            );
+                        }
+
+                        int imageSize =
+                            checked((int)imageSizeUnsigned);
+
+                        byte[] jpegData =
+                            new byte[imageSize];
+
+                        try
+                        {
+                            await ReadExactlyAsync(
+                                stream,
+                                jpegData,
+                                0,
+                                jpegData.Length,
+                                cancellationToken
+                            );
+                        }
+                        catch (EndOfStreamException)
+                        {
+                            /*
+                             * JPEG受信途中の切断。
+                             * 不完全な画像は表示しない。
+                             */
+                            AppendPortLog(
+                                port,
+                                "JPEG受信途中で切断されました。"
+                            );
+
+                            break;
+                        }
+
+                        Image receivedImage;
+
+                        try
+                        {
+                            using (MemoryStream memoryStream =
+                                new MemoryStream(jpegData))
+                            using (Image temporaryImage =
+                                Image.FromStream(
+                                    memoryStream,
+                                    true,
+                                    true
+                                ))
+                            {
+                                /*
+                                 * Image.FromStreamで生成した画像は
+                                 * 元Streamへ依存する場合がある。
+                                 *
+                                 * Bitmapへコピーし、
+                                 * MemoryStreamを安全に破棄できるようにする。
+                                 */
+                                receivedImage =
+                                    new Bitmap(temporaryImage);
+                            }
+                        }
+                        catch (ArgumentException)
+                        {
+                            /*
+                             * 壊れたJPEGが来ても
+                             * アプリ全体は終了させず、
+                             * 次のフレームを待つ。
+                             */
+                            AppendPortLog(
+                                port,
+                                "壊れたJPEGフレームを破棄しました。"
+                            );
+
+                            continue;
+                        }
+
+                        for (int i = 0; i < targets.Length; i++)
+                        {
+                            UpdateCameraImage(
+                                targets[i],
+                                i == 0
+                                    ? receivedImage
+                                    : (Image)receivedImage.Clone());
+                        }
+
+                        await FlashPortLamp(port);
+                    }
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                // StopTcpやフォーム終了による正常停止
+            }
+            catch (IOException ex)
+            {
+                if (!cancellationToken.IsCancellationRequested)
+                {
+                    AppendPortLog(
+                        port,
+                        "カメラ通信エラー: " + ex.Message
+                    );
+                }
+            }
+            catch (SocketException ex)
+            {
+                if (!cancellationToken.IsCancellationRequested)
+                {
+                    AppendPortLog(
+                        port,
+                        "カメラSocketエラー: " + ex.Message
+                    );
+                }
+            }
+            catch (Exception ex)
+            {
+                if (!cancellationToken.IsCancellationRequested)
+                {
+                    AppendLog(
+                        $"Port {port}: カメラ受信エラー: " +
+                        ex.Message
+                    );
+
+                    AppendPortLog(
+                        port,
+                        "カメラ受信エラー: " + ex.Message
+                    );
+
+                    await SetPortLamp(
+                        port,
+                        LampState.Error
+                    );
+
+                    SetPortStatus(
+                        port,
+                        "Error"
+                    );
+                }
+            }
+            finally
+            {
+                int remainingClients;
+
+                lock (_tcpLock)
+                {
+                    if (_tcpClientCounts.ContainsKey(port))
+                    {
+                        _tcpClientCounts[port]--;
+
+                        if (_tcpClientCounts[port] < 0)
+                        {
+                            _tcpClientCounts[port] = 0;
+                        }
+
+                        remainingClients =
+                            _tcpClientCounts[port];
+                    }
+                    else
+                    {
+                        remainingClients = 0;
+                    }
+                }
+
+                AppendLog(
+                    $"Port {port}: カメラ接続終了 " +
+                    remoteEndPoint
+                );
+
+                AppendPortLog(
+                    port,
+                    "カメラ接続終了: " +
+                    remoteEndPoint
+                );
+
+                /*
+                 * 映像が来なくなっても、
+                 * 最後に表示した画像はそのまま残す。
+                 */
+                if (!cancellationToken.IsCancellationRequested)
+                {
+                    if (remainingClients == 0)
+                    {
+                        await SetPortLamp(
+                            port,
+                            LampState.Idle
+                        );
+
+                        SetPortStatus(
+                            port,
+                            "Listening"
+                        );
+                    }
+                    else
+                    {
+                        await SetPortLamp(
+                            port,
+                            LampState.Connected
+                        );
+
+                        SetPortStatus(
+                            port,
+                            "Connected"
+                        );
+                    }
+                }
+            }
+        }
+
+        private void UpdateCameraImage(
+    PictureBox pictureBox,
+    Image newImage)
+        {
+            if (pictureBox == null ||
+                pictureBox.IsDisposed ||
+                IsDisposed ||
+                Disposing)
+            {
+                newImage.Dispose();
+                return;
+            }
+
+            Action updateAction = () =>
+            {
+                if (pictureBox.IsDisposed ||
+                    IsDisposed ||
+                    Disposing)
+                {
+                    newImage.Dispose();
+                    return;
+                }
+
+                Image oldImage =
+                    pictureBox.Image;
+
+                pictureBox.Image =
+                    newImage;
+
+                if (oldImage != null)
+                {
+                    oldImage.Dispose();
+                }
+            };
+
+            if (pictureBox.InvokeRequired)
+            {
+                try
+                {
+                    pictureBox.BeginInvoke(updateAction);
+                }
+                catch (ObjectDisposedException)
+                {
+                    newImage.Dispose();
+                }
+                catch (InvalidOperationException)
+                {
+                    newImage.Dispose();
+                }
+
+                return;
+            }
+
+            updateAction();
+        }
+
+        
+
         private async Task<string> ReadHeaderLineAsync(
     NetworkStream stream,
     CancellationToken cancellationToken)
@@ -2762,6 +3158,5 @@ namespace HandGestureDashboard
             progressBar1.Maximum = 100;
             progressBar1.Value = 0;
         }
-
     }
 }
