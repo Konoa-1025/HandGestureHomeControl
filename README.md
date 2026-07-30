@@ -1,4 +1,4 @@
-# HandGestureDashBoard Windows
+# HandGestureDashBoard Windows v1.0.0p
 HandGestureHomeControlの動作を外部端末で確認するアプリケーション
 
 ## 概要
@@ -8,12 +8,13 @@ Windowsフォームアプリケーション.NETで作られています。
 HandGestureHomeControlの動作精度を向上、検証するために作成しました。
 特段エラーハンドリングはしていないため普段使いには向いてません。
 メイン動作は三日で作ったので、予期しないことをするともちろんエラーです。
+なので俺が「こうしてほしいだろうなー」って動きをしてください。まかせます。
 
 ## 動作条件
 - Windows10以上
 - .NET Framework 4.7.2
 - Port6000~6005を開通できる環境（ポート変更可能）
-- HandGestureHomeControlを使用
+- HandGestureHomeControlを使用している環境
 - 正解パスファイル
 
 ## 作者
