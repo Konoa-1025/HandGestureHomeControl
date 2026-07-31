@@ -14,6 +14,7 @@ import Managers.echonetManager as echonet
 import Managers.recognitionManager as recognition
 import Managers.experimentManager as experiment
 import Managers.modelManager as model
+import Managers.feedbackManager as sound
 
 def Managers_initialize():
     #!Managersの初期化
@@ -47,6 +48,9 @@ def Managers_initialize():
         return False
     if not model.Initialization(None):
         p.error("modelManagerの初期化に失敗しました")
+        return False
+    if not sound.Initialization(None):
+        p.error("soundManagerの初期化に失敗しました")
         return False
     
     p.success("Managersの初期化完了")
