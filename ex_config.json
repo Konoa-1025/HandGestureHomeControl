@@ -1,0 +1,168 @@
+{
+    "network": {
+        "tcp": {
+            "hosts": [
+                "192.168.0.10",
+                "192.0.0.2",
+                "192.0.0.5"
+            ],
+            "ports": {
+                "log": 6000,
+                "research": 6001,
+                "front_camera": 6002,
+                "side_camera": 6003,
+                "experiment": 6004,
+                "test": 6005
+            }
+        }
+    },
+
+    "system": {
+        "monitor_interval_seconds": 0.5,
+        "startup_wait_seconds": 1.0
+    },
+
+    "camera": {
+        "max_active_cameras": 2,
+        "sources": [
+            {
+                "id": "camera_1",
+                "display_name": "カメラ1",
+                "type": "axis",
+                "connection": {
+                    "host": "127.0.0.1",
+                    "username": "USERNAME",
+                    "password": "PASSWORD"
+                }
+            },
+            {
+                "id": "camera_2",
+                "display_name": "カメラ2",
+                "type": "axis",
+                "connection": {
+                    "host": "127.0.0.1",
+                    "username": "USERNAME",
+                    "password": "PASSWORD"
+                }
+            },
+            {
+                "id": "iphone",
+                "display_name": "iPhone",
+                "type": "url",
+                "connection": {
+                    "url": "http://127.0.0.1:8080/video"
+                }
+            }
+        ]
+    },
+
+    "cascade": {
+        "memory_threshold_percent": {
+            "low": 80,
+            "high": 90
+        },
+        "resolution": {
+            "low": {
+                "width": 1920,
+                "height": 1080
+            },
+            "high": {
+                "width": 2560,
+                "height": 1440
+            }
+        }
+    },
+
+    "model": {
+        "switch_threshold": {
+            "cpu_percent": {
+                "low": 70,
+                "high": 90
+            },
+            "memory_percent": {
+                "low": 89,
+                "high": 90
+            }
+        },
+        "standby": {
+            "person_timeout_seconds": 5.0,
+            "motion_threshold": 25,
+            "minimum_changed_pixels": 1000
+        },
+        "profiles": {
+            "low": {
+                "process_resolution": {
+                    "width": 640,
+                    "height": 360
+                },
+                "max_hands": 1,
+                "detection_confidence": 0.4,
+                "tracking_confidence": 0.4
+            },
+            "high": {
+                "process_resolution": {
+                    "width": 1280,
+                    "height": 720
+                },
+                "max_hands": 1,
+                "detection_confidence": 0.7,
+                "tracking_confidence": 0.7
+            }
+        }
+    },
+
+    "recognition": {
+        "recognizer": {},
+        "stabilizer": {
+            "required_frames": 5,
+            "lost_timeout_seconds": 0.5
+        },
+        "direction_estimator": {
+            "minimum_vector_length": 30
+        }
+    },
+
+    "home_appliances": {
+        "files": {
+            "appliances": "homeAppliances/appliances.csv",
+            "actions": "homeAppliances/actions.csv",
+            "combos": "homeAppliances/combos.csv"
+        }
+    },
+
+    "combo": {
+        "timing": {
+            "beep_interval_seconds": 1.0,
+            "cancel_timeout_seconds": 0.7
+        },
+        "sound": {
+            "type": "magic",
+            "files": {
+                "cancel": "cancel.mp3",
+                "go": "go.mp3",
+                "beep": "beep.mp3",
+                "start": "start.mp3"
+            }
+        }
+    },
+
+    "echonet": {
+        "communication": {
+            "port": 3610,
+            "timeout_seconds": 3.0
+        },
+        "temperature": {
+            "default": 24,
+            "minimum": 16,
+            "maximum": 30
+        }
+    },
+
+    "data": {
+        "send_interval_seconds": 0.5,
+        "application": {
+            "version": "1.0.0",
+            "git_commit": null
+        }
+    }
+}
