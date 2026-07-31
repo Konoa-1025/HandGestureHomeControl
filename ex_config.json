@@ -28,7 +28,7 @@
             {
                 "id": "camera_1",
                 "display_name": "カメラ1",
-                "type": "axis",
+                "type": "url",
                 "connection": {
                     "host": "127.0.0.1",
                     "username": "USERNAME",
@@ -38,7 +38,7 @@
             {
                 "id": "camera_2",
                 "display_name": "カメラ2",
-                "type": "axis",
+                "type": "url",
                 "connection": {
                     "host": "127.0.0.1",
                     "username": "USERNAME",
@@ -46,9 +46,9 @@
                 }
             },
             {
-                "id": "iphone",
-                "display_name": "iPhone",
-                "type": "url",
+                "id": "iPhone",
+                "display_name": "Inside Camera",
+                "type": "webcam",
                 "connection": {
                     "url": "http://127.0.0.1:8080/video"
                 }

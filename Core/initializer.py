@@ -16,54 +16,54 @@ import Managers.experimentManager as experiment
 import Managers.modelManager as model
 import Managers.feedbackManager as feedback
 
-def Managers_initialize():
+def Managers_initialize(config):
     #!Managersの初期化
     p.info("Managersの初期化中")
-    if not action.Initialization(None):
+    if not action.Initialization(config):
         p.error("actionManagerの初期化に失敗しました")
         return False
     
-    if not camera.Initialization(None):
+    if not camera.Initialization(config):
         p.error("cameraManagerの初期化に失敗しました")
         return False
     
-    if not cascade.Initialization(None):
+    if not cascade.Initialization(config):
         p.error("cascadeManagerの初期化に失敗しました")
         return False
     
-    if not combo.Initialization(None):
+    if not combo.Initialization(config):
         p.error("comboManagerの初期化に失敗しました")
         return False
     
-    if not system.Initialization(None):
+    if not system.Initialization(config):
         p.error("systemManagerの初期化に失敗しました")
         return False
     
-    if not tcp.Initialization(None):
+    if not tcp.Initialization(config):
         p.error("tcpManagerの初期化に失敗しました")
         return False
     
-    if not echonet.Initialization(None):
+    if not echonet.Initialization(config):
         p.error("echonetManagerの初期化に失敗しました")
         return False
     
-    if not recognition.Initialization(None):
+    if not recognition.Initialization(config):
         p.error("recognitionManagerの初期化に失敗しました")
         return False
     
-    if not experiment.Initialization(None):
+    if not experiment.Initialization(config):
         p.error("experimentManagerの初期化に失敗しました")
         return False
     
-    if not model.Initialization(None):
+    if not model.Initialization(config):
         p.error("modelManagerの初期化に失敗しました")
         return False
     
-    if not feedback.Initialization(None):
+    if not feedback.Initialization(config):
         p.error("feedbackManagerの初期化に失敗しました")
         return False
     
-    if not feedback.Initialization(None):
+    if not feedback.Initialization(config):
         p.error("feedbackManagerの初期化に失敗しました")
         return False
     
