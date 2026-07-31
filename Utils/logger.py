@@ -67,7 +67,26 @@ def _display_name(source):  #?ソース名短縮
         #cascade
         "lowCascade": "Cascade-low",
         "highCascade": "Cascade-high",
-        
+        "motionCascade": "Cascade-moti",
+        #SystemManager
+        "systemManager": "SysManager",
+        #camera
+        "cameraManager": "CamManager",
+        #cascade
+        "cascadeManager": "CasManager",
+        #echonet
+        "echonetManager": "EchoManager",
+        #exiperiment
+        "experimentManager": "ExpManager",
+        #recognizer
+        "recognitionManager": "RecogManager",
+        "gestureRecognizer": "GestRecog",
+        "personTracker": "PersonTracker",
+        "pointingEstimator": "PointEstimator",
+        "gestureStabilizer": "GestStabilizer",
+        #feedback
+        "feedbackManager": "FeedManager"
+        #
     }
 
     return names.get(source, source)
