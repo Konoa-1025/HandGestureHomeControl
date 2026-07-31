@@ -12,7 +12,8 @@ import Utils.configLoader as figload
 import Core.initializer as initializer
 
 def main():
-    setting_config = figload.load_setting_config()
+    setting_config = figload.load_setting_config() #?設定の読み込み
+    initializer.Managers_initialize() #?初期化
 
     try:
         while True:
