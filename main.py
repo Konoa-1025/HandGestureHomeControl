@@ -24,7 +24,18 @@ def main():
 
     try:
         while True:
-            pass
+            #!メインカメラの処理
+            front_frame = camera.read_frame("front")
+            if front_frame is None:
+                p.warning("フロントカメラの映像を取得できませんでした")
+                continue
+            
+            else:
+                # 認識処理
+                pass
+
+            #!サブカメラの処理
+            side_frame = camera.read_frame("side")
     finally:
         p.debug("終わり")
 

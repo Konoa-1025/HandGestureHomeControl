@@ -9,6 +9,7 @@ import Utils.logger as p
 settings = {}
 captures = {}
 current_resolution = "1920x1080"
+url = None
 
 def Initialization(config):
     p.info("cameraManagerを初期化中")
@@ -39,12 +40,13 @@ def make_url(camera, resolution=None):
         if resolution is None:
             resolution = current_resolution
 
-        return (
+        url = (
             f"http://{username}:{password}@{host}"
             f"/axis-cgi/mjpg/video.cgi"
             f"?resolution={resolution}"
         )
 
+        return url
     if camera_type in ("url", "iphone"):
         return connection.get("url")
     return None
@@ -80,6 +82,8 @@ def try_open(camera):
             capture.release()
             return None
         p.success(f"{display_name}への接続に成功しました")
+        if display_name == "iPhoneカメラ":
+            p.debug("Macbookで起動してる場合は上部のカメラとして動く可能性があります。")
         return capture
     
     except (TypeError, ValueError) as error:
@@ -99,38 +103,51 @@ def start_camera():
     global captures
 
     stop_camera()
-
     captures = {}
-    camera_sources = settings.get("sources", [])
-    max_active_cameras = int(
-        settings.get("max_active_cameras", 2)
-    )
+
+    camera_sources = settings.get("sources")
+
+    if camera_sources is None:
+        p.error(
+            "camera.sourcesが設定されていません。"
+            "config.jsonのcamera階層を確認してください"
+        )
+        return False
+
+    if not isinstance(camera_sources, list):
+        p.error("camera.sourcesは配列で指定してください")
+        return False
+
+    if not camera_sources:
+        p.error("camera.sourcesにカメラが登録されていません")
+        return False
 
     for camera in camera_sources:
-        if len(captures) >= max_active_cameras:
-            break
+        if not camera.get("enabled", True):
+            continue
+
         camera_id = camera.get("id")
 
         if not camera_id:
-            p.warning("idが設定されていないカメラをスキップしました")
+            p.warning("IDが設定されていないカメラをスキップしました")
             continue
 
         if camera_id in captures:
-            p.warning(
-                f"カメラIDが重複しています: {camera_id}"
-            )
+            p.warning(f"カメラIDが重複しています: {camera_id}")
             continue
 
         capture = try_open(camera)
-        
+
         if capture is None:
             continue
 
         captures[camera_id] = capture
 
     if not captures:
+        p.error("有効なカメラを開くことができませんでした")
         return False
-    p.info(f"{len(captures)}台のカメラを開始しました")
+
+    p.success(f"{len(captures)}台のカメラを開始しました")
     return True
 
 def get_capture(camera_id):
@@ -138,19 +155,19 @@ def get_capture(camera_id):
 
 def read_frame(camera_id):
     capture = captures.get(camera_id)
+
     if capture is None:
-        p.warning(
-            f"指定されたカメラが開かれていません: {camera_id}"
-        )
-        return False, None
+        return None
+
     success, frame = capture.read()
 
     if not success:
         p.warning(
-            f"{camera_id}から映像を取得できませんでした"
+            f"{camera_id}からフレームを取得できませんでした"
         )
-        return False, None
-    return True, frame
+        return None
+
+    return frame
 
 def stop_camera(camera_id=None):
     global captures
@@ -175,3 +192,4 @@ def stop_camera(camera_id=None):
 
     captures = {}
     return True
+    z
