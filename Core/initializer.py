@@ -35,7 +35,7 @@ def Managers_initialize(config):
         p.error("comboManagerの初期化に失敗しました")
         return False
     
-    if not system.Initialization(config):
+    if not system.Initialization():
         p.error("systemManagerの初期化に失敗しました")
         return False
     

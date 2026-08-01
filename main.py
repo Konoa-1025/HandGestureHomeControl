@@ -12,6 +12,8 @@ import Utils.configLoader as figload
 import Core.initializer as initializer
 
 import Managers.cameraManager as camera
+import Managers.systemManager as system
+import Managers.cascadeManager as cascade
 
 def main():
     setting_config = figload.load_setting_config() #?設定の読み込み
@@ -24,18 +26,22 @@ def main():
 
     try:
         while True:
-            #!メインカメラの処理
             front_frame = camera.read_frame("front")
-            if front_frame is None:
+
+            #!メインカメラ
+            if front_frame is None: #?フレーム取得失敗
                 p.warning("フロントカメラの映像を取得できませんでした")
                 continue
-            
-            else:
-                # 認識処理
-                pass
+            else:#?フレーム取得成功
+                cased_frame = cascade.cascade_process(front_frame,system.get_mem()) #?cascadeプロセス
+                if cased_frame is None: #!人がいなかったらモデルに投げない
+                    pass
 
-            #!サブカメラの処理
+
             side_frame = camera.read_frame("side")
+            if side_frame is None:
+                continue
+
     finally:
         p.debug("終わり")
 
