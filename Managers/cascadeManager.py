@@ -7,8 +7,6 @@ import Cascades.highCascade as highCascade
 import Cascades.motionCascade as motionCascade
 import Cascades.lowCascade as lowCascade
 
-import cv2
-
 low = None
 high = None
 low_width = None
@@ -26,10 +24,7 @@ def Initialization(settings):
 
     low = settings["cascade"]["memory_threshold_percent"]["low"]
     high = settings["cascade"]["memory_threshold_percent"]["high"]
-    low_width = settings["cascade"]["resolution"]["low"]["width"]
-    low_height = settings["cascade"]["resolution"]["low"]["height"]
-    high_width = settings["cascade"]["resolution"]["high"]["width"]
-    high_height = settings["cascade"]["resolution"]["high"]["height"]
+
 
     # lowとhighの順番チェック
     if low >= high:
@@ -38,9 +33,9 @@ def Initialization(settings):
         return False
 
     # ヒステリシス幅チェック
-    if high - low < 20:
+    if high - low < 10:
         p.error("cascade設定エラー")
-        p.error("ヒステリシス幅は20%以上必要です。")
+        p.error("ヒステリシス幅は10%以上必要です。")
         p.error(f"現在 : {high - low}%")
         return False
 
@@ -50,13 +45,13 @@ def Initialization(settings):
 
     #!Cascadeの初期化
     p.info("Cascadesの初期化中")
-    if not highCascade.Initialization(None):
+    if not highCascade.Initialization(settings):
         p.error("highCascadeの初期化に失敗しました")
         return False
-    if not motionCascade.Initialization(None):
+    if not motionCascade.Initialization(settings):
         p.error("motionCascadeの初期化に失敗しました")
         return False
-    if not lowCascade.Initialization(None):
+    if not lowCascade.Initialization(settings):
         p.error("lowCascadeの初期化に失敗しました")
         return False
     p.success("Cascadesの初期化完了")
@@ -66,7 +61,11 @@ def Initialization(settings):
 current_mode = "high"
 
 def cascade_selection(frame,select_mode):
-    pass
+    if select_mode == "low":
+        casedframe = lowCascade.run(frame)
+    else:
+        casedframe = highCascade.run(frame)
+    return casedframe
 
 def motion_check(frame):
     return motionCascade.is_human(frame)
@@ -87,8 +86,8 @@ def cascade_process(frame,memory_usage_rate):
             elif memory_usage_rate <= low:
                 current_mode = "high"
                 p.change("highcascade")
-            frame = cascade_selection(frame,current_mode)
-            return frame
+            casedframe = cascade_selection(frame,current_mode)
+            return casedframe
     else:
         return
 
