@@ -11,9 +11,16 @@ import Utils.logger as p
 import Utils.configLoader as figload
 import Core.initializer as initializer
 
+import Managers.cameraManager as camera
+
 def main():
     setting_config = figload.load_setting_config() #?設定の読み込み
     initializer.Managers_initialize(setting_config) #?初期化
+
+    #?カメラの起動
+    if not camera.start_camera():
+            p.error("カメラを1台も開くことができませんでした")
+            return False
 
     try:
         while True:
