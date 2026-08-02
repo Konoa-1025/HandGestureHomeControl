@@ -16,6 +16,7 @@ import Managers.experimentManager as experiment
 import Managers.modelManager as model
 import Managers.feedbackManager as feedback
 import Managers.appliancesManager as appliances
+import Managers.actionManager as action
 
 def Managers_initialize(config):
     #!Managersの初期化
@@ -69,8 +70,12 @@ def Managers_initialize(config):
         return False
 
     if not appliances.Initialization(config):
-            p.error("appliancesManagerの初期化に失敗しました")
-            return False
+        p.error("appliancesManagerの初期化に失敗しました")
+        return False
+
+    if not action.Initialization(config):
+        p.error("actionManagerの初期化に失敗しました")
+        return False
     
     p.success("Managersの初期化完了")
     return True

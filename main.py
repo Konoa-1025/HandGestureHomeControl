@@ -18,6 +18,7 @@ import Managers.modelManager as model
 import Managers.recognitionManager as recognize
 import Managers.appliancesManager as appliances
 import Managers.comboManager as combo
+import Managers.actionManager as action
 
 
 
@@ -90,7 +91,7 @@ def main():
                     if gesture["confirmed_gesture"] == "POINT":
                         wait_point_release = True
                     #!ここでActionManagerへ送る
-                    # # action.action_process(combo_result["action"])
+                    action.action_process(combo_result["action"])
                 elif combo_status == "FAILED":
                     p.error("登録されたコンボと一致しませんでした")
 
