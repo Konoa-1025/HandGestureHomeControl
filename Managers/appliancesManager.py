@@ -38,7 +38,7 @@ def select_appliance_abstract(direction):
 
     for appliance in appliances:
         if appliance["abstract"] == direction:
-            return appliance
+            return appliance["device"]
 
     return None
 

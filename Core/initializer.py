@@ -15,6 +15,7 @@ import Managers.recognitionManager as recognition
 import Managers.experimentManager as experiment
 import Managers.modelManager as model
 import Managers.feedbackManager as feedback
+import Managers.appliancesManager as appliances
 
 def Managers_initialize(config):
     #!Managersの初期化
@@ -66,6 +67,10 @@ def Managers_initialize(config):
     if not feedback.Initialization(config):
         p.error("feedbackManagerの初期化に失敗しました")
         return False
+
+    if not appliances.Initialization(config):
+            p.error("appliancesManagerの初期化に失敗しました")
+            return False
     
     p.success("Managersの初期化完了")
     return True

@@ -61,7 +61,7 @@ def main():
 
             if is_conbo == False: #?コンボ中ではなかったら
                 if (gesture["confirmed_gesture"] == "POINT"and gesture["confirmed_direction"] is not None): #!POINTジェスチャかつ方向が確定している場合
-                    select_appliance = appliances.select_appliance(gesture["confirmed_direction"])#?家電の選択
+                    select_appliance = appliances.select_appliance_abstract(gesture["confirmed_direction"])#?家電の選択
                     is_conbo = conbo.is_combo()
                     p.success(select_appliance)
                     continue
