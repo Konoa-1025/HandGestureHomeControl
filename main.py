@@ -37,7 +37,7 @@ def main():
             if front_frame is None: #?フレーム取得失敗
                 p.warning("フロントカメラの映像を取得できませんでした")
                 continue
-            
+
             cascade_result = cascade.cascade_process(front_frame,system.get_mem()) #?返り値：軽量化フレーム
             if cascade_result is None:
                 continue
@@ -51,8 +51,8 @@ def main():
             last_is_hand = hand_landmarks["is_hand"]
             if not last_is_hand: #!手が映ってないならリコライズしない
                 continue
-            gesture_data = recognize.gesture_process(hand_landmarks)
-            p.debug(gesture_data)
+            gesture = recognize.gesture_process(hand_landmarks)
+            #gesture = recognize.get_gesture #?返り値：確定ジェスチャ
             #!指差しだったらpointingEstimator.pyで方向をgetする。
                 
 
