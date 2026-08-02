@@ -16,10 +16,13 @@ import Managers.systemManager as system
 import Managers.cascadeManager as cascade
 import Managers.modelManager as model
 import Managers.recognitionManager as recognize
+import Managers.appliancesManager as appliances
+import Managers.comboManager as conbo
 
 
 
 def main():
+    is_conbo = False
     last_is_hand = False
     setting_config = figload.load_setting_config() #?設定の読み込み
     initializer.Managers_initialize(setting_config) #?初期化
@@ -51,11 +54,19 @@ def main():
             last_is_hand = hand_landmarks["is_hand"]
             if not last_is_hand: #!手が映ってないならリコライズしない
                 continue
+
+            #?家電選択とコンボ
+            
             gesture = recognize.gesture_process(hand_landmarks)#?返り値：確定ジェスチャ,方向
-            if (gesture["confirmed_gesture"] == "POINT"and gesture["confirmed_direction"] is not None):
-                p.debug(f"POINT方向: {gesture['confirmed_direction']}")
 
-
+            if is_conbo == False: #?コンボ中ではなかったら
+                if (gesture["confirmed_gesture"] == "POINT"and gesture["confirmed_direction"] is not None): #!POINTジェスチャかつ方向が確定している場合
+                    select_appliance = appliances.select_appliance(gesture["confirmed_direction"])#?家電の選択
+                    is_conbo = conbo.is_combo()
+                    p.success(select_appliance)
+                    continue
+            else:    #?コンボ中だったら
+                p.debug(gesture)
 
 
             side_frame = camera.read_frame("side")
