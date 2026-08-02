@@ -62,10 +62,10 @@ current_mode = "high"
 
 def cascade_selection(frame,select_mode):
     if select_mode == "low":
-        casedframe = lowCascade.run(frame)
+        cased_frame = lowCascade.run(frame)
     else:
-        casedframe = highCascade.run(frame)
-    return casedframe
+        cased_frame = highCascade.run(frame)
+    return cased_frame
 
 def motion_check(frame):
     return motionCascade.is_human(frame)
@@ -78,7 +78,6 @@ def cascade_process(frame,memory_usage_rate):
             return False
     
     if motion_check(frame) == True:
-            p.debug("人を検知")
         #?ヒステリシス制御
             if memory_usage_rate >= high:
                 current_mode = "low"
@@ -86,8 +85,8 @@ def cascade_process(frame,memory_usage_rate):
             elif memory_usage_rate <= low:
                 current_mode = "high"
                 p.change("highcascade")
-            casedframe = cascade_selection(frame,current_mode)
-            return casedframe
+            cased_frame = cascade_selection(frame,current_mode)
+            return cased_frame
     else:
         return
 

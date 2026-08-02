@@ -14,6 +14,7 @@ import Core.initializer as initializer
 import Managers.cameraManager as camera
 import Managers.systemManager as system
 import Managers.cascadeManager as cascade
+import Managers.modelManager as model
 
 def main():
     setting_config = figload.load_setting_config() #?設定の読み込み
@@ -35,7 +36,10 @@ def main():
             else:#?フレーム取得成功
                 cased_frame = cascade.cascade_process(front_frame,system.get_mem()) #?cascadeプロセス
                 if cased_frame is None: #!人がいなかったらモデルに投げない
-                    pass
+                    continue
+                hand_landmarks = model.model_process(cased_frame,system.get_cpu(),system.get_gpu())
+                p.debug(hand_landmarks)
+
 
 
             side_frame = camera.read_frame("side")
