@@ -20,20 +20,32 @@ All OK
 
 ## Managers
 [actionManager](Managers/actionManager.py) NO
+
 [cameraManager](Managers/cameraManager.py) OK
+
 [cascadeManager](Managers/cascadeManager.py) OK
+
 [comboManager](Managers/comboManager.py) NO
+
 [echonetManager](Managers/echonetManager.py) NO
+
 [experimentManager](Managers/experimentManager.py) NO
+
 [feedbackManager](Managers/feedbackManager.py) NO
+
 [modelManager](Managers/modelManager.py) OK
+
 [previewManager](Managers/previewManager.py) NO
+
 [recognitionManager](Managers/recognitionManager.py) OK
+
 [systemManager](Managers/systemManager.py) OK
+
 [tcpManager](Managers/tcpManager.py) NO
 
 ## Models
 CPU All OK
+
 GPU NO
 
 ## Networks
