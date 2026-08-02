@@ -51,11 +51,9 @@ def main():
             last_is_hand = hand_landmarks["is_hand"]
             if not last_is_hand: #!手が映ってないならリコライズしない
                 continue
-            gesture = recognize.gesture_process(hand_landmarks)
-            p.debug(gesture)
-            #gesture = recognize.get_gesture #?返り値：確定ジェスチャ
-            #!指差しだったらpointingEstimator.pyで方向をgetする。
-                
+            gesture = recognize.gesture_process(hand_landmarks)#?返り値：確定ジェスチャ,方向
+            if (gesture["confirmed_gesture"] == "POINT"and gesture["confirmed_direction"] is not None):
+                p.debug(f"POINT方向: {gesture['confirmed_direction']}")
 
 
 
