@@ -62,11 +62,15 @@ def main():
             if is_conbo == False: #?コンボ中ではなかったら
                 if (gesture["confirmed_gesture"] == "POINT"and gesture["confirmed_direction"] is not None): #!POINTジェスチャかつ方向が確定している場合
                     select_appliance = appliances.select_appliance_abstract(gesture["confirmed_direction"])#?家電の選択
+                    if select_appliance == None:
+                        continue
+                    conbo.start_combo(select_appliance)
                     is_conbo = conbo.is_combo()
                     p.success(select_appliance)
                     continue
             else:    #?コンボ中だったら
-                p.debug(gesture)
+                conbo.reset_combo()
+                is_conbo = conbo.is_combo()
 
 
             side_frame = camera.read_frame("side")
