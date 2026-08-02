@@ -3,6 +3,7 @@
 #? Norifumi Konndo
 
 import Utils.logger as p
+import Managers.echonetManager as echonet
 
 action_functions = {}
 
@@ -33,9 +34,8 @@ def Initialization(settings):
         "airpurifier_toggle_power": airpurifier_toggle_power,
         "airpurifier_temp_up": airpurifier_temp_up,
         "airpurifier_temp_down": airpurifier_temp_down,
-        "airpurifier_cooling": airpurifier_cooling,
-        "airpurifier_heating": airpurifier_heating
     }
+
 
     p.success("actionManagerの初期化完了")
     return True
@@ -60,18 +60,17 @@ def action_process(action_name):
 # ==========================================================
 
 def toggle_power():
-    p.success("照明: 電源切替")
-    return True
+    return echonet.toggle_power("LIGHT")
 
 
 def color_up():
-    p.success("照明: 色温度アップ")
-    return True
+    p.warning("照明の色温度アップ用EPC・EDTは未設定です")
+    return False
 
 
 def color_down():
-    p.success("照明: 色温度ダウン")
-    return True
+    p.warning("照明の色温度ダウン用EPC・EDTは未設定です")
+    return False
 
 
 # ==========================================================
@@ -88,28 +87,23 @@ def TEST():
 # ==========================================================
 
 def aircon_toggle_power():
-    p.success("エアコン: 電源切替")
-    return True
+    return echonet.toggle_power("AIRCON")
 
 
 def aircon_temp_up():
-    p.success("エアコン: 温度アップ")
-    return True
+    return echonet.temperature_up("AIRCON")
 
 
 def aircon_temp_down():
-    p.success("エアコン: 温度ダウン")
-    return True
+    return echonet.temperature_down("AIRCON")
 
 
 def aircon_cooling():
-    p.success("エアコン: 冷房")
-    return True
+    return echonet.aircon_cooling()
 
 
 def aircon_heating():
-    p.success("エアコン: 暖房")
-    return True
+    return echonet.aircon_heating()
 
 
 # ==========================================================
@@ -117,23 +111,20 @@ def aircon_heating():
 # ==========================================================
 
 def braind_toggle_upper():
-    p.success("ブラインド: 開閉")
-    return True
+    return echonet.braind_toggle_upper()
 
 
 def braind_stop():
-    p.success("ブラインド: 停止")
-    return True
+    return echonet.braind_stop()
 
 
 def braind_angle_up():
-    p.success("ブラインド: 角度アップ")
-    return True
+    return echonet.braind_angle_up()
 
 
 def braind_angle_down():
-    p.success("ブラインド: 角度ダウン")
-    return True
+    return echonet.braind_angle_down()
+
 
 
 # ==========================================================
@@ -141,25 +132,12 @@ def braind_angle_down():
 # ==========================================================
 
 def airpurifier_toggle_power():
-    p.success("空気清浄機: 電源切替")
-    return True
+    return echonet.toggle_power("AIRPURI")
 
 
 def airpurifier_temp_up():
-    p.success("空気清浄機: 強くする")
-    return True
+    return echonet.temperature_up("AIRPURI")
 
 
 def airpurifier_temp_down():
-    p.success("空気清浄機: 弱くする")
-    return True
-
-
-def airpurifier_cooling():
-    p.success("空気清浄機: モード1")
-    return True
-
-
-def airpurifier_heating():
-    p.success("空気清浄機: モード2")
-    return True
+    return echonet.temperature_down("AIRPURI")
