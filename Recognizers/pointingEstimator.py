@@ -21,7 +21,7 @@ def Initialization(settings):
     p.success("pointingEstimatorの初期化完了")
     return True
 
-def abstract_abstract(angle): #!使用するならこっちの方が安定してます。
+def abstract_direction(angle): #!使用するならこっちの方が安定してます。
     if -22.5 <= angle < 22.5:
         return "RIGHT"
     elif 22.5 <= angle < 67.5:
@@ -47,11 +47,6 @@ def specific_direction(hand_landmark):#!具体的な角度で正確性に欠け�
     dy = tip["y"] - mcp["y"]
     
     length = math.hypot(dx, dy)
-
-    p.debug(
-            f"人差し指ベクトル長: {length}, "
-            f"最低値: {min_vector_length}"
-        )
     
     if length < min_vector_length:
         return "UNKNOWN"
@@ -71,7 +66,7 @@ def get_direction(hand_landmarks):
             "direction": "UNKNOWN"
         }
 
-    direction = abstract_abstract(angle)
+    direction = abstract_direction(angle)
 
     return {
         "angle": angle,
