@@ -56,7 +56,7 @@ def model_process(frame,cpu_usage_rate,gpu_usage_rate = None):
     
     if frame is None:
         p.error("フレームがNoneです。")
-        return False
+        return {"is_hand": False,"hands": []}
     
     #?ヒステリシス制御
     if cpu_usage_rate >= high:
@@ -68,7 +68,7 @@ def model_process(frame,cpu_usage_rate,gpu_usage_rate = None):
     elif cpu_usage_rate <= low:
         current_mode = "high"
         if old_mode != current_mode:
-            p.change("high")
+            p.change("highModel")
             old_mode = current_mode
     hand_landmarks = model_selection(frame,current_mode)
     return hand_landmarks

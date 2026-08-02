@@ -12,3 +12,6 @@ def Initialization(settings):
     p.success("recognitionManagerの初期化完了")
 
     return True
+
+def recognize_process():
+    pass

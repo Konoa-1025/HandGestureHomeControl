@@ -15,6 +15,7 @@ import Managers.cameraManager as camera
 import Managers.systemManager as system
 import Managers.cascadeManager as cascade
 import Managers.modelManager as model
+import Managers.recognitionManager as recognize
 
 def main():
     setting_config = figload.load_setting_config() #?設定の読み込み
@@ -38,6 +39,11 @@ def main():
                 if cased_frame is None: #!人がいなかったらモデルに投げない
                     continue
                 hand_landmarks = model.model_process(cased_frame,system.get_cpu(),system.get_gpu()) #?返り値：手の認識,ランドマーク位置
+                if not hand_landmarks["is_hand"]: #!手が映ってないならリコライズしない
+                    continue
+                gesture_data = recognize.recognize_process
+                
+
 
 
 
