@@ -34,11 +34,10 @@ def main():
                 p.warning("フロントカメラの映像を取得できませんでした")
                 continue
             else:#?フレーム取得成功
-                cased_frame = cascade.cascade_process(front_frame,system.get_mem()) #?cascadeプロセス
+                cased_frame = cascade.cascade_process(front_frame,system.get_mem()) #?返り値：軽量化フレーム
                 if cased_frame is None: #!人がいなかったらモデルに投げない
                     continue
-                hand_landmarks = model.model_process(cased_frame,system.get_cpu(),system.get_gpu())
-                p.debug(hand_landmarks)
+                hand_landmarks = model.model_process(cased_frame,system.get_cpu(),system.get_gpu()) #?返り値：手の認識,ランドマーク位置
 
 
 
