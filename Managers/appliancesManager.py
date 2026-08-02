@@ -35,10 +35,9 @@ def Initialization(settings):
 
 
 def select_appliance_abstract(direction):
-
     for appliance in appliances:
         if appliance["abstract"] == direction:
-            return appliance["device"]
+            return appliance
 
     return None
 
