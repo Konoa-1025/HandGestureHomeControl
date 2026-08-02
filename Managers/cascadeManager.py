@@ -70,25 +70,36 @@ def cascade_selection(frame,select_mode):
 def motion_check(frame):
     return motionCascade.is_human(frame)
 
-def cascade_process(frame,memory_usage_rate):
+def cascade_process(frame, memory_usage_rate):
     global current_mode
 
     if frame is None:
-            p.error("フレームがNoneです。")
-            return False
-    
-    if motion_check(frame) == True:
-        #?ヒステリシス制御
-            if memory_usage_rate >= high:
-                current_mode = "low"
-                p.change("lowcascade")
-            elif memory_usage_rate <= low:
-                current_mode = "high"
-                p.change("highcascade")
-            cased_frame = cascade_selection(frame,current_mode)
-            return cased_frame
-    else:
-        return
+        p.error("フレームがNoneです。")
+        return None
+
+    is_motion = motion_check(frame)
+
+    # ヒステリシス制御
+    if memory_usage_rate >= high:
+        if current_mode != "low":
+            current_mode = "low"
+            p.change("lowcascade")
+
+    elif memory_usage_rate <= low:
+        if current_mode != "high":
+            current_mode = "high"
+            p.change("highcascade")
+
+    # 動きの有無に関係なく、モデル用フレームは作る
+    cased_frame = cascade_selection(
+        frame,
+        current_mode
+    )
+
+    return {
+        "is_motion": is_motion,
+        "cased_frame": cased_frame
+    }
 
 def get_mode():
     return current_mode

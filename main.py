@@ -17,7 +17,10 @@ import Managers.cascadeManager as cascade
 import Managers.modelManager as model
 import Managers.recognitionManager as recognize
 
+
+
 def main():
+    last_is_hand = False
     setting_config = figload.load_setting_config() #?設定の読み込み
     initializer.Managers_initialize(setting_config) #?初期化
 
@@ -34,14 +37,23 @@ def main():
             if front_frame is None: #?フレーム取得失敗
                 p.warning("フロントカメラの映像を取得できませんでした")
                 continue
-            else:#?フレーム取得成功
-                cased_frame = cascade.cascade_process(front_frame,system.get_mem()) #?返り値：軽量化フレーム
-                if cased_frame is None: #!人がいなかったらモデルに投げない
-                    continue
-                hand_landmarks = model.model_process(cased_frame,system.get_cpu(),system.get_gpu()) #?返り値：手の認識,ランドマーク位置
-                if not hand_landmarks["is_hand"]: #!手が映ってないならリコライズしない
-                    continue
-                gesture_data = recognize.recognize_process
+            
+            cascade_result = cascade.cascade_process(front_frame,system.get_mem()) #?返り値：軽量化フレーム
+            if cascade_result is None:
+                continue
+            
+            is_motion = cascade_result["is_motion"]
+            cased_frame = cascade_result["cased_frame"]
+            if not is_motion and not last_is_hand: #!人がいないかつ手が映っていないならモデルに投げない
+                continue
+
+            hand_landmarks = model.model_process(cased_frame,system.get_cpu(),system.get_gpu()) #?返り値：手の認識,ランドマーク位置
+            last_is_hand = hand_landmarks["is_hand"]
+            if not last_is_hand: #!手が映ってないならリコライズしない
+                continue
+            gesture_data = recognize.gesture_process(hand_landmarks)
+            p.debug(gesture_data)
+            #!指差しだったらpointingEstimator.pyで方向をgetする。
                 
 
 

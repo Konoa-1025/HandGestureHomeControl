@@ -3,6 +3,8 @@
 #? Norifumi Konndo
 
 import Utils.logger as p
+import Recognizers.gestureRecognizer as recognizer
+import Recognizers.gestureStabilizer as stabilizer
 
 
 def Initialization(settings):
@@ -13,5 +15,6 @@ def Initialization(settings):
 
     return True
 
-def recognize_process():
-    pass
+def gesture_process(hand_landmarks):
+    recognized_gesture = recognizer.run(hand_landmarks["hands"])
+    return recognized_gesture
