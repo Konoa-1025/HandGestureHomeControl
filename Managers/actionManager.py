@@ -6,6 +6,14 @@ import Utils.logger as p
 import Managers.echonetManager as echonet
 
 action_functions = {}
+light_colors = [
+    (255, 255, 255), # 白
+    (255, 0, 0),     # 赤
+    (0, 255, 0),     # 緑
+    (0, 0, 255)      # 青
+]
+
+light_color_index = 0
 
 
 def Initialization(settings):
@@ -21,10 +29,11 @@ def Initialization(settings):
         "TEST": TEST,
 
         "aircon_toggle_power": aircon_toggle_power,
-        "aircon_temp_up": aircon_temp_up,
-        "aircon_temp_down": aircon_temp_down,
+        "aircon_auto": aircon_auto,
         "aircon_cooling": aircon_cooling,
         "aircon_heating": aircon_heating,
+        "aircon_dehumidification": aircon_dehumidification,
+        "aircon_fan": aircon_fan,
 
         "braind_toggle_upper": braind_toggle_upper,
         "braind_stop": braind_stop,
@@ -32,8 +41,9 @@ def Initialization(settings):
         "braind_angle_down": braind_angle_down,
 
         "airpurifier_toggle_power": airpurifier_toggle_power,
-        "airpurifier_temp_up": airpurifier_temp_up,
-        "airpurifier_temp_down": airpurifier_temp_down,
+        "airpurifier_airflow_up": airpurifier_airflow_up,
+        "airpurifier_airflow_down": airpurifier_airflow_down,
+        "airpurifier_auto": airpurifier_auto,
     }
 
 
@@ -64,13 +74,37 @@ def toggle_power():
 
 
 def color_up():
-    p.warning("照明の色温度アップ用EPC・EDTは未設定です")
-    return False
+    global light_color_index
+
+    light_color_index += 1
+
+    if light_color_index >= len(light_colors):
+        light_color_index = 0
+
+    red, green, blue = light_colors[light_color_index]
+
+    return echonet.light_set_color(
+        red,
+        green,
+        blue
+    )
 
 
 def color_down():
-    p.warning("照明の色温度ダウン用EPC・EDTは未設定です")
-    return False
+    global light_color_index
+
+    light_color_index -= 1
+
+    if light_color_index < 0:
+        light_color_index = len(light_colors) - 1
+
+    red, green, blue = light_colors[light_color_index]
+
+    return echonet.light_set_color(
+        red,
+        green,
+        blue
+    )
 
 
 # ==========================================================
@@ -87,15 +121,11 @@ def TEST():
 # ==========================================================
 
 def aircon_toggle_power():
-    return echonet.toggle_power("AIRCON")
+    return echonet.aircon_toggle_power()
 
 
-def aircon_temp_up():
-    return echonet.temperature_up("AIRCON")
-
-
-def aircon_temp_down():
-    return echonet.temperature_down("AIRCON")
+def aircon_auto():
+    return echonet.aircon_auto()
 
 
 def aircon_cooling():
@@ -105,6 +135,13 @@ def aircon_cooling():
 def aircon_heating():
     return echonet.aircon_heating()
 
+
+def aircon_dehumidification():
+    return echonet.aircon_dehumidification()
+
+
+def aircon_fan():
+    return echonet.aircon_fan()
 
 # ==========================================================
 # ブラインド
@@ -135,9 +172,13 @@ def airpurifier_toggle_power():
     return echonet.toggle_power("AIRPURI")
 
 
-def airpurifier_temp_up():
-    return echonet.temperature_up("AIRPURI")
+def airpurifier_airflow_up():
+    return echonet.airpurifier_airflow_up()
 
 
-def airpurifier_temp_down():
-    return echonet.temperature_down("AIRPURI")
+def airpurifier_airflow_down():
+    return echonet.airpurifier_airflow_down()
+
+
+def airpurifier_auto():
+    return echonet.airpurifier_auto()

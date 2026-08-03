@@ -6,8 +6,8 @@ LIGHT,FIST,,,,color_down
 TEST,PEACE,PEACE,PEACE,OPEN_HAND,TEST
 ,,,,,
 AIRCON,POINT,,,,aircon_toggle_power
-AIRCON,OPEN_HAND,,,,aircon_temp_up
-AIRCON,FIST,,,,aircon_temp_down
+AIRCON,OPEN_HAND,,,,aircon_cooling
+AIRCON,FIST,,,,aircon_heating
 AIRCON,PEACE,OPEN_HAND,,,aircon_cooling
 AIRCON,PEACE,FIST,,,aircon_heating
 ,,,,,
@@ -17,10 +17,10 @@ BRAIND,PEACE,OPEN_HAND,,,braind_angle_up
 BRAIND,PEACE,FIST,,,braind_angle_down
 ,,,,,
 AIRPURI,POINT,,,,airpurifier_toggle_power
-AIRPURI,OPEN_HAND,,,,airpurifier_temp_up
-AIRPURI,FIST,,,,airpurifier_temp_down
-AIRPURI,PEACE,OPEN_HAND,,,airpurifier_cooling
-AIRPURI,PEACE,FIST,,,airpurifier_heating
+AIRPURI,OPEN_HAND,,,,airpurifier_auto
+AIRPURI,FIST,,,,airpurifier_airflow_up
+AIRPURI,PEACE,,,,airpurifier_airflow_down
+,,,,,
 ,,,,,
 ,,,,,
 ,,,,,
