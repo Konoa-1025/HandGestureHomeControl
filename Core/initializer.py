@@ -18,6 +18,7 @@ import Managers.feedbackManager as feedback
 import Managers.appliancesManager as appliances
 import Managers.actionManager as action
 import Managers.echonetManager as echonet
+import Managers.previewManager as preview
 
 def Managers_initialize(config):
     #!Managersの初期化
@@ -76,6 +77,10 @@ def Managers_initialize(config):
 
     if not action.Initialization(config):
         p.error("actionManagerの初期化に失敗しました")
+        return False
+
+    if not preview.Initialization(config):
+        p.error("previewManagerの初期化に失敗しました")
         return False
 
     

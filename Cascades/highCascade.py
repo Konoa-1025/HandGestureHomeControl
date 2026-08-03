@@ -24,7 +24,7 @@ def Initialization(settings):
         p.error("heightの設定が間違えています。")
         return False
     
-    p.success("lowCascadeの初期化完了")
+    p.success("highCascadeの初期化完了")
     return True
     
 def run(frame):

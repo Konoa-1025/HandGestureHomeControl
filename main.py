@@ -19,6 +19,7 @@ import Managers.recognitionManager as recognize
 import Managers.appliancesManager as appliances
 import Managers.comboManager as combo
 import Managers.actionManager as action
+import Managers.previewManager as preview
 
 
 
@@ -45,9 +46,11 @@ def main():
             cascade_result = cascade.cascade_process(front_frame,system.get_mem()) #?返り値：軽量化フレーム
             if cascade_result is None:
                 continue
-            
+
             is_motion = cascade_result["is_motion"]
             cased_frame = cascade_result["cased_frame"]
+
+            preview.show_frame_detail(cased_frame) #?プレビュー表示
             if not is_motion and not last_is_hand: #!人がいないかつ手が映っていないならモデルに投げない
                 continue
 
