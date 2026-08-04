@@ -124,10 +124,14 @@ def sound(sound_name):
         sound("beep")
         sound("go")
         sound("cancel")
+        sound("open")
     """
 
     if not sound_enabled:
         return True
+
+    if not pygame.mixer.get_init():
+        return False
 
     if sound_name == "start":
         return start()
@@ -140,6 +144,9 @@ def sound(sound_name):
 
     if sound_name == "cancel":
         return cancel()
+
+    if sound_name == "open":
+        return app_open()
 
     p.error(
         f"存在しないサウンドです: {sound_name}"
@@ -177,6 +184,13 @@ def cancel():
     """
 
     return play_sound("cancel")
+
+def app_open():
+    """
+    アプリケーションが起動したときの音。
+    """
+
+    return play_sound("open")
 
 
 def play_sound(sound_name):

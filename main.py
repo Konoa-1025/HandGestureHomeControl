@@ -20,6 +20,7 @@ import Managers.appliancesManager as appliances
 import Managers.comboManager as combo
 import Managers.actionManager as action
 import Managers.previewManager as preview
+import Managers.feedbackManager as feedback
 
 
 
@@ -91,17 +92,23 @@ def main():
 
                 if combo_status == "COMPLETED":
                     p.success(f"コンボ成功: {combo_result['action']}")
+                    feedback.feedback("go",combo_status)
                     if gesture["confirmed_gesture"] == "POINT":
+                        feedback.feedback("start","start")
                         wait_point_release = True
                     #!ここでActionManagerへ送る
                     action.action_process(combo_result["action"])
                 elif combo_status == "FAILED":
+                    feedback.feedback("cancel",combo_status)
                     p.error("登録されたコンボと一致しませんでした")
 
                 elif combo_status == "CANCELED":
+                    feedback.feedback("cancel",combo_status)
                     p.warning("コンボをキャンセルしました")
+                    
 
                 elif combo_status == "WAITING":
+                    feedback.feedback("beep",combo_status)
                     pass
 
 
