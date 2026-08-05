@@ -2,6 +2,9 @@ device,display_name,abstract,zone,x_min,x_max,y_min,y_max,depth
 AIRCON,エアコン,UP_LEFT,TOP,,,,,NEAR
 BRAIND,ブラインド,UP_RIGHT,TOP,,,,,FAR
 AIRPURI,空気清浄機,LEFT,BOTTOM,,,,,FAR
-LIGHT,照明,RIGHT,TOP,,,,,
+LIGHT1,照明1,,,,,,,
+LIGHT2,照明2,,,,,,,
+LIGHT3,照明3,,,,,,,
+LIGHT4,照明4,,,,,,,
 KEY,電気錠,,CENTER
 TEST,,DOWN

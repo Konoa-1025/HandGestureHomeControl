@@ -44,6 +44,26 @@ def Initialization(settings):
         "airpurifier_airflow_up": airpurifier_airflow_up,
         "airpurifier_airflow_down": airpurifier_airflow_down,
         "airpurifier_auto": airpurifier_auto,
+
+        "light1_power_on": light1_power_on,
+        "light1_power_off": light1_power_off,
+        "light1_toggle_power": light1_toggle_power,
+
+        "light2_power_on": light2_power_on,
+        "light2_power_off": light2_power_off,
+        "light2_toggle_power": light2_toggle_power,
+
+        "light3_power_on": light3_power_on,
+        "light3_power_off": light3_power_off,
+        "light3_toggle_power": light3_toggle_power,
+
+        "light4_power_on": light4_power_on,
+        "light4_power_off": light4_power_off,
+        "light4_toggle_power": light4_toggle_power,
+
+        "all_lights_power_on": all_lights_power_on,
+        "all_lights_power_off": all_lights_power_off,
+        "all_lights_toggle_power": all_lights_toggle_power,
     }
 
 
@@ -182,3 +202,62 @@ def airpurifier_airflow_down():
 
 def airpurifier_auto():
     return echonet.airpurifier_auto()
+
+def light1_power_on():
+    return echonet.light1_power_on()
+
+
+def light1_power_off():
+    return echonet.light1_power_off()
+
+
+def light1_toggle_power():
+    return echonet.light1_toggle_power()
+
+
+def light2_power_on():
+    return echonet.light2_power_on()
+
+
+def light2_power_off():
+    return echonet.light2_power_off()
+
+
+def light2_toggle_power():
+    return echonet.light2_toggle_power()
+
+
+def light3_power_on():
+    return echonet.light3_power_on()
+
+
+def light3_power_off():
+    return echonet.light3_power_off()
+
+
+def light3_toggle_power():
+    return echonet.light3_toggle_power()
+
+
+def light4_power_on():
+    return echonet.light4_power_on()
+
+
+def light4_power_off():
+    return echonet.light4_power_off()
+
+
+def light4_toggle_power():
+    return echonet.light4_toggle_power()
+
+
+def all_lights_power_on():
+    return echonet.all_lights_power_on()
+
+
+def all_lights_power_off():
+    return echonet.all_lights_power_off()
+
+
+def all_lights_toggle_power():
+    return echonet.all_lights_toggle_power()

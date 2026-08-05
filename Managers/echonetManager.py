@@ -33,6 +33,7 @@ minimum_temperature = 16
 maximum_temperature = 30
 
 device_temperatures = {}
+device_power_states = {}
 
 
 def Initialization(settings):
@@ -44,6 +45,7 @@ def Initialization(settings):
     global minimum_temperature
     global maximum_temperature
     global device_temperatures
+    global device_power_states
 
     if el is not None:
         p.warning("echonetManagerは既に初期化されています")
@@ -85,6 +87,13 @@ def Initialization(settings):
 
         el = EchonetLite(controller_eoj)
         el.begin(None, None, None)
+
+        device_temperatures = {}
+        device_power_states = {}
+
+        for device in devices:
+            device_temperatures[device] = default_temperature
+            device_power_states[device] = False
 
     except FileNotFoundError:
         el = None
@@ -429,3 +438,148 @@ def airpurifier_airflow_down():
         airpurifier_airflow_level = next_level
 
     return result
+
+# ==========================================================
+# 照明1
+# ==========================================================
+
+def light1_power_on():
+    result = power_on("LIGHT1")
+
+    if result:
+        device_power_states["LIGHT1"] = True
+
+    return result
+
+
+def light1_power_off():
+    result = power_off("LIGHT1")
+
+    if result:
+        device_power_states["LIGHT1"] = False
+
+    return result
+
+
+def light1_toggle_power():
+    return toggle_power("LIGHT1")
+
+
+# ==========================================================
+# 照明2
+# ==========================================================
+
+def light2_power_on():
+    result = power_on("LIGHT2")
+
+    if result:
+        device_power_states["LIGHT2"] = True
+
+    return result
+
+
+def light2_power_off():
+    result = power_off("LIGHT2")
+
+    if result:
+        device_power_states["LIGHT2"] = False
+
+    return result
+
+
+def light2_toggle_power():
+    return toggle_power("LIGHT2")
+
+
+# ==========================================================
+# 照明3
+# ==========================================================
+
+def light3_power_on():
+    result = power_on("LIGHT3")
+
+    if result:
+        device_power_states["LIGHT3"] = True
+
+    return result
+
+
+def light3_power_off():
+    result = power_off("LIGHT3")
+
+    if result:
+        device_power_states["LIGHT3"] = False
+
+    return result
+
+
+def light3_toggle_power():
+    return toggle_power("LIGHT3")
+
+
+# ==========================================================
+# 照明4
+# ==========================================================
+
+def light4_power_on():
+    result = power_on("LIGHT4")
+
+    if result:
+        device_power_states["LIGHT4"] = True
+
+    return result
+
+
+def light4_power_off():
+    result = power_off("LIGHT4")
+
+    if result:
+        device_power_states["LIGHT4"] = False
+
+    return result
+
+
+def light4_toggle_power():
+    return toggle_power("LIGHT4")
+
+def all_lights_power_on():
+    light_devices = ["LIGHT1", "LIGHT2", "LIGHT3", "LIGHT4"]
+    all_success = True
+
+    for device in light_devices:
+        result = power_on(device)
+
+        if result:
+            device_power_states[device] = True
+        else:
+            all_success = False
+
+    return all_success
+
+
+def all_lights_power_off():
+    light_devices = ["LIGHT1", "LIGHT2", "LIGHT3", "LIGHT4"]
+    all_success = True
+
+    for device in light_devices:
+        result = power_off(device)
+
+        if result:
+            device_power_states[device] = False
+        else:
+            all_success = False
+
+    return all_success
+
+def all_lights_toggle_power():
+    light_devices = ["LIGHT1", "LIGHT2", "LIGHT3", "LIGHT4"]
+
+    all_lights_on = all(
+        device_power_states.get(device, False)
+        for device in light_devices
+    )
+
+    if all_lights_on:
+        return all_lights_power_off()
+
+    return all_lights_power_on()

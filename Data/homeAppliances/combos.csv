@@ -1,5 +1,5 @@
 appliances,gesture1,gesture2,gesture3,gesture4,action
-LIGHT,POINT,,,,toggle_power
+LIGHT,POINT,,,,all_lights_toggle_power
 LIGHT,OPEN_HAND,,,,color_up
 LIGHT,FIST,,,,color_down
 ,,,,,
