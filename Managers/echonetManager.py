@@ -542,8 +542,29 @@ def light4_power_off():
 def light4_toggle_power():
     return toggle_power("LIGHT4")
 
+def light5_power_on():
+    result = power_on("LIGHT5")
+
+    if result:
+        device_power_states["LIGHT5"] = True
+
+    return result
+
+
+def light5_power_off():
+    result = power_off("LIGHT5")
+
+    if result:
+        device_power_states["LIGHT5"] = False
+
+    return result
+
+
+def light5_toggle_power():
+    return toggle_power("LIGHT5")
+
 def all_lights_power_on():
-    light_devices = ["LIGHT1", "LIGHT2", "LIGHT3", "LIGHT4"]
+    light_devices = ["LIGHT1", "LIGHT2", "LIGHT3", "LIGHT4", "LIGHT5"]
     all_success = True
 
     for device in light_devices:
@@ -558,7 +579,7 @@ def all_lights_power_on():
 
 
 def all_lights_power_off():
-    light_devices = ["LIGHT1", "LIGHT2", "LIGHT3", "LIGHT4"]
+    light_devices = ["LIGHT1", "LIGHT2", "LIGHT3", "LIGHT4", "LIGHT5"]
     all_success = True
 
     for device in light_devices:
@@ -572,7 +593,7 @@ def all_lights_power_off():
     return all_success
 
 def all_lights_toggle_power():
-    light_devices = ["LIGHT1", "LIGHT2", "LIGHT3", "LIGHT4"]
+    light_devices = ["LIGHT1", "LIGHT2", "LIGHT3", "LIGHT4", "LIGHT5"]
 
     all_lights_on = all(
         device_power_states.get(device, False)

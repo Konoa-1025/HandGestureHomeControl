@@ -61,6 +61,10 @@ def Initialization(settings):
         "light4_power_off": light4_power_off,
         "light4_toggle_power": light4_toggle_power,
 
+        "light5_power_on": light5_power_on,
+        "light5_power_off": light5_power_off,
+        "light5_toggle_power": light5_toggle_power,
+
         "all_lights_power_on": all_lights_power_on,
         "all_lights_power_off": all_lights_power_off,
         "all_lights_toggle_power": all_lights_toggle_power,
@@ -249,6 +253,17 @@ def light4_power_off():
 
 def light4_toggle_power():
     return echonet.light4_toggle_power()
+
+def light5_power_on():
+    return echonet.light5_power_on()
+
+
+def light5_power_off():
+    return echonet.light5_power_off()
+
+
+def light5_toggle_power():
+    return echonet.light5_toggle_power()
 
 
 def all_lights_power_on():
