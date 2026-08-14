@@ -4,8 +4,8 @@
 #! 未実装GPU
 
 import Utils.logger as p
-import Models.cpu.highModel as highModel
-import Models.cpu.lowModel as lowModel
+import Models.mediapipe.highModel as highModel
+import Models.mediapipe.lowModel as lowModel
 
 low = 70
 high = 90
