@@ -67,6 +67,13 @@ def try_open(camera):
                 return None
         elif camera_type == "webcam":
             source = int(connection.get("device_id", 0))
+            if camera_type == "webcam":
+                capture = cv2.VideoCapture(source,cv2.CAP_MSMF)
+                capture.set(cv2.CAP_PROP_FOURCC,cv2.VideoWriter_fourcc(*"MJPG"))
+                capture.set(cv2.CAP_PROP_FRAME_WIDTH,connection.get("width", 1280))
+                capture.set(cv2.CAP_PROP_FRAME_HEIGHT,connection.get("height", 720))
+                capture.set(cv2.CAP_PROP_FPS,connection.get("fps", 60))
+                capture.set(cv2.CAP_PROP_BUFFERSIZE,1)
         else:
             p.warning(
                 f"{display_name}のカメラ形式が不明です: "

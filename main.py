@@ -55,7 +55,7 @@ def main():
             if not is_motion and not last_is_hand: #!人がいないかつ手が映っていないならモデルに投げない
                 continue
 
-            hand_landmarks = model.model_process(cased_frame,system.get_cpu(),system.get_gpu()) #?返り値：手の認識,ランドマーク位置
+            hand_landmarks = model.model_process(cased_frame,system.get_cpu(),0) #?返り値：手の認識,ランドマーク位置
             last_is_hand = hand_landmarks["is_hand"]
             if not last_is_hand: #!
                 wait_point_release = False
