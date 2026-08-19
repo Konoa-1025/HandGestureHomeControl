@@ -45,6 +45,7 @@ def make_url(camera, resolution=None):
             f"/axis-cgi/mjpg/video.cgi"
             f"?resolution={resolution}"
         )
+        p.info(f"Camera URL:{url}")
 
         return url
     if camera_type in ("url", "iphone"):
