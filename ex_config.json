@@ -169,10 +169,8 @@
     "position": {
         "enabled": true,
         "csv_path": "Data/position/floor.csv",
-        "image_size": [
-            3840,
-            2160
-        ],
+        "image_size": [3584, 2114],
+        "image_rect": [112, 76, 3360, 1890],
         "bottom_ratio": 0.3,
         "debug": true
     }

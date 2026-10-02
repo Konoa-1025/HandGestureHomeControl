@@ -45,7 +45,7 @@ def Initialization(config):
         return True
     detector = None
     try:
-        tatami_map = TatamiMap(settings["csv_path"], settings["image_size"])
+        tatami_map = TatamiMap(settings["csv_path"], settings["image_size"], settings.get("image_rect"))
         from Recognizers.personDetector import PersonDetector
         detector = PersonDetector()
         estimator = HumanPosition(tatami_map, detector, settings.get("bottom_ratio", 0.3), settings.get("debug", False))

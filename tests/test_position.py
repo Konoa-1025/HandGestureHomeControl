@@ -39,6 +39,22 @@ class PositionTests(unittest.TestCase):
             self.assertEqual(self.map.locate((width*.6, height*.7, width*.9, height), (height, width, 3)), 'T2')
         self.assertIsNone(self.map.locate((101, 0, 120, 100), (100, 100, 3)))
 
+    def test_screenshot_margins_are_removed_before_scaling(self):
+        self.path.write_text('tatami_id,tl_x,tl_y,tr_x,tr_y,br_x,br_y,bl_x,bl_y\n'
+                             'T1,12,20,62,20,62,120,12,120\n'
+                             'T2,62,20,112,20,112,120,62,120\n')
+        screenshot_map = TatamiMap(self.path, (124,140), (12,20,100,100))
+        for width, height in ((1920,1080), (2560,1440)):
+            shape = (height,width,3)
+            for name, points in self.map.scaled_polygons(shape).items():
+                np.testing.assert_allclose(screenshot_map.scaled_polygons(shape)[name], points)
+            self.assertEqual(screenshot_map.locate((width*.6,height*.7,width*.9,height),shape), 'T2')
+
+    def test_invalid_image_rect(self):
+        for rect in ((0,0,0,100), (-1,0,100,100), (10,0,100,100), (0,0,100), (0,0,float('nan'),100)):
+            with self.assertRaises(ValueError):
+                TatamiMap(self.path, (100,100), rect)
+
     def test_overlap_geometry(self):
         polygon = [(0,0), (10,0), (10,10), (0,10)]
         self.assertEqual(overlap_area(polygon, (5,5,15,15)), 25)

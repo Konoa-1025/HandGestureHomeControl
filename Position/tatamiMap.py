@@ -7,10 +7,18 @@ import numpy as np
 
 
 class TatamiMap:
-    def __init__(self, csv_path, image_size):
+    def __init__(self, csv_path, image_size, image_rect=None):
         self.image_size = np.asarray(image_size, dtype=float)
         if self.image_size.shape != (2,) or not np.all(np.isfinite(self.image_size)) or np.any(self.image_size <= 0):
             raise ValueError("image_sizeはCSV作成画像の[幅, 高さ]で指定してください")
+        # スクリーンショットの場合は反転後画像内の「映像部分」を指定する。
+        # 通常のフレームから作ったCSVなら余白がないので指定不要。
+        rect = np.asarray(image_rect if image_rect is not None else [0, 0, *self.image_size], dtype=float)
+        if (rect.shape != (4,) or not np.all(np.isfinite(rect))
+                or np.any(rect[:2] < 0) or np.any(rect[2:] <= 0)
+                or np.any(rect[:2] + rect[2:] > self.image_size)):
+            raise ValueError("image_rectは画像内の[左, 上, 幅, 高さ]で指定してください")
+        origin, content_size = rect[:2], rect[2:]
         path = Path(csv_path).expanduser()
         if not path.is_absolute():
             path = Path(__file__).resolve().parent.parent / path
@@ -27,7 +35,7 @@ class TatamiMap:
                     raise ValueError("畳IDが空欄または重複しています")
                 if not np.all(np.isfinite(polygon)) or cv2.contourArea(polygon) <= 0:
                     raise ValueError(f"{name}の頂点が不正です")
-                self.polygons[name] = (polygon / self.image_size).astype(np.float32)
+                self.polygons[name] = ((polygon - origin) / content_size).astype(np.float32)
         if not self.polygons:
             raise ValueError("畳CSVにデータがありません")
 

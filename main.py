@@ -36,8 +36,6 @@ def main():
             p.error("カメラを1台も開くことができませんでした")
             return False
 
-    human_position.Initialization(setting_config)
-
     try:
         while True:
             front_frame = camera.read_frame("front")
