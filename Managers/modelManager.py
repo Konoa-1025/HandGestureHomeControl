@@ -6,8 +6,6 @@ import Utils.logger as p
 import Models.mediapipe.highModel as mediapipeHighModel
 import Models.mediapipe.lowModel as mediapipeLowModel
 
-import Models.pipetrt.highmodel as pipetrtHighModel
-
 
 low = 70
 high = 90
@@ -22,6 +20,7 @@ def Initialization(settings):
     global low
     global high
     global backend
+    global pipetrtHighModel
 
     p.info("modelManagerを初期化中")
 
@@ -82,6 +81,11 @@ def Initialization(settings):
                 "MediaPipe lowModelの初期化に失敗しました"
             )
             return False
+        
+        elif backend == "pipetrt":
+            import Models.pipetrt.highmodel as pipetrtHighModel
+
+        p.info("PipeTRT backendを使用します")
 
     # =====================================
     # PipeTRT
