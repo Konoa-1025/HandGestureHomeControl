@@ -3,7 +3,7 @@
 #? Norifumi Konndo
 
 import cv2
-
+from pathlib import Path
 import Utils.logger as p
 
 settings = {}
@@ -50,6 +50,29 @@ def make_url(camera, resolution=None):
         return url
     if camera_type in ("url", "iphone"):
         return connection.get("url")
+    
+    if camera_type == "movie":
+        if camera.get("movie") is not True:
+            #p.warning("録画映像を使用するにはmovieをtrueにしてください")
+            return None
+
+        movie_path = connection.get("path")
+
+        if not isinstance(movie_path, str) or not movie_path.strip():
+            p.warning("connection.pathに動画パスが設定されていません")
+            return None
+
+        path = Path(movie_path).expanduser()
+
+        # 相対パスはconfig.jsonがあるプロジェクト直下を基準にする
+        if not path.is_absolute():
+            path = Path(__file__).resolve().parent.parent / path
+
+        if not path.is_file():
+            p.warning(f"動画ファイルが見つかりません: {path}")
+            return None
+
+        return str(path)
     return None
 
 def try_open(camera):
@@ -59,7 +82,7 @@ def try_open(camera):
     connection = camera.get("connection", {})
 
     try:
-        if camera_type in ("axis", "url", "iphone"):
+        if camera_type in ("axis", "url", "iphone","movie"):
             source = make_url(camera)
             if not source:
                 p.warning(
