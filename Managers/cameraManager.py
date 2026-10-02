@@ -4,10 +4,13 @@
 
 import cv2
 from pathlib import Path
+import sys
 import Utils.logger as p
 
 settings = {}
 captures = {}
+source_settings = {}
+finished_sources = set()
 current_resolution = "1920x1080"
 url = None
 
@@ -92,7 +95,8 @@ def try_open(camera):
         elif camera_type == "webcam":
             source = int(connection.get("device_id", 0))
             if camera_type == "webcam":
-                capture = cv2.VideoCapture(source,cv2.CAP_MSMF)
+                backend = cv2.CAP_MSMF if sys.platform == "win32" else cv2.CAP_ANY
+                capture = cv2.VideoCapture(source, backend)
                 capture.set(cv2.CAP_PROP_FOURCC,cv2.VideoWriter_fourcc(*"MJPG"))
                 capture.set(cv2.CAP_PROP_FRAME_WIDTH,connection.get("width", 1280))
                 capture.set(cv2.CAP_PROP_FRAME_HEIGHT,connection.get("height", 720))
@@ -106,7 +110,8 @@ def try_open(camera):
             return None
         p.info(f"{display_name}に接続中")
 
-        capture = cv2.VideoCapture(source)
+        if camera_type != "webcam":
+            capture = cv2.VideoCapture(source)
 
         if not capture.isOpened():
             p.error(f"{display_name}を開くことができませんでした")
@@ -173,6 +178,7 @@ def start_camera():
             continue
 
         captures[camera_id] = capture
+        source_settings[camera_id] = camera
 
     if not captures:
         p.error("有効なカメラを開くことができませんでした")
@@ -187,10 +193,19 @@ def get_capture(camera_id):
 def read_frame(camera_id):
     capture = captures.get(camera_id)
 
-    if capture is None:
+    if capture is None or camera_id in finished_sources:
         return None
 
     success, frame = capture.read()
+
+    source = source_settings.get(camera_id, {})
+    if not success and source.get("type", "").lower() == "movie":
+        if source.get("loop", True):
+            capture.set(cv2.CAP_PROP_POS_FRAMES, 0)
+            success, frame = capture.read()
+        if not success:
+            finished_sources.add(camera_id)
+            return None
 
     if not success:
         p.warning(
@@ -204,6 +219,8 @@ def stop_camera(camera_id=None):
     global captures
 
     if camera_id is not None:
+        source_settings.pop(camera_id, None)
+        finished_sources.discard(camera_id)
         capture = captures.pop(camera_id, None)
         if capture is None:
             return False
@@ -222,5 +239,9 @@ def stop_camera(camera_id=None):
             )
 
     captures = {}
+    source_settings.clear()
+    finished_sources.clear()
     return True
-    z
+
+def is_finished(camera_id):
+    return camera_id in finished_sources
