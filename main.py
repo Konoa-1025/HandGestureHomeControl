@@ -21,6 +21,7 @@ import Managers.comboManager as combo
 import Managers.actionManager as action
 import Managers.previewManager as preview
 import Managers.feedbackManager as feedback
+import Managers.positionManager as human_position
 
 
 
@@ -35,12 +36,16 @@ def main():
             p.error("カメラを1台も開くことができませんでした")
             return False
 
+    human_position.Initialization(setting_config)
+
     try:
         while True:
             front_frame = camera.read_frame("front")
 
             #!メインカメラ
             if front_frame is None: #?フレーム取得失敗
+                if camera.is_finished("front"):
+                    break
                 p.warning("フロントカメラの映像を取得できませんでした")
                 continue
 
@@ -51,7 +56,9 @@ def main():
             is_motion = cascade_result["is_motion"]
             cased_frame = cascade_result["cased_frame"]
 
-            preview.show_frame_detail(cased_frame) #?プレビュー表示
+            current_position = human_position.update(cased_frame)
+            if not preview.show_frame_detail(cased_frame, human_position.get_debug_state()):
+                break
             if not is_motion and not last_is_hand: #!人がいないかつ手が映っていないならモデルに投げない
                 continue
 
@@ -64,7 +71,7 @@ def main():
                 continue
             #?家電選択とコンボ
             
-            gesture = recognize.gesture_process(hand_landmarks)#?返り値：確定ジェスチャ,方向
+            gesture = recognize.gesture_process(hand_landmarks, current_position)#?返り値：確定ジェスチャ,方向
 
             if wait_point_release:
                 if gesture["confirmed_gesture"] == "POINT":
@@ -117,6 +124,9 @@ def main():
                 continue
 
     finally:
+        human_position.close()
+        camera.stop_camera()
+        preview.close_window()
         p.debug("終わり")
 
 if __name__ == "__main__":

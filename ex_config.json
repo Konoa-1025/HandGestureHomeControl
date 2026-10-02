@@ -165,5 +165,15 @@
             "version": "1.0.0",
             "git_commit": null
         }
+    },
+    "position": {
+        "enabled": true,
+        "csv_path": "Data/position/floor.csv",
+        "image_size": [
+            3840,
+            2160
+        ],
+        "bottom_ratio": 0.3,
+        "debug": true
     }
 }

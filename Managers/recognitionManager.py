@@ -32,13 +32,13 @@ def get_gesture_data(hand_landmarks):
     return recognized_gesture
 
 
-def gesture_process(hand_landmarks):
+def gesture_process(hand_landmarks, current_position=None):
     raw_gesture = get_gesture_data(hand_landmarks)#?返り値 現在のジェスチャ,各指の状態
 
     point_data = None
 
     if raw_gesture["name"] == "POINT":
-        point_data = pointing.get_direction(hand_landmarks)#?返り値 角度,方向
+        point_data = pointing.get_direction(hand_landmarks, current_position)#?返り値 角度,方向
 
     recognized_gesture = stabilizer.stabilizer_process(raw_gesture,point_data)#?返り値 確定したジェスチャ,確定した方向
 

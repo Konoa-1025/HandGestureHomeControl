@@ -100,7 +100,7 @@ def show_frame_simple(frame):
         p.error(f"フレーム表示中にエラーが発生しました: {error}")
         return False
 
-def show_frame_detail(frame):
+def show_frame_detail(frame, position_state=None):
     global window_created
 
     if frame is None:
@@ -166,6 +166,7 @@ def show_frame_detail(frame):
             "bottom_right"
         )
 
+        draw_position_debug(frame, position_state)
         cv2.imshow(window_name, frame)
 
         key = cv2.waitKey(1) & 0xFF
@@ -300,3 +301,21 @@ def select_appliance_abstract(direction):
             return appliance["display_name"]
 
     return "None"
+
+def draw_position_debug(frame, state):
+    """表示用BGR画像だけに描画し、認識に渡す画像は変更しない。"""
+    if state is None:
+        return
+    for name, polygon in state.tatami_map.scaled_polygons(frame.shape).items():
+        points = polygon.round().astype("int32")
+        color = (0, 255, 0) if name == state.current_position else (0, 200, 255)
+        cv2.polylines(frame, [points], True, color, 2)
+        center = tuple(points.mean(axis=0).astype(int))
+        cv2.putText(frame, name, center, cv2.FONT_HERSHEY_SIMPLEX, 0.8, color, 2)
+    for box, color in ((state.bounding_box, (255, 160, 0)), (state.position_box, (255, 0, 255))):
+        if box is not None:
+            x1, y1, x2, y2 = map(round, box)
+            cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
+    text = f"CURRENT POSITION: {state.current_position or 'None'}"
+    cv2.putText(frame, text, (20, 80), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 5)
+    cv2.putText(frame, text, (20, 80), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)

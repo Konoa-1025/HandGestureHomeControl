@@ -55,7 +55,8 @@ def specific_direction(hand_landmark):#!具体的な角度で正確性に欠け�
     angle = math.degrees(math.atan2(-dy, dx))
     return angle
 
-def get_direction(hand_landmarks):
+def get_direction(hand_landmarks, current_position=None):
+    # 現状は画像上の8方向判定。位置は将来のWall判定へ渡す入口として受け取る。
     hand_landmark = hand_landmarks["hands"][0]["landmarks"]
 
     angle = specific_direction(hand_landmark)

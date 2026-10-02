@@ -27,13 +27,13 @@ class TatamiMap:
                     raise ValueError("畳IDが空欄または重複しています")
                 if not np.all(np.isfinite(polygon)) or cv2.contourArea(polygon) <= 0:
                     raise ValueError(f"{name}の頂点が不正です")
-                self.polygons[name] = polygon
+                self.polygons[name] = (polygon / self.image_size).astype(np.float32)
         if not self.polygons:
             raise ValueError("畳CSVにデータがありません")
 
     def scaled_polygons(self, frame_shape):
         height, width = frame_shape[:2]
-        scale = np.array([width, height]) / self.image_size
+        scale = np.array([width, height])
         return {name: (polygon * scale).astype(np.float32) for name, polygon in self.polygons.items()}
 
     def locate(self, box, frame_shape):
