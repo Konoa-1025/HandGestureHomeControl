@@ -292,3 +292,13 @@ def draw_position_debug(frame, state):
     text = f"CURRENT POSITION: {state.current_position or 'None'}"
     cv2.putText(frame, text, (20, 80), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 5)
     cv2.putText(frame, text, (20, 80), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+
+
+def show_frame_pointing(frame, state):
+    from Feedback.pointingPreview import draw_preview
+    if not window_created:
+        return False
+    display = draw_preview(frame, state.centers, state.result, '', False, state.trial, live=True)
+    cv2.imshow(window_name, display)
+    key = cv2.waitKey(1) & 0xFF
+    return key not in (ord('q'), 27) and cv2.getWindowProperty(window_name, cv2.WND_PROP_VISIBLE) >= 1

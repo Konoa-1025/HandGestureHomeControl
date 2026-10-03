@@ -15,7 +15,7 @@ def Initialization(settings):
 
     position_appliances = {}
     position_path = settings["home_appliances"]["files"].get("positionmap")
-    use_position_map = bool(position_path)
+    use_position_map = bool(position_path) and not settings.get("pointing", {}).get("enabled", False)
 
     p.info("appliancesManagerを初期化中")
 
@@ -117,3 +117,6 @@ def select_appliance_concrete(x, y, depth=None):
         return appliance
 
     return None
+
+def get_appliance(device):
+    return next((item for item in appliances if item["device"] == device), None)

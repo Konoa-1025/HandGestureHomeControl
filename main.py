@@ -22,6 +22,7 @@ import Managers.actionManager as action
 import Managers.previewManager as preview
 import Managers.feedbackManager as feedback
 import Managers.positionManager as human_position
+import Managers.pointingManager as pointing
 
 
 
@@ -29,7 +30,10 @@ def main():
     wait_point_release = False
     last_is_hand = False
     setting_config = figload.load_setting_config() #?設定の読み込み
-    initializer.Managers_initialize(setting_config) #?初期化
+    if not initializer.Managers_initialize(setting_config):
+        human_position.close()
+        preview.close_window()
+        return False
 
     #?カメラの起動
     if not camera.start_camera():
@@ -54,16 +58,25 @@ def main():
             is_motion = cascade_result["is_motion"]
             cased_frame = cascade_result["cased_frame"]
 
-            current_position = human_position.update(cased_frame)
-            if not preview.show_frame_detail(cased_frame, human_position.get_debug_state(), current_position):
-                break
-            if not is_motion and not last_is_hand: #!人がいないかつ手が映っていないならモデルに投げない
-                continue
+            current_position = None
+            pointing_event = None
+            if pointing.enabled:
+                hand_landmarks = model.model_process(cased_frame, system.get_cpu(), 0)
+                pointing_event = pointing.update(hand_landmarks, cased_frame.shape, camera.get_timestamp("front"), not combo.is_combo())
+                if not preview.show_frame_pointing(cased_frame, pointing):
+                    break
+            else:
+                current_position = human_position.update(cased_frame)
+                if not preview.show_frame_detail(cased_frame, human_position.get_debug_state(), current_position):
+                    break
+                if not is_motion and not last_is_hand:
+                    continue
+                hand_landmarks = model.model_process(cased_frame, system.get_cpu(), 0)
 
-            hand_landmarks = model.model_process(cased_frame,system.get_cpu(),0) #?返り値：手の認識,ランドマーク位置
             last_is_hand = hand_landmarks["is_hand"]
             if not last_is_hand: #!
-                wait_point_release = False
+                if not pointing.enabled:
+                    wait_point_release = False
                 if combo.is_combo():
                     combo_result = combo.combo_process({"confirmed_gesture": None,"confirmed_direction": None})
                 continue
@@ -72,12 +85,28 @@ def main():
             gesture = recognize.gesture_process(hand_landmarks, current_position)#?返り値：確定ジェスチャ,方向
 
             if wait_point_release:
-                if gesture["confirmed_gesture"] == "POINT":
+                if pointing.enabled:
+                    if pointing.result["gesture"] in ("POINT", "NO HAND", "UNKNOWN"):
+                        continue
+                elif gesture["confirmed_gesture"] == "POINT":
                     continue
                 wait_point_release = False
             
             #?コンボ中ではない場合は家電を選択
             if not combo.is_combo():
+                if pointing.enabled:
+                    if pointing_event["action"]:
+                        if action.action_process(pointing_event["action"]):
+                            p.success("照明全部をOFFにしました")
+                        else:
+                            p.warning("全灯OFFに失敗しました")
+                        wait_point_release = True
+                    elif pointing_event["appliance"] is not None:
+                        selected_appliance = pointing_event["appliance"]
+                        combo.start_combo(selected_appliance)
+                        wait_point_release = True
+                        p.success(f"家電を選択しました: {selected_appliance['display_name']}")
+                    continue
                 if (
                     gesture["confirmed_gesture"] == "POINT"
                     and gesture["confirmed_direction"] is not None

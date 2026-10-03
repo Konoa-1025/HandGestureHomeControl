@@ -245,3 +245,11 @@ def stop_camera(camera_id=None):
 
 def is_finished(camera_id):
     return camera_id in finished_sources
+
+def get_timestamp(camera_id):
+    import time
+    capture = captures.get(camera_id)
+    source = source_settings.get(camera_id, {})
+    if capture is not None and source.get("type", "").lower() == "movie":
+        return capture.get(cv2.CAP_PROP_POS_FRAMES) / max(capture.get(cv2.CAP_PROP_FPS), 1)
+    return time.monotonic()

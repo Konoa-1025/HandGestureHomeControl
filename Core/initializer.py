@@ -20,6 +20,7 @@ import Managers.actionManager as action
 import Managers.echonetManager as echonet
 import Managers.previewManager as preview
 import Managers.positionManager as position
+import Managers.pointingManager as pointing
 
 def Managers_initialize(config):
     #!Managersの初期化
@@ -80,7 +81,10 @@ def Managers_initialize(config):
         p.error("actionManagerの初期化に失敗しました")
         return False
 
-    if not position.Initialization(config):
+    if not pointing.Initialization(config):
+        return False
+
+    if not pointing.enabled and not position.Initialization(config):
         p.error("positionManagerの初期化に失敗しました")
         return False
 

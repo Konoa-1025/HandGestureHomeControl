@@ -174,5 +174,6 @@
         "image_rect": [112, 76, 3360, 1890],
         "bottom_ratio": 0.3,
         "debug": true
-    }
+    },
+    "pointing": {"enabled": true}
 }
