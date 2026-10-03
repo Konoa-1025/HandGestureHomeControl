@@ -4,9 +4,7 @@
 
 import cv2
 import Utils.logger as p
-import csv
-
-appliances = []
+import Managers.appliancesManager as appliances_manager
 window_created = False
 window_name = "HandGestureHomeControl Preview"
 
@@ -33,29 +31,6 @@ def Initialization(settings):
         window_created = True
         p.success("プレビューウィンドウの初期化完了")
 
-        global appliances
-        
-        p.info("appliancesManagerを初期化中")
-        
-        csv_path = settings["home_appliances"]["files"]["appliancesmap"]
-        
-        try:
-            with open(csv_path, "r", encoding="utf-8-sig") as file:
-                reader = csv.DictReader(file)
-    
-                appliances = []
-        
-                for row in reader:
-                    if not row["device"]:
-                        continue
-        
-                    appliances.append(row)
-        
-        except Exception as error:
-            p.error(f"CSVの読み込みに失敗しました: {error}")
-            return False
-        
-        p.success(f"プレビュー家電の読み込み完了 ({len(appliances)}件)")
         return True
     except cv2.error as error:
         p.error(f"プレビューウィンドウの初期化に失敗しました: {error}")
@@ -100,7 +75,7 @@ def show_frame_simple(frame):
         p.error(f"フレーム表示中にエラーが発生しました: {error}")
         return False
 
-def show_frame_detail(frame, position_state=None):
+def show_frame_detail(frame, position_state=None, current_position=None):
     global window_created
 
     if frame is None:
@@ -114,55 +89,55 @@ def show_frame_detail(frame, position_state=None):
 
         draw_text(
             frame,
-            select_appliance_abstract("UP_LEFT"),
+            select_appliance_abstract("UP_LEFT", current_position),
             "top_left"
         )
 
         draw_text(
             frame,
-            select_appliance_abstract("UP"),
+            select_appliance_abstract("UP", current_position),
             "top"
         )
 
         draw_text(
             frame,
-            select_appliance_abstract("UP_RIGHT"),
+            select_appliance_abstract("UP_RIGHT", current_position),
             "top_right"
         )
 
         draw_text(
             frame,
-            select_appliance_abstract("LEFT"),
+            select_appliance_abstract("LEFT", current_position),
             "left"
         )
 
         draw_text(
             frame,
-            select_appliance_abstract("CENTER"),
+            select_appliance_abstract("CENTER", current_position),
             "center"
         )
 
         draw_text(
             frame,
-            select_appliance_abstract("RIGHT"),
+            select_appliance_abstract("RIGHT", current_position),
             "right"
         )
 
         draw_text(
             frame,
-            select_appliance_abstract("DOWN_LEFT"),
+            select_appliance_abstract("DOWN_LEFT", current_position),
             "bottom_left"
         )
 
         draw_text(
             frame,
-            select_appliance_abstract("DOWN"),
+            select_appliance_abstract("DOWN", current_position),
             "bottom"
         )
 
         draw_text(
             frame,
-            select_appliance_abstract("DOWN_RIGHT"),
+            select_appliance_abstract("DOWN_RIGHT", current_position),
             "bottom_right"
         )
 
@@ -295,12 +270,10 @@ def draw_text(frame, text, position):
 
     cv2.putText(frame,text,(x, y),font,scale,(255, 255, 255),thickness,cv2.LINE_AA)
 
-def select_appliance_abstract(direction):
-    for appliance in appliances:
-        if appliance["abstract"] == direction:
-            return appliance["display_name"]
+def select_appliance_abstract(direction, current_position=None):
+    appliance = appliances_manager.select_appliance_abstract(direction, current_position)
+    return appliance["display_name"] if appliance else "None"
 
-    return "None"
 
 def draw_position_debug(frame, state):
     """表示用BGR画像だけに描画し、認識に渡す画像は変更しない。"""

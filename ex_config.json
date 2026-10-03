@@ -125,7 +125,8 @@
 
     "home_appliances": {
         "files": {
-            "appliances": "homeAppliances/appliances.csv",
+            "positionmap": "Data/homeAppliances/positionMap.csv",
+            "appliancesmap": "Data/homeAppliances/appliancesMap.csv",
             "actions": "homeAppliances/actions.csv",
             "combos": "homeAppliances/combos.csv"
         }

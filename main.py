@@ -55,7 +55,7 @@ def main():
             cased_frame = cascade_result["cased_frame"]
 
             current_position = human_position.update(cased_frame)
-            if not preview.show_frame_detail(cased_frame, human_position.get_debug_state()):
+            if not preview.show_frame_detail(cased_frame, human_position.get_debug_state(), current_position):
                 break
             if not is_motion and not last_is_hand: #!人がいないかつ手が映っていないならモデルに投げない
                 continue
@@ -82,7 +82,7 @@ def main():
                     gesture["confirmed_gesture"] == "POINT"
                     and gesture["confirmed_direction"] is not None
                 ):
-                    selected_appliance = appliances.select_appliance_abstract(gesture["confirmed_direction"]) #?家電の選択
+                    selected_appliance = appliances.select_appliance_abstract(gesture["confirmed_direction"], current_position) #?家電の選択
                     if selected_appliance is None:
                         p.warning("指差し方向に家電がありません")
                         continue
