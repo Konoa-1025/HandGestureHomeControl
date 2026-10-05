@@ -6,13 +6,15 @@ import cv2
 import Utils.logger as p
 import Managers.appliancesManager as appliances_manager
 window_created = False
+last_key = -1
+last_display = None
 window_name = "HandGestureHomeControl Preview"
 
 
 def Initialization(settings):
     name: str = "HandGestureHomeControl Preview"
-    width: int = 960
-    height: int = 540
+    width: int = 1320
+    height: int = 710
 
     # window_name = config["preview"]["window_name"]
     # window_width = config["preview"]["width"]
@@ -294,11 +296,13 @@ def draw_position_debug(frame, state):
     cv2.putText(frame, text, (20, 80), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
 
 
-def show_frame_pointing(frame, state):
+def show_frame_pointing(frame, state, status=None):
     from Feedback.pointingPreview import draw_preview
+    global last_key, last_display
     if not window_created:
         return False
-    display = draw_preview(frame, state.centers, state.result, '', False, state.trial, live=True)
-    cv2.imshow(window_name, display)
-    key = cv2.waitKey(1) & 0xFF
-    return key not in (ord('q'), 27) and cv2.getWindowProperty(window_name, cv2.WND_PROP_VISIBLE) >= 1
+    status = status or {}
+    last_display = draw_preview(frame, state.centers, state.result, '', status.get('paused', False), state.trial, live=True, status=status)
+    cv2.imshow(window_name, last_display)
+    last_key = cv2.waitKey(20 if status.get('paused') else 1) & 0xFF
+    return last_key not in (ord('q'), 27) and cv2.getWindowProperty(window_name, cv2.WND_PROP_VISIBLE) >= 1

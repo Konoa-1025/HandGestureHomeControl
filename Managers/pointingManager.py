@@ -32,7 +32,8 @@ def Initialization(config):
             raise ValueError('指差し設定値が不正です')
         if any(appliances.get_appliance(device) is None for device in centers):
             raise ValueError('中心点CSVに未登録の家電IDがあります')
-        trial = PointingTrial(hold)
+        settings.update(hold_seconds=hold, max_angle_degrees=angle, min_finger_length_ratio=length)
+        trial = PointingTrial(hold, float(settings.get('gap_tolerance_seconds', 0)))
         p.success('家電中心への指差し判定を初期化しました')
         return True
     except (OSError, ValueError, KeyError, TypeError) as error:
@@ -43,7 +44,7 @@ def Initialization(config):
 def update(hand_data, frame_shape, timestamp, allow_selection=True):
     global result
     result = compare_direction(hand_data, frame_shape, centers, settings['max_angle_degrees'], settings.get('min_finger_length_ratio', .005))
-    event = trial.update(result if allow_selection else dict(result, candidate=None), timestamp)
+    event = trial.update(result if allow_selection else dict(result, candidate=None, reason='COMBO'), timestamp)
     if event == 'all_lights_power_off':
         return {'action': event, 'appliance': None}
     if event and event.startswith('SELECT '):

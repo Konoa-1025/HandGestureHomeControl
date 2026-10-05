@@ -24,6 +24,7 @@ import Managers.pointingManager as pointing
 
 def Managers_initialize(config):
     #!Managersの初期化
+    dry_run = config.get("runtime", {}).get("dry_run", False)
     p.info("Managersの初期化中")
     if not action.Initialization(config):
         p.error("actionManagerの初期化に失敗しました")
@@ -41,15 +42,15 @@ def Managers_initialize(config):
         p.error("comboManagerの初期化に失敗しました")
         return False
     
-    if not system.Initialization():
+    if not dry_run and not system.Initialization():
         p.error("systemManagerの初期化に失敗しました")
         return False
     
-    if not tcp.Initialization(config):
+    if not dry_run and not tcp.Initialization(config):
         p.error("tcpManagerの初期化に失敗しました")
         return False
     
-    if not echonet.Initialization(config):
+    if not dry_run and not echonet.Initialization(config):
         p.error("echonetManagerの初期化に失敗しました")
         return False
     
@@ -65,13 +66,10 @@ def Managers_initialize(config):
         p.error("modelManagerの初期化に失敗しました")
         return False
     
-    if not feedback.Initialization(config):
+    if not dry_run and not feedback.Initialization(config):
         p.error("feedbackManagerの初期化に失敗しました")
         return False
     
-    if not feedback.Initialization(config):
-        p.error("feedbackManagerの初期化に失敗しました")
-        return False
 
     if not appliances.Initialization(config):
         p.error("appliancesManagerの初期化に失敗しました")
@@ -88,7 +86,7 @@ def Managers_initialize(config):
         p.error("positionManagerの初期化に失敗しました")
         return False
 
-    if not preview.Initialization(config):
+    if not config.get("runtime", {}).get("headless", False) and not preview.Initialization(config):
         p.error("previewManagerの初期化に失敗しました")
         return False
 

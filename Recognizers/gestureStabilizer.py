@@ -107,14 +107,14 @@ def reset():
     last_hand_detected_at = None
 
 
-def get_confirmed_gesture(raw_gesture):
+def get_confirmed_gesture(raw_gesture, timestamp=None):
     global current_gesture
     global gesture_started_at
     global gesture_mismatch_started_at
     global confirmed_gesture
     global last_hand_detected_at
 
-    now = time.monotonic()
+    now = time.monotonic() if timestamp is None else timestamp
 
     if raw_gesture is None:
         return confirmed_gesture
@@ -179,13 +179,13 @@ def get_confirmed_gesture(raw_gesture):
     return confirmed_gesture
 
 
-def get_confirmed_direction(direction_data):
+def get_confirmed_direction(direction_data, timestamp=None):
     global current_direction
     global direction_started_at
     global direction_mismatch_started_at
     global confirmed_direction
 
-    now = time.monotonic()
+    now = time.monotonic() if timestamp is None else timestamp
 
     if direction_data is None:
         return confirmed_direction
@@ -248,23 +248,23 @@ def get_confirmed_direction(direction_data):
     return confirmed_direction
 
 
-def check_lost_hand():
+def check_lost_hand(timestamp=None):
     global last_hand_detected_at
 
     if last_hand_detected_at is None:
         return
 
-    now = time.monotonic()
+    now = time.monotonic() if timestamp is None else timestamp
     lost_elapsed = now - last_hand_detected_at
 
     if lost_elapsed >= lost_timeout_seconds:
         reset()
 
 
-def stabilizer_process(raw_gesture,direction_data=None):
-    check_lost_hand()
+def stabilizer_process(raw_gesture,direction_data=None, timestamp=None):
+    check_lost_hand(timestamp)
 
-    stable_gesture = get_confirmed_gesture(raw_gesture)
+    stable_gesture = get_confirmed_gesture(raw_gesture, timestamp)
 
     stable_direction = None
 
@@ -272,7 +272,7 @@ def stabilizer_process(raw_gesture,direction_data=None):
         gesture_name = raw_gesture.get("name","UNKNOWN")
 
         if gesture_name == "POINT":
-            stable_direction = get_confirmed_direction(direction_data)
+            stable_direction = get_confirmed_direction(direction_data, timestamp)
 
         else:
             reset_direction()

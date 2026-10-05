@@ -28,18 +28,20 @@ def Initialization(settings):
 
 
 def get_gesture_data(hand_landmarks):
+    if not hand_landmarks.get("hands"):
+        return {"name": "UNKNOWN", "fingers": {}}
     recognized_gesture = recognizer.run(hand_landmarks["hands"])
     return recognized_gesture
 
 
-def gesture_process(hand_landmarks, current_position=None):
-    raw_gesture = get_gesture_data(hand_landmarks)#?返り値 現在のジェスチャ,各指の状態
+def gesture_process(hand_landmarks, current_position=None, timestamp=None):
+    raw_gesture = get_gesture_data(hand_landmarks)
 
     point_data = None
 
     if raw_gesture["name"] == "POINT":
         point_data = pointing.get_direction(hand_landmarks, current_position)#?返り値 角度,方向
 
-    recognized_gesture = stabilizer.stabilizer_process(raw_gesture,point_data)#?返り値 確定したジェスチャ,確定した方向
+    recognized_gesture = stabilizer.stabilizer_process(raw_gesture,point_data,timestamp)#?返り値 確定したジェスチャ,確定した方向
 
     return recognized_gesture

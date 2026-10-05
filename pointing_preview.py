@@ -46,6 +46,7 @@ def initialize(config):
 
 def main():
     parser = argparse.ArgumentParser(description='手の方向・画面外家電・全灯OFFの表示専用試作')
+    parser.add_argument('--video', type=Path)
     parser.add_argument('--start-frame', type=int, default=0, help='録画動画の開始フレーム')
     parser.add_argument('--frames', type=int, default=0, help='確認するフレーム数。0なら終了まで')
     parser.add_argument('--snapshot', type=Path, help='最後の表示画像の保存先')
@@ -55,9 +56,11 @@ def main():
     if args.headless and (args.frames <= 0 or args.paused):
         parser.error('--headlessでは--framesに正の数を指定し、--pausedは外してください')
     config = load_setting_config()
+    if args.video is not None:
+        config['camera']['sources'] = [{'id':'front','type':'movie','movie':True,'enabled':True,'loop':True,'connection':{'path':str(args.video)}}]
     centers = load_centers(CENTERS)
     trial_settings = json.loads(TRIAL_CONFIG.read_text())
-    trial = PointingTrial(trial_settings['hold_seconds'])
+    trial = PointingTrial(trial_settings['hold_seconds'], trial_settings.get('gap_tolerance_seconds', 0))
     timestamp = 0.0
     with (ROOT / config['home_appliances']['files']['appliancesmap']).open(encoding='utf-8-sig') as file:
         devices = [r['device'] for r in csv.DictReader(file) if r.get('display_name')]
@@ -85,7 +88,8 @@ def main():
         if args.start_frame and source.get('type') == 'movie':
             camera.get_capture('front').set(cv2.CAP_PROP_POS_FRAMES, args.start_frame)
         if not args.headless:
-            cv2.namedWindow(WINDOW, cv2.WINDOW_AUTOSIZE)
+            cv2.namedWindow(WINDOW, cv2.WINDOW_NORMAL)
+            cv2.resizeWindow(WINDOW, 1320, 710)
             cv2.setMouseCallback(WINDOW, on_click)
         while True:
             if not paused or next_frame:
@@ -103,7 +107,8 @@ def main():
                 if event:
                     print(f'SIMULATION {timestamp:.2f}s: {event} (no transmission)', flush=True)
             result = compare_direction(hand_data, rgb.shape, centers, trial_settings['max_angle_degrees'], trial_settings.get('min_finger_length_ratio', 0.005))
-            display = draw_preview(rgb, centers, result, devices[selected], paused, trial, dirty)
+            status = {'input':'VIDEO' if source.get('type') == 'movie' else 'CAMERA', 'frame_index':int(camera.get_capture('front').get(cv2.CAP_PROP_POS_FRAMES)) if source.get('type') == 'movie' else count, 'mode':'SIMULATION', 'max_angle_degrees':trial_settings['max_angle_degrees'], 'state':trial.state, 'hold_elapsed':trial.hold_elapsed, 'hold_seconds':trial.hold_seconds}
+            display = draw_preview(rgb, centers, result, devices[selected], paused, trial, dirty, status=status)
             if not args.headless:
                 cv2.imshow(WINDOW, display)
             if args.frames and count >= args.frames:

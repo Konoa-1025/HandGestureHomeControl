@@ -1,160 +1,131 @@
+import argparse
+import copy
+import time
+from pathlib import Path
 
-#? main.py
-#? Norifumi Konndo
-#! Python 3.11以上指定
-#? 役割：親,司令塔
-
-import art
-art.tprint("HandGestureHC")
+import cv2
 
 import Utils.logger as p
 import Utils.configLoader as figload
 import Core.initializer as initializer
-
+from Core.application import Application
 import Managers.cameraManager as camera
 import Managers.systemManager as system
 import Managers.cascadeManager as cascade
 import Managers.modelManager as model
-import Managers.recognitionManager as recognize
-import Managers.appliancesManager as appliances
-import Managers.comboManager as combo
-import Managers.actionManager as action
 import Managers.previewManager as preview
-import Managers.feedbackManager as feedback
 import Managers.positionManager as human_position
 import Managers.pointingManager as pointing
+import Managers.comboManager as combo
+import Managers.echonetManager as echonet
 
 
+def make_options(argv=None):
+    parser = argparse.ArgumentParser(description='HGHC camera/video recognition and status preview')
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument('--dry-run', dest='dry_run', action='store_true')
+    mode.add_argument('--live', dest='dry_run', action='store_false')
+    parser.set_defaults(dry_run=None)
+    parser.add_argument('--video', type=Path)
+    parser.add_argument('--start-frame', type=int, default=0)
+    parser.add_argument('--frames', type=int, default=0)
+    parser.add_argument('--headless', action='store_true')
+    parser.add_argument('--snapshot', type=Path)
+    args = parser.parse_args(argv)
+    if args.frames < 0 or args.start_frame < 0 or (args.headless and args.frames == 0):
+        parser.error('headlessには--framesの正の値が必要です。フレーム番号は0以上にしてください。')
+    return args
 
-def main():
-    wait_point_release = False
+
+def main(options=None):
+    options = options or make_options([])
+    config = copy.deepcopy(figload.load_setting_config())
+    if options.video is not None:
+        config['camera']['sources'] = [{'id':'front','type':'movie','movie':True,'enabled':True,'loop':True,'connection':{'path':str(options.video)}}]
+    front = next((source for source in config['camera']['sources'] if source.get('id') == 'front' and source.get('enabled', True)), {})
+    movie = front.get('type', '').lower() == 'movie'
+    dry_run = movie if options.dry_run is None else options.dry_run
+    config['runtime'] = {'dry_run': dry_run, 'headless': options.headless}
+    application = Application(dry_run)
+    frame_count = 0
+    paused = False
+    advance = False
+    cased_frame = None
+    status = {}
+    last_clock = time.monotonic()
+    fps = 0.0
     last_is_hand = False
-    setting_config = figload.load_setting_config() #?設定の読み込み
-    if not initializer.Managers_initialize(setting_config):
-        human_position.close()
-        preview.close_window()
-        return False
-
-    #?カメラの起動
-    if not camera.start_camera():
-            p.error("カメラを1台も開くことができませんでした")
-            return False
-
     try:
+        if not initializer.Managers_initialize(config):
+            return False
+        if not camera.start_camera() or camera.get_capture('front') is None:
+            p.error('front入力を開けませんでした')
+            return False
+        if options.start_frame and movie:
+            camera.get_capture('front').set(cv2.CAP_PROP_POS_FRAMES, options.start_frame)
+        p.info('SIMULATION: 実機送信なし' if dry_run else 'LIVE: 実機制御あり')
         while True:
-            front_frame = camera.read_frame("front")
-
-            #!メインカメラ
-            if front_frame is None: #?フレーム取得失敗
-                if camera.is_finished("front"):
-                    break
-                p.warning("フロントカメラの映像を取得できませんでした")
-                continue
-
-            cascade_result = cascade.cascade_process(front_frame,system.get_mem()) #?返り値：軽量化フレーム
-            if cascade_result is None:
-                continue
-
-            is_motion = cascade_result["is_motion"]
-            cased_frame = cascade_result["cased_frame"]
-
-            current_position = None
-            pointing_event = None
-            if pointing.enabled:
-                hand_landmarks = model.model_process(cased_frame, system.get_cpu(), 0)
-                pointing_event = pointing.update(hand_landmarks, cased_frame.shape, camera.get_timestamp("front"), not combo.is_combo())
-                if not preview.show_frame_pointing(cased_frame, pointing):
-                    break
-            else:
-                current_position = human_position.update(cased_frame)
-                if not preview.show_frame_detail(cased_frame, human_position.get_debug_state(), current_position):
-                    break
-                if not is_motion and not last_is_hand:
-                    continue
-                hand_landmarks = model.model_process(cased_frame, system.get_cpu(), 0)
-
-            last_is_hand = hand_landmarks["is_hand"]
-            if not last_is_hand: #!
+            if not paused or advance or cased_frame is None:
+                front_frame = camera.read_frame('front')
+                if front_frame is None:
+                    if movie or camera.is_finished('front'):
+                        break
+                    p.error('カメラ映像を取得できません。入力を確認してください')
+                    return False
+                cascade_result = cascade.cascade_process(front_frame, system.get_mem())
+                if cascade_result is None:
+                    return False
+                cased_frame = cascade_result['cased_frame']
+                current_position = None
                 if not pointing.enabled:
-                    wait_point_release = False
-                if combo.is_combo():
-                    combo_result = combo.combo_process({"confirmed_gesture": None,"confirmed_direction": None})
-                continue
-            #?家電選択とコンボ
-            
-            gesture = recognize.gesture_process(hand_landmarks, current_position)#?返り値：確定ジェスチャ,方向
-
-            if wait_point_release:
+                    current_position = human_position.update(cased_frame)
+                run_model = pointing.enabled or cascade_result['is_motion'] or last_is_hand
+                hands = model.model_process(cased_frame, system.get_cpu(), 0) if run_model else {'is_hand': False, 'hands': []}
+                last_is_hand = hands['is_hand']
+                timestamp = camera.get_timestamp('front')
+                status = application.update(hands, cased_frame.shape, timestamp, current_position)
+                now = time.monotonic()
+                instantaneous = 1 / max(now - last_clock, .001)
+                fps = instantaneous if frame_count == 0 else fps * .8 + instantaneous * .2
+                last_clock = now
+                frame_count += 1
+                advance = False
+                status.update(input='VIDEO' if movie else 'CAMERA', frame_index=int(camera.get_capture('front').get(cv2.CAP_PROP_POS_FRAMES)) if movie else frame_count, fps=fps)
+            status['paused'] = paused
+            if not options.headless:
                 if pointing.enabled:
-                    if pointing.result["gesture"] in ("POINT", "NO HAND", "UNKNOWN"):
-                        continue
-                elif gesture["confirmed_gesture"] == "POINT":
-                    continue
-                wait_point_release = False
-            
-            #?コンボ中ではない場合は家電を選択
-            if not combo.is_combo():
-                if pointing.enabled:
-                    if pointing_event["action"]:
-                        if action.action_process(pointing_event["action"]):
-                            p.success("照明全部をOFFにしました")
-                        else:
-                            p.warning("全灯OFFに失敗しました")
-                        wait_point_release = True
-                    elif pointing_event["appliance"] is not None:
-                        selected_appliance = pointing_event["appliance"]
-                        combo.start_combo(selected_appliance)
-                        wait_point_release = True
-                        p.success(f"家電を選択しました: {selected_appliance['display_name']}")
-                    continue
-                if (
-                    gesture["confirmed_gesture"] == "POINT"
-                    and gesture["confirmed_direction"] is not None
-                ):
-                    selected_appliance = appliances.select_appliance_abstract(gesture["confirmed_direction"], current_position) #?家電の選択
-                    if selected_appliance is None:
-                        p.warning("指差し方向に家電がありません")
-                        continue
-
-                    combo.start_combo(selected_appliance)
-                    p.success(f"家電を選択しました: "f"{selected_appliance['display_name']}")
-                    continue #!家電選択に使ったPOINTはコンボへ送らない
-            #?コンボ中の場合
+                    if not preview.show_frame_pointing(cased_frame, pointing, status):
+                        break
+                elif not preview.show_frame_detail(cased_frame, human_position.get_debug_state(), current_position):
+                    break
+            if options.frames and frame_count >= options.frames:
+                break
+            if not options.headless and movie and pointing.enabled:
+                if preview.last_key == ord(' '):
+                    paused = not paused
+                    last_clock = time.monotonic()
+                elif preview.last_key == ord('n'):
+                    paused, advance = True, True
+        if options.snapshot and cased_frame is not None:
+            if pointing.enabled:
+                from Feedback.pointingPreview import draw_preview
+                display = draw_preview(cased_frame, pointing.centers, pointing.result, '', paused, pointing.trial, live=True, status=status)
             else:
-                combo_result = combo.combo_process(gesture)
-                combo_status = combo_result["status"]
-
-                if combo_status == "COMPLETED":
-                    p.success(f"コンボ成功: {combo_result['action']}")
-                    feedback.feedback("go",combo_status)
-                    if gesture["confirmed_gesture"] == "POINT":
-                        feedback.feedback("start","start")
-                        wait_point_release = True
-                    #!ここでActionManagerへ送る
-                    action.action_process(combo_result["action"])
-                elif combo_status == "FAILED":
-                    feedback.feedback("cancel",combo_status)
-                    p.error("登録されたコンボと一致しませんでした")
-
-                elif combo_status == "CANCELED":
-                    feedback.feedback("cancel",combo_status)
-                    p.warning("コンボをキャンセルしました")
-                    
-
-                elif combo_status == "WAITING":
-                    feedback.feedback("beep",combo_status)
-                    pass
-
-
-            side_frame = camera.read_frame("side")
-            if side_frame is None:
-                continue
-
+                display = cv2.cvtColor(cased_frame, cv2.COLOR_RGB2BGR)
+            options.snapshot.parent.mkdir(parents=True, exist_ok=True)
+            if not cv2.imwrite(str(options.snapshot), display):
+                raise OSError('プレビュー画像を保存できませんでした')
+        p.info(f'{frame_count}フレームを処理しました')
+        return True
     finally:
         human_position.close()
+        model.close()
         camera.stop_camera()
         preview.close_window()
-        p.debug("終わり")
+        combo.reset_combo()
+        if not dry_run:
+            echonet.close()
 
-if __name__ == "__main__":
-    main()
+
+if __name__ == '__main__':
+    main(make_options())

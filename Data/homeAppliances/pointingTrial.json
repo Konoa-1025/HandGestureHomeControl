@@ -1,5 +1,6 @@
 {
     "hold_seconds": 0.5,
     "max_angle_degrees": 20,
-    "min_finger_length_ratio": 0.005
+    "min_finger_length_ratio": 0.005,
+    "gap_tolerance_seconds": 0.15
 }
