@@ -5,7 +5,7 @@ from unittest.mock import Mock, patch
 
 from Core import initializer
 from Core.application import Application
-from Managers import echonetManager
+from Managers import echonetManager, feedbackManager
 from EchonetLite.EchonetLite import EchonetLite
 
 
@@ -33,11 +33,30 @@ class RuntimeTests(unittest.TestCase):
         device.thread.join.assert_called_once_with(timeout=1.5)
 
     def test_failed_action_is_reported_as_failed(self):
-        with patch('Core.application.action.action_process',return_value=False):
+        with patch('Core.application.action.action_process',return_value=False), patch.object(feedbackManager.sound,'sound',return_value=True) as sound:
             app=Application(False)
             app.execute('all_lights_power_off')
             self.assertEqual(app.action_status,'FAILED')
             self.assertEqual(app.last_action,'all_lights_power_off')
+            sound.assert_called_once_with('cancel')
+
+    def test_each_successful_action_plays_sound_even_after_same_status(self):
+        with patch('Core.application.action.action_process',return_value=True), patch.object(feedbackManager.sound,'sound',return_value=True) as sound:
+            feedbackManager.reset()
+            feedbackManager.feedback('go','COMPLETED')
+            sound.reset_mock()
+            app=Application(False)
+            app.execute('aircon_toggle_power')
+            app.execute('aircon_toggle_power')
+            app.execute('all_lights_power_off')
+            self.assertEqual([call.args[0] for call in sound.call_args_list],['go','go','go'])
+            feedbackManager.reset()
+
+    def test_simulated_action_has_no_sound_or_transmission(self):
+        with patch('Core.application.action.action_process') as action, patch.object(feedbackManager.sound,'sound') as sound:
+            Application(True).execute('aircon_toggle_power')
+            action.assert_not_called()
+            sound.assert_not_called()
 
     def test_close_manager_is_idempotent(self):
         previous=echonetManager.el

@@ -31,6 +31,7 @@ class Application:
             self.action_status = 'SIMULATED'
         else:
             self.action_status = 'SENT' if action.action_process(name) else 'FAILED'
+            feedback.feedback('go' if self.action_status == 'SENT' else 'cancel')
         self.record(f'{self.action_status}: {name}')
         self.state = self.action_status
 
@@ -51,6 +52,10 @@ class Application:
         expired = combo.expire(timestamp)
         if expired:
             self.record('COMBO TIMEOUT')
+            if pointing.enabled:
+                pointing.trial.reset()
+            if not self.dry_run:
+                feedback.feedback('cancel')
         event = {'action': None, 'appliance': None}
         if pointing.enabled:
             event = pointing.update(hand_data, frame_shape, timestamp, not combo.is_combo() and not self.wait_point_release)
@@ -68,18 +73,22 @@ class Application:
                 return self.snapshot(hand_data, timestamp)
             self.wait_point_release = False
         if combo.is_combo():
+            if raw_gesture != self.confirmed_gesture or raw_gesture not in ('POINT', 'OPEN_HAND', 'FIST', 'PEACE'):
+                gesture = dict(gesture, confirmed_gesture=None)
+            elif pointing.enabled and raw_gesture == 'POINT' and pointing.result['candidate'] != combo.selected_appliance:
+                gesture = dict(gesture, confirmed_gesture=None)
             outcome = combo.combo_process(gesture, timestamp)
             status = outcome['status']
             self.state = 'COMBO' if status == 'WAITING' else f'COMBO_{status}'
             if status == 'COMPLETED':
                 self.execute(outcome['action'])
-                if not self.dry_run:
-                    feedback.feedback('go', status)
                 self.wait_point_release = self.confirmed_gesture == 'POINT'
             elif status in ('FAILED','CANCELED'):
                 self.record(f'COMBO {status}')
+                if pointing.enabled:
+                    pointing.trial.reset()
                 if not self.dry_run:
-                    feedback.feedback('cancel', status)
+                    feedback.feedback('cancel')
         else:
             if not pointing.enabled and self.confirmed_gesture == 'POINT':
                 event['appliance'] = appliances.select_appliance_abstract(gesture['confirmed_direction'], current_position)
@@ -90,9 +99,13 @@ class Application:
                 selected = event['appliance']
                 combo.start_combo(selected, timestamp)
                 self.last_selected = selected['device']
-                self.wait_point_release = True
-                self.state = 'WAIT_RELEASE'
+                self.wait_point_release = False
+                self.state = 'COMBO'
                 self.record(f'SELECT: {self.last_selected}')
+                if not self.dry_run:
+                    feedback.feedback('start')
+            elif expired:
+                self.state = 'COMBO_TIMEOUT'
         return self.snapshot(hand_data, timestamp)
 
     def snapshot(self, hand_data, timestamp):

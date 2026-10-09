@@ -152,8 +152,6 @@ def combo_process(gesture, timestamp=None):
     if now < next_input_at:
         return {"status": "WAITING","action": None}
 
-    next_input_at = now + input_interval_seconds
-
     confirmed_gesture = gesture["confirmed_gesture"]
 
     #? 一瞬Noneになっても、すぐにはキャンセルしない
@@ -175,6 +173,7 @@ def combo_process(gesture, timestamp=None):
     if confirmed_gesture == last_input_gesture:
         return {"status": "WAITING","action": None}
 
+    next_input_at = now + input_interval_seconds
     last_input_gesture = confirmed_gesture
     gesture_history.append(confirmed_gesture)
 
