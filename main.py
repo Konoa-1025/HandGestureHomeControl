@@ -161,7 +161,7 @@ def main(options=None):
             "loop": True, "connection": {"path": str(options.video)}
         }]
     front_source = next((source for source in setting_config["camera"]["sources"]
-                         if source.get("id") == "front" and source.get("enabled", True)), {})
+                        if source.get("id") == "front" and source.get("enabled", True)), {})
     movie = front_source.get("type", "").lower() == "movie"
     dry_run = movie if options.dry_run is None else options.dry_run
     if options.edit_centers:
@@ -233,7 +233,7 @@ def main(options=None):
                 if options.edit_centers:
                     gesture = recognize.gesture_process(hand_landmarks, timestamp, cased_frame.shape)
                     status.update(point_data=gesture["point_data"], gesture=gesture["raw_gesture"],
-                                  confirmed_gesture=gesture["confirmed_gesture"], state=recognize.stabilizer.target_state)
+                                confirmed_gesture=gesture["confirmed_gesture"], state=recognize.stabilizer.target_state)
                     if gesture["target"]:
                         record_event(status, "SIMULATION: " + gesture["target"])
                 else:
@@ -247,7 +247,7 @@ def main(options=None):
                 fps = current_fps if frame_count == 1 else fps * 0.8 + current_fps * 0.2
                 last_clock = now
                 status.update(input="VIDEO" if movie else "CAMERA", fps=fps,
-                              frame_index=int(camera.get_capture("front").get(cv2.CAP_PROP_POS_FRAMES)) if movie else frame_count)
+                            frame_index=int(camera.get_capture("front").get(cv2.CAP_PROP_POS_FRAMES)) if movie else frame_count)
                 advance = False
 
             if options.edit_centers:
@@ -256,7 +256,7 @@ def main(options=None):
                 )
                 status["state"] = recognize.stabilizer.target_state
             status.update(paused=paused, selected=combo.selected_appliance, combo_history=list(combo.gesture_history),
-                          combo_remaining=max(0, combo.timeout_seconds - (timestamp - combo.combo_started_at)) if combo.combo_started_at is not None else None)
+                        combo_remaining=max(0, combo.timeout_seconds - (timestamp - combo.combo_started_at)) if combo.combo_started_at is not None else None)
             if not options.headless:
                 if recognize.pointing.enabled:
                     if not preview.show_frame_pointing(cased_frame, status):
