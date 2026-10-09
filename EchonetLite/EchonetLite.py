@@ -193,15 +193,20 @@ class EchonetLite():
         # 受信設定
         self.rsock.bind(('', self.ECHONETport))
         self.rsock.settimeout(1)
+        self.stop_event = threading.Event()
         def recv():
-            while True:
+            while not self.stop_event.is_set():
                 try:
                     data, ip = self.rsock.recvfrom(EchonetLite.BUFFER_SIZE)
                     # bytesを16進数文字列に変換する
                     self.returner(ip[0], list(data))
                 except socket.timeout:
                     continue
-        self.thread = threading.Thread(target=recv, args=())
+                except OSError:
+                    if self.stop_event.is_set():
+                        break
+                    raise
+        self.thread = threading.Thread(target=recv, args=(), daemon=True)
         self.thread.start() #  受信スレッド開始
         # インスタンスリスト通知 D5
         seoj = self.EOJ_NodeProfile
@@ -211,6 +216,16 @@ class EchonetLite():
         if self.devices['0ef001'][0xd5] != None:
             self.sendMultiOPC1(seoj, deoj, self.INF, 0xd5, self.devices['0ef001'][0xd5]) # オブジェクトリスト通知
         print("# EchonetLite.begin() end.") if self.debug else '' # debug
+
+
+    def close(self):
+        #?受信待ちを解除してから終了する
+        if hasattr(self, "stop_event"):
+            self.stop_event.set()
+        if hasattr(self, "rsock"):
+            self.rsock.close()
+        if hasattr(self, "thread") and self.thread is not threading.current_thread():
+            self.thread.join(timeout=1.5)
 
 
     def update(self, obj:list[int]|str, epc:int, edt:list[int]):

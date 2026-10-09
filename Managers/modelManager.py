@@ -82,16 +82,13 @@ def Initialization(settings):
             )
             return False
         
-        elif backend == "pipetrt":
-            import Models.pipetrt.highmodel as pipetrtHighModel
-
-        p.info("PipeTRT backendを使用します")
 
     # =====================================
     # PipeTRT
     # =====================================
 
     elif backend == "pipetrt":
+        import Models.pipetrt.highmodel as pipetrtHighModel
 
         p.info("PipeTRT backendを使用します")
 
@@ -229,3 +226,15 @@ def model_process(
         "is_hand": False,
         "hands": []
     }
+
+def close():
+    global current_mode, old_mode
+    for module in (mediapipeHighModel, mediapipeLowModel):
+        if module.hands_model is not None:
+            module.hands_model.close()
+            module.hands_model = None
+        module.initialized = False
+    if "pipetrtHighModel" in globals():
+        pipetrtHighModel.close()
+    current_mode = "high"
+    old_mode = "high"

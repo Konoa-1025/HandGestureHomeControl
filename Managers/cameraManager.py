@@ -3,11 +3,17 @@
 #? Norifumi Konndo
 
 import cv2
+import sys
+import time
+import math
 from pathlib import Path
 import Utils.logger as p
 
 settings = {}
 captures = {}
+source_settings = {}
+finished_sources = set()
+playback_count = {}
 current_resolution = "1920x1080"
 url = None
 
@@ -92,7 +98,7 @@ def try_open(camera):
         elif camera_type == "webcam":
             source = int(connection.get("device_id", 0))
             if camera_type == "webcam":
-                capture = cv2.VideoCapture(source,cv2.CAP_MSMF)
+                capture = cv2.VideoCapture(source, cv2.CAP_MSMF if sys.platform == "win32" else cv2.CAP_ANY)
                 capture.set(cv2.CAP_PROP_FOURCC,cv2.VideoWriter_fourcc(*"MJPG"))
                 capture.set(cv2.CAP_PROP_FRAME_WIDTH,connection.get("width", 1280))
                 capture.set(cv2.CAP_PROP_FRAME_HEIGHT,connection.get("height", 720))
@@ -106,7 +112,8 @@ def try_open(camera):
             return None
         p.info(f"{display_name}に接続中")
 
-        capture = cv2.VideoCapture(source)
+        if camera_type != "webcam":
+            capture = cv2.VideoCapture(source)
 
         if not capture.isOpened():
             p.error(f"{display_name}を開くことができませんでした")
@@ -173,6 +180,8 @@ def start_camera():
             continue
 
         captures[camera_id] = capture
+        source_settings[camera_id] = camera
+        playback_count[camera_id] = 0
 
     if not captures:
         p.error("有効なカメラを開くことができませんでした")
@@ -187,10 +196,19 @@ def get_capture(camera_id):
 def read_frame(camera_id):
     capture = captures.get(camera_id)
 
-    if capture is None:
+    if capture is None or camera_id in finished_sources:
         return None
 
     success, frame = capture.read()
+    source = source_settings.get(camera_id, {})
+    if not success and source.get("type", "").lower() == "movie":
+        if source.get("loop", True):
+            capture.set(cv2.CAP_PROP_POS_FRAMES, 0)
+            success, frame = capture.read()
+            playback_count[camera_id] += 1
+        if not success:
+            finished_sources.add(camera_id)
+            return None
 
     if not success:
         p.warning(
@@ -204,6 +222,9 @@ def stop_camera(camera_id=None):
     global captures
 
     if camera_id is not None:
+        source_settings.pop(camera_id, None)
+        finished_sources.discard(camera_id)
+        playback_count.pop(camera_id, None)
         capture = captures.pop(camera_id, None)
         if capture is None:
             return False
@@ -222,5 +243,21 @@ def stop_camera(camera_id=None):
             )
 
     captures = {}
+    source_settings.clear()
+    finished_sources.clear()
+    playback_count.clear()
     return True
-    z
+
+def is_finished(camera_id):
+    return camera_id in finished_sources
+
+
+def get_timestamp(camera_id):
+    capture = captures.get(camera_id)
+    source = source_settings.get(camera_id, {})
+    if capture is not None and source.get("type", "").lower() == "movie":
+        fps = capture.get(cv2.CAP_PROP_FPS)
+        if not math.isfinite(fps) or fps < 1:
+            fps = 1
+        return capture.get(cv2.CAP_PROP_POS_FRAMES) / fps
+    return time.monotonic()

@@ -13,7 +13,8 @@ width = 640
 height = 360
 
 def Initialization(settings):
-    global threshold,minimum_changed_pixels
+    global threshold,minimum_changed_pixels,before_gray
+    before_gray = None
 
     p.info("motionCascadeを初期化中")
 

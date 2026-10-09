@@ -604,3 +604,9 @@ def all_lights_toggle_power():
         return all_lights_power_off()
 
     return all_lights_power_on()
+
+def close():
+    global el
+    if el is not None:
+        el.close()
+        el = None

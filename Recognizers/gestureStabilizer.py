@@ -3,6 +3,7 @@
 #? Norifumi Kondo
 
 import time
+import math
 import Utils.logger as p
 
 
@@ -22,6 +23,16 @@ direction_mismatch_started_at = None
 confirmed_direction = None
 
 last_hand_detected_at = None
+
+#?家電中心への指差し保持。ジェスチャ確定とは別に時間を数える
+pending_target = None
+hold_elapsed = 0.0
+last_target_time = None
+last_valid_time = None
+previous_valid = False
+target_latched = False
+target_state = "NO_HAND"
+
 
 
 def Initialization(settings):
@@ -105,16 +116,17 @@ def reset():
     reset_direction()
 
     last_hand_detected_at = None
+    reset_target()
 
 
-def get_confirmed_gesture(raw_gesture):
+def get_confirmed_gesture(raw_gesture, timestamp=None):
     global current_gesture
     global gesture_started_at
     global gesture_mismatch_started_at
     global confirmed_gesture
     global last_hand_detected_at
 
-    now = time.monotonic()
+    now = time.monotonic() if timestamp is None else timestamp
 
     if raw_gesture is None:
         return confirmed_gesture
@@ -179,13 +191,13 @@ def get_confirmed_gesture(raw_gesture):
     return confirmed_gesture
 
 
-def get_confirmed_direction(direction_data):
+def get_confirmed_direction(direction_data, timestamp=None):
     global current_direction
     global direction_started_at
     global direction_mismatch_started_at
     global confirmed_direction
 
-    now = time.monotonic()
+    now = time.monotonic() if timestamp is None else timestamp
 
     if direction_data is None:
         return confirmed_direction
@@ -248,23 +260,26 @@ def get_confirmed_direction(direction_data):
     return confirmed_direction
 
 
-def check_lost_hand():
+def check_lost_hand(timestamp=None):
     global last_hand_detected_at
 
     if last_hand_detected_at is None:
         return
 
-    now = time.monotonic()
+    now = time.monotonic() if timestamp is None else timestamp
     lost_elapsed = now - last_hand_detected_at
 
     if lost_elapsed >= lost_timeout_seconds:
-        reset()
+        #!手が消えても家電の解除待ちは残す
+        reset_gesture()
+        reset_direction()
+        last_hand_detected_at = None
 
 
-def stabilizer_process(raw_gesture,direction_data=None):
-    check_lost_hand()
+def stabilizer_process(raw_gesture,direction_data=None,timestamp=None):
+    check_lost_hand(timestamp)
 
-    stable_gesture = get_confirmed_gesture(raw_gesture)
+    stable_gesture = get_confirmed_gesture(raw_gesture, timestamp)
 
     stable_direction = None
 
@@ -272,9 +287,78 @@ def stabilizer_process(raw_gesture,direction_data=None):
         gesture_name = raw_gesture.get("name","UNKNOWN")
 
         if gesture_name == "POINT":
-            stable_direction = get_confirmed_direction(direction_data)
+            stable_direction = get_confirmed_direction(direction_data, timestamp)
 
         else:
             reset_direction()
 
     return {"confirmed_gesture": stable_gesture,"confirmed_direction": stable_direction}
+
+
+
+def clear_target_hold():
+    global pending_target, hold_elapsed, last_valid_time, previous_valid
+    pending_target = None
+    hold_elapsed = 0.0
+    last_valid_time = None
+    previous_valid = False
+
+
+def reset_target():
+    global last_target_time, target_latched, target_state
+    clear_target_hold()
+    last_target_time = None
+    target_latched = False
+    target_state = "NO_HAND"
+
+
+def target_process(result, timestamp, hold_seconds, gap_seconds, allow_selection=True):
+    global pending_target, hold_elapsed, last_target_time, last_valid_time
+    global previous_valid, target_latched, target_state
+
+    if not math.isfinite(timestamp):
+        raise ValueError("指差し判定の時刻が正しくありません")
+    if last_target_time is not None and timestamp < last_target_time:
+        reset_target()
+    previous_time = last_target_time
+    last_target_time = timestamp
+    target_state = result["reason"] if allow_selection else "COMBO"
+
+    if result["gesture"] in ("OPEN_HAND", "FIST", "PEACE"):
+        target_latched = False
+        clear_target_hold()
+        return None
+    if target_latched:
+        target_state = "WAIT_RELEASE"
+        return None
+
+    candidate = result["candidate"] if allow_selection else None
+    if candidate is None:
+        previous_valid = False
+        if not allow_selection:
+            target_state = "COMBO"
+        if (pending_target is not None and gap_seconds > 0
+                and timestamp - last_valid_time <= gap_seconds + 1e-9):
+            target_state = "TRACKING_GAP"
+        else:
+            clear_target_hold()
+        return None
+
+    if candidate != pending_target:
+        clear_target_hold()
+        pending_target = candidate
+    elif previous_valid:
+        hold_elapsed += timestamp - previous_time
+    elif timestamp - last_valid_time > gap_seconds + 1e-9:
+        hold_elapsed = 0.0
+
+    last_valid_time = timestamp
+    previous_valid = True
+    target_state = "SELECTING"
+    if hold_elapsed + 1e-9 < hold_seconds:
+        return None
+
+    hold_elapsed = hold_seconds
+    target_latched = True
+    target_state = "WAIT_RELEASE"
+    return candidate

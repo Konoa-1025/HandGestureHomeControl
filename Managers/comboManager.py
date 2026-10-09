@@ -84,7 +84,7 @@ def is_combo():
     return combo_active
 
 
-def start_combo(appliance):
+def start_combo(appliance, timestamp=None):
     global combo_active
     global selected_appliance
     global gesture_history
@@ -93,7 +93,7 @@ def start_combo(appliance):
     global none_started_at
     global last_input_gesture
 
-    now = time.monotonic()
+    now = time.monotonic() if timestamp is None else timestamp
 
     combo_active = True
     selected_appliance = appliance["device"]
@@ -128,13 +128,13 @@ def reset_combo():
     last_input_gesture = None
 
 
-def combo_process(gesture):
+def combo_process(gesture, timestamp=None):
     global next_input_at
     global gesture_history
     global none_started_at
     global last_input_gesture
 
-    now = time.monotonic()
+    now = time.monotonic() if timestamp is None else timestamp
 
     if not combo_active:
         return {"status": "INACTIVE","action": None}
@@ -151,8 +151,6 @@ def combo_process(gesture):
 
     if now < next_input_at:
         return {"status": "WAITING","action": None}
-
-    next_input_at = now + input_interval_seconds
 
     confirmed_gesture = gesture["confirmed_gesture"]
 
@@ -175,6 +173,7 @@ def combo_process(gesture):
     if confirmed_gesture == last_input_gesture:
         return {"status": "WAITING","action": None}
 
+    next_input_at = now + input_interval_seconds
     last_input_gesture = confirmed_gesture
     gesture_history.append(confirmed_gesture)
 
@@ -215,3 +214,10 @@ def check_combo():
             return {"status": "COMPLETED","action": action}
 
     return {"status": "WAITING","action": None}
+
+def expire(timestamp=None):
+    now = time.monotonic() if timestamp is None else timestamp
+    if combo_active and (combo_started_at is None or now - combo_started_at >= timeout_seconds):
+        reset_combo()
+        return True
+    return False

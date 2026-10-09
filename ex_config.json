@@ -62,6 +62,10 @@
             "high": 90
         },
         "resolution": {
+            "motion": {
+                "threshold": 25,
+                "minimum_changed_pixels": 1000
+            },
             "low": {
                 "width": 1920,
                 "height": 1080
@@ -116,24 +120,32 @@
         "recognizer": {},
         "stabilizer": {
             "required_frames": 5,
+            "confirmation_seconds": 0.3,
+            "mismatch_tolerance_seconds": 0.1,
             "lost_timeout_seconds": 0.5
         },
         "direction_estimator": {
-            "minimum_vector_length": 30
+            "minimum_vector_length": 0.005
         }
     },
 
     "home_appliances": {
         "files": {
             "appliances": "homeAppliances/appliances.csv",
+            "appliancesmap": "Data/homeAppliances/appliancesMap.csv",
+            "positionmap": "Data/homeAppliances/positionMap.csv",
             "actions": "homeAppliances/actions.csv",
             "combos": "homeAppliances/combos.csv"
         }
     },
 
     "combo": {
+        "combo_csv_path": "Data/homeAppliances/combos.csv",
         "timing": {
             "beep_interval_seconds": 1.0,
+            "input_interval_seconds": 0.5,
+            "timeout_seconds": 5.0,
+            "none_timeout_seconds": 0.5,
             "cancel_timeout_seconds": 0.7
         },
         "sound": {
@@ -148,8 +160,11 @@
     },
 
     "echonet": {
+        "controller_eoj": [[5, 255, 1]],
+        "device_map_csv": "Data/echonet/miniature_home/echonetMap.csv",
         "communication": {
             "port": 3610,
+            "esv": "61",
             "timeout_seconds": 3.0
         },
         "temperature": {
@@ -164,6 +179,33 @@
         "application": {
             "version": "1.0.0",
             "git_commit": null
+        }
+    },
+    "pointing": {
+        "enabled": true,
+        "centers_path": "Data/homeAppliances/pointCenters.csv",
+        "settings_path": "Data/homeAppliances/pointingTrial.json"
+    },
+    "position": {
+        "enabled": true,
+        "csv_path": "Data/position/floor.csv",
+        "image_size": [3584, 2114],
+        "image_rect": [112, 76, 3360, 1890],
+        "bottom_ratio": 0.3,
+        "debug": true
+    },
+    "feedback": {
+        "sound": {
+            "enabled": true,
+            "type": "magic",
+            "volume": 1.0,
+            "files": {
+                "open": "open.mp3",
+                "start": "start.mp3",
+                "go": "go.mp3",
+                "cancel": "cancel.mp3",
+                "beep": "beep.mp3"
+            }
         }
     }
 }
