@@ -7,6 +7,8 @@
 @details UDP socketやELOBJを管理することを主とする
 """
 
+from __future__ import annotations
+
 import platform
 import socket
 import binascii

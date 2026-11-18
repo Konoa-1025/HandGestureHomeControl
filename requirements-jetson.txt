@@ -1,0 +1,14 @@
+# Jetson Xavier NX / JetPack 5.1.2 / Python 3.8.
+# Prerequisites: CUDA 11.4, JetPack-provided TensorRT 8.5.2.2,
+# and a venv created with --system-site-packages.
+# Keep this file standalone so it can be copied to Jetson on its own.
+# Installation reported successful on 2026-11-17; HGHC inference still to verify.
+art==6.5
+psutil==7.2.2
+pygame==2.6.1
+ipget==0.0.3
+numpy==1.24.4
+cuda-python==11.8.2
+pipetrt==0.1.2
+# OpenCV, ONNX and ModelOpt are resolved as PipeTRT dependencies.
+# Record their actual versions with pip freeze after installation.

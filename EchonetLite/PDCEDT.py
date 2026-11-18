@@ -6,6 +6,8 @@
 @date 2023年度
 @details EDTをPDCと結びつけて管理することを主とする
 """
+from __future__ import annotations
+
 from copy import deepcopy
 
 class PDCEDT():

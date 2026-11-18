@@ -1,0 +1,220 @@
+{
+    "network": {
+        "tcp": {
+            "hosts": [
+                "192.168.0.10",
+                "192.0.0.2",
+                "192.0.0.5"
+            ],
+            "ports": {
+                "log": 6000,
+                "research": 6001,
+                "front_camera": 6002,
+                "side_camera": 6003,
+                "experiment": 6004,
+                "test": 6005
+            }
+        }
+    },
+    "system": {
+        "monitor_interval_seconds": 0.5,
+        "startup_wait_seconds": 1.0
+    },
+    "camera": {
+        "max_active_cameras": 1,
+        "sources": [
+            {
+                "id": "front",
+                "display_name": "Webカメラ",
+                "type": "webcam",
+                "enabled": true,
+                "connection": {
+                    "device_id": 0,
+                    "width": 1280,
+                    "height": 720,
+                    "fps": 30
+                }
+            },
+            {
+                "id": "side",
+                "display_name": "AXISカメラ設定例",
+                "type": "axis",
+                "enabled": false,
+                "connection": {
+                    "host": "127.0.0.1",
+                    "username": "USERNAME",
+                    "password": "PASSWORD"
+                }
+            },
+            {
+                "id": "iPhone",
+                "display_name": "Inside Camera",
+                "type": "iphone",
+                "enabled": false,
+                "connection": {
+                    "url": "http://127.0.0.1:8080/video"
+                }
+            }
+        ]
+    },
+    "cascade": {
+        "memory_threshold_percent": {
+            "low": 80,
+            "high": 90
+        },
+        "resolution": {
+            "motion": {
+                "threshold": 25,
+                "minimum_changed_pixels": 1000
+            },
+            "low": {
+                "width": 1920,
+                "height": 1080
+            },
+            "high": {
+                "width": 2560,
+                "height": 1440
+            }
+        }
+    },
+    "model": {
+        "backend": "pipetrt",
+        "switch_threshold": {
+            "cpu_percent": {
+                "low": 70,
+                "high": 90
+            },
+            "memory_percent": {
+                "low": 89,
+                "high": 90
+            }
+        },
+        "standby": {
+            "person_timeout_seconds": 5.0,
+            "motion_threshold": 25,
+            "minimum_changed_pixels": 1000
+        },
+        "profiles": {
+            "low": {
+                "process_resolution": {
+                    "width": 640,
+                    "height": 360
+                },
+                "max_hands": 1,
+                "detection_confidence": 0.4,
+                "tracking_confidence": 0.4
+            },
+            "high": {
+                "model": "full",
+                "precision": "fp16",
+                "process_resolution": {
+                    "width": 1280,
+                    "height": 720
+                },
+                "max_hands": 1,
+                "detection_confidence": 0.7,
+                "tracking_confidence": 0.7
+            }
+        }
+    },
+    "recognition": {
+        "recognizer": {},
+        "stabilizer": {
+            "required_frames": 5,
+            "confirmation_seconds": 0.3,
+            "mismatch_tolerance_seconds": 0.1,
+            "lost_timeout_seconds": 0.5
+        },
+        "direction_estimator": {
+            "minimum_vector_length": 0.005
+        }
+    },
+    "home_appliances": {
+        "files": {
+            "appliancesmap": "Data/homeAppliances/appliancesMap.csv",
+            "positionmap": "Data/homeAppliances/positionMap.csv",
+            "combos": "Data/homeAppliances/combos.csv"
+        }
+    },
+    "combo": {
+        "combo_csv_path": "Data/homeAppliances/combos.csv",
+        "timing": {
+            "beep_interval_seconds": 1.0,
+            "input_interval_seconds": 0.5,
+            "timeout_seconds": 5.0,
+            "none_timeout_seconds": 0.5,
+            "cancel_timeout_seconds": 0.7
+        },
+        "sound": {
+            "type": "magic",
+            "files": {
+                "cancel": "cancel.mp3",
+                "go": "go.mp3",
+                "beep": "beep.mp3",
+                "start": "start.mp3"
+            }
+        }
+    },
+    "echonet": {
+        "controller_eoj": [
+            [
+                5,
+                255,
+                1
+            ]
+        ],
+        "device_map_csv": "Data/echonet/miniature_home/echonetMap.csv",
+        "communication": {
+            "port": 3610,
+            "esv": "61",
+            "timeout_seconds": 3.0
+        },
+        "temperature": {
+            "default": 24,
+            "minimum": 16,
+            "maximum": 30
+        }
+    },
+    "data": {
+        "send_interval_seconds": 0.5,
+        "application": {
+            "version": "1.0.0",
+            "git_commit": null
+        }
+    },
+    "pointing": {
+        "enabled": true,
+        "centers_path": "Data/homeAppliances/pointCenters.csv",
+        "settings_path": "Data/homeAppliances/pointingTrial.json"
+    },
+    "position": {
+        "enabled": true,
+        "csv_path": "Data/position/floor.csv",
+        "image_size": [
+            3584,
+            2114
+        ],
+        "image_rect": [
+            112,
+            76,
+            3360,
+            1890
+        ],
+        "bottom_ratio": 0.3,
+        "debug": true
+    },
+    "feedback": {
+        "sound": {
+            "enabled": true,
+            "type": "magic",
+            "volume": 1.0,
+            "files": {
+                "open": "open.mp3",
+                "start": "start.mp3",
+                "go": "go.mp3",
+                "cancel": "cancel.mp3",
+                "beep": "beep.mp3"
+            }
+        }
+    }
+}

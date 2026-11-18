@@ -1,0 +1,5 @@
+# Desktop (Python 3.11). On Jetson use requirements-jetson.txt instead.
+-r requirements-common.txt
+numpy==1.26.4
+opencv-contrib-python==4.11.0.86
+mediapipe==0.10.21

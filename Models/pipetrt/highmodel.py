@@ -1,6 +1,7 @@
 #? Models/gpu/highModel.py
 #? Norifumi Kondo
 
+import cv2
 import pipetrt
 import Utils.logger as p
 
@@ -16,6 +17,14 @@ def Initialization(settings):
     p.info("PipeTRT highModelを初期化中")
 
     try:
+        import numpy as np
+        import tensorrt as trt
+
+        # TensorRT 8.5のnptypeはNumPy 1.24で削除された別名を参照する。
+        # 古い別名と同じ組み込みboolを、このプロセス内に限り補う。
+        if trt.__version__.split(".")[:2] == ["8", "5"] and "bool" not in np.__dict__:
+            np.bool = bool
+
         high_settings = settings["model"]["profiles"]["high"]
 
         # 現在のPipeTRTでは主にこの2つを指定
@@ -65,7 +74,9 @@ def run(frame):
         }
 
     try:
-        result = hands_model.detect(frame)
+        # Cascade出力はMediaPipe向けRGB。PipeTRTはBGR画像を受け取る。
+        bgr_frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+        result = hands_model.detect(bgr_frame)
 
         hands = []
 

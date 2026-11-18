@@ -10,6 +10,7 @@ __pycache__/
 
 # Virtual Environment
 .venv/
+.venv-*/
 venv/
 
 # macOS
@@ -27,3 +28,7 @@ venv/
 # Python cache
 .pytest_cache/
 .mypy_cache/
+
+# Experiment output and deployment bundle
+results/experiments/
+dist/jetson-experiments.zip

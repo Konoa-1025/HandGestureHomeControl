@@ -2,7 +2,6 @@
 #? Models/cpu/lowModel.py
 #? Norifumi Kondo
 
-import mediapipe as mp
 import Utils.logger as p
 
 
@@ -17,6 +16,8 @@ def Initialization(settings):
     p.info("lowModelを初期化中")
 
     try:
+        import mediapipe as mp
+
         low_settings = settings["model"]["profiles"]["low"]
 
         max_hands = low_settings["max_hands"]
